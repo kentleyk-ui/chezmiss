@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import Image from "next/image";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle } from "lucide-react";
+import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -11,6 +12,15 @@ const titleScript = Alex_Brush({
 });
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  const navItems = [
+    { label: "ACCUEIL", href: "#accueil" },
+    { label: "À PROPOS", href: "/a-propos" },
+    { label: "BOUTIQUE", href: "#boutique" },
+    { label: "CONTACTE", href: "#contact" },
+  ];
+
   const values = [
     { icon: Diamond, title: "QUALITE SUPERIEURE", description: "Des produits selectionnes avec exigence pour des resultats professionnels.", number: "01" },
     { icon: Wand2, title: "EXPERTISE & PASSION", description: "Une marque pensee par des experts pour sublimer chaque regard.", number: "02" },
@@ -65,18 +75,23 @@ export default function Home() {
               className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(197,151,1,0.62)]"
             />
           </div>
-          <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-3">
-            {[
-              { label: "ACCUEIL", href: "#accueil" },
-              { label: "À PROPOS", href: "/a-propos" },
-              { label: "BOUTIQUE", href: "#boutique" },
-              { label: "CONTACTE", href: "#contact" },
-            ].map((item) => (
+          <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-2">
+            {navItems.map((item) => (
               <a key={item.label} href={item.href}>
                 <LiquidMetalButton label={item.label} />
               </a>
             ))}
           </nav>
+          
+          {/* Mobile menu button */}
+          <button 
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors mr-auto ml-2"
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
           <div className="flex items-center gap-2.5 sm:gap-3">
             <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors" aria-label="Recherche"><ScanSearch size={15} /></button>
             <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors" aria-label="Compte"><CircleUser size={15} /></button>
@@ -86,6 +101,23 @@ export default function Home() {
             </button>
           </div>
         </div>
+        
+        {/* Mobile menu overlay */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-[#c59701]/[0.15]">
+            <nav className="flex flex-col items-center gap-3 py-6 px-4">
+              {navItems.map((item) => (
+                <a 
+                  key={item.label} 
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <LiquidMetalButton label={item.label} />
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* HERO */}
