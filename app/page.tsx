@@ -96,8 +96,15 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1px] bg-gradient-to-r from-transparent via-[#c59701]/15 to-transparent rotate-12" />
         </div>
         <div className="absolute top-4 sm:top-5 left-6 sm:left-8 lg:left-10">
-          <div className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#c59701] border border-[#c59701]/25 rounded-full px-4 py-1.5 bg-[#c59701]/5">
-            LUXE · BEAUTE · CONFIANCE
+          <div 
+            className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#c59701] rounded-full px-4 py-1.5 bg-[#c59701]/5"
+            style={{
+              border: "1px solid rgba(197,151,1,0.35)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3), 0 0 12px rgba(197,151,1,0.15)",
+              textShadow: "0 1px 2px rgba(0,0,0,0.5), 0 0 8px rgba(197,151,1,0.3)",
+            }}
+          >
+            LUXE · BEAUTÉ · CONFIANCE
           </div>
         </div>
         <div className="relative max-w-7xl mx-auto px-6 w-full pt-16 pb-8 flex flex-col gap-6">
