@@ -22,23 +22,23 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
   const dimensions = useMemo(() => {
     if (viewMode === "icon") {
       return {
-        width: 46,
-        height: 46,
-        innerWidth: 42,
-        innerHeight: 42,
-        shaderWidth: 46,
-        shaderHeight: 46,
+        width: 40,
+        height: 40,
+        innerWidth: 36,
+        innerHeight: 36,
+        shaderWidth: 40,
+        shaderHeight: 40,
       }
     } else {
       const textLength = label.trim().length
-      const dynamicWidth = Math.max(44 + textLength * 9.8, 64)
+      const dynamicWidth = Math.max(36 + textLength * 8.5, 56)
       return {
         width: dynamicWidth,
-        height: 46,
+        height: 38,
         innerWidth: dynamicWidth - 4,
-        innerHeight: 42,
+        innerHeight: 34,
         shaderWidth: dynamicWidth,
-        shaderHeight: 46,
+        shaderHeight: 38,
       }
     }
   }, [label, viewMode])
@@ -204,10 +204,10 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
             {viewMode === "text" && (
               <span
                 style={{
-                  fontSize: "14px",
+                  fontSize: "11px",
                   color: "#f5dce9",
                   fontWeight: 600,
-                  letterSpacing: "0.14em",
+                  letterSpacing: "0.12em",
                   textShadow: "0px 0px 6px rgba(197,151,1,0.75), 0px 0px 14px rgba(240,201,225,0.55), 0px 1px 2px rgba(0,0,0,0.7)",
                   transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
                   transform: "scale(1)",
