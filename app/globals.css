@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cm-gold: #c59701;
+  --cm-gold-rgb: 197, 151, 1;
+  --cm-pink: #f0c9e1;
+  --cm-pink-rgb: 240, 201, 225;
+  --cm-bg-1: #080508;
+  --cm-bg-2: #040204;
+  --cm-bg-3: #020102;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes cm-page-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.995);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.cm-page-enter {
+  animation: cm-page-enter 560ms ease-out both;
+}
+
+/* ── FOND PRINCIPAL ── */
+.cm-marble {
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(var(--cm-pink-rgb), 0.10), transparent),
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(var(--cm-gold-rgb), 0.07), transparent),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(180, 50, 100, 0.06), transparent),
+    linear-gradient(180deg, var(--cm-bg-1) 0%, var(--cm-bg-2) 50%, var(--cm-bg-3) 100%);
+  position: relative;
+}
+
+/* Grain texture subtil en overlay */
+.cm-marble::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: 0.35;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+
+.cm-marble > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── GLASS CARD ── */
+.cm-glass {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(var(--cm-gold-rgb), 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.cm-text-glass {
+  background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.08), rgba(var(--cm-gold-rgb), 0.06));
+  border: 1px solid rgba(var(--cm-gold-rgb), 0.14);
+  box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.2), 0 10px 26px rgba(0, 0, 0, 0.28), 0 0 14px rgba(var(--cm-gold-rgb), 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cm-text-glass-soft {
+  background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.06), rgba(var(--cm-gold-rgb), 0.04));
+  border: 1px solid rgba(var(--cm-gold-rgb), 0.12);
+  box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.14), 0 8px 20px rgba(0, 0, 0, 0.24);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.cm-text-glass-strong {
+  background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.12), rgba(var(--cm-gold-rgb), 0.08));
+  border: 1px solid rgba(var(--cm-gold-rgb), 0.16);
+  box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.28), 0 14px 32px rgba(0, 0, 0, 0.3), 0 0 18px rgba(var(--cm-gold-rgb), 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Glow pulse identique aux boutons Liquid Metal — bordure solide gold */
+@keyframes cm-glass-glow-pulse {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(240,201,225,0.28), 0 14px 32px rgba(0,0,0,0.35), 0 0 12px rgba(197,151,1,0.50), 0 0 28px rgba(197,151,1,0.20); }
+  50%       { box-shadow: inset 0 1px 0 rgba(240,201,225,0.38), 0 14px 32px rgba(0,0,0,0.35), 0 0 26px rgba(197,151,1,0.80), 0 0 54px rgba(197,151,1,0.32); }
+}
+
+.cm-glass-gold-border {
+  border: 1.5px solid #c59701 !important;
+  animation: cm-glass-glow-pulse 3s ease-in-out infinite;
+}
+
+.cm-logo-gold {
+  filter: sepia(0.32) saturate(1.35) hue-rotate(-8deg) brightness(1.08)
+    contrast(1.12) drop-shadow(0 0 8px rgba(var(--cm-gold-rgb), 0.42));
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.96) 62%,
+    rgba(0, 0, 0, 0.86) 82%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.96) 62%,
+    rgba(0, 0, 0, 0.86) 82%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
+}
+
+/* ── LOGO ABSOLU (conservé pour compatibilité) ── */
+.logo-chezmiss {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 380px;
+  height: auto;
+  z-index: 9999;
+}
+
+@media (max-width: 640px) {
+  .cm-text-glass {
+    background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.06), rgba(var(--cm-gold-rgb), 0.04));
+    border: 1px solid rgba(var(--cm-gold-rgb), 0.12);
+    box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.14), 0 6px 16px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .cm-text-glass-soft {
+    background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.05), rgba(var(--cm-gold-rgb), 0.03));
+    border: 1px solid rgba(var(--cm-gold-rgb), 0.09);
+    box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.1), 0 5px 14px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .cm-text-glass-strong {
+    background: linear-gradient(160deg, rgba(var(--cm-pink-rgb), 0.08), rgba(var(--cm-gold-rgb), 0.05));
+    border: 1px solid rgba(var(--cm-gold-rgb), 0.13);
+    box-shadow: inset 0 1px 0 rgba(var(--cm-pink-rgb), 0.18), 0 8px 20px rgba(0, 0, 0, 0.24), 0 0 10px rgba(var(--cm-gold-rgb), 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .logo-chezmiss {
+    width: 342px;
+  }
+}

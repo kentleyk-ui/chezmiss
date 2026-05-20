@@ -1,0 +1,219 @@
+"use client";
+
+import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
+import Image from "next/image";
+import { Gem, Crown, Truck, ShieldCheck, Search, User, ShoppingBag } from "lucide-react";
+
+export default function Home() {
+  const values = [
+    {
+      icon: Gem,
+      title: "QUALITE SUPERIEURE",
+      description: "Des produits selectionnes avec exigence pour des resultats professionnels.",
+    },
+    {
+      icon: Crown,
+      title: "EXPERTISE & PASSION",
+      description: "Une marque pensee par des experts pour sublimer chaque regard.",
+    },
+    {
+      icon: Truck,
+      title: "LIVRAISON RAPIDE",
+      description: "Expedition rapide et securisee partout en France et en Europe.",
+    },
+    {
+      icon: ShieldCheck,
+      title: "SATISFAIT OU REMBOURSE",
+      description: "14 jours pour changer d'avis, parce que votre satisfaction est notre priorite.",
+    },
+  ];
+
+  const products = [
+    { name: "WHIPPED CREAM CLEANSER", subtitle: "Nettoyant creme fouettee", price: "19,90 EUR" },
+    { name: "LASH SETTING SPRAY", subtitle: "Spray fixateur", price: "16,90 EUR" },
+    { name: "LASH PRIMER", subtitle: "Appret pour cils", price: "15,90 EUR" },
+    { name: "PREMIUM BONDER", subtitle: "Accelerateur de sechage", price: "15,90 EUR" },
+    { name: "CREAM REMOVER", subtitle: "Dissolvant en creme", price: "14,90 EUR" },
+  ];
+
+  return (
+    <main className="cm-marble min-h-screen text-[#f8edf3]">
+      <div className="border-b border-[#d4af37]/30 bg-[#f0c9e1] text-center text-[11px] tracking-[0.22em] py-2 text-[#2f1623] font-semibold">
+        LE 1ER GROSSISTE LASH LUXE EN FRANCE
+      </div>
+
+      <header className="sticky top-0 z-50 bg-black/82 backdrop-blur-md border-b border-[#ffd772]/68 shadow-[0_10px_34px_rgba(0,0,0,0.48)]">
+        <div className="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between gap-6">
+          <div className="w-[280px] sm:w-[420px] lg:w-[680px] h-14 sm:h-16 flex items-center justify-start overflow-hidden -my-1">
+            <Image
+              src="/logo-black.png"
+              alt="Chez Miss"
+              width={680}
+              height={172}
+              priority
+              className="object-contain w-auto h-auto max-w-full max-h-full drop-shadow-[0_0_34px_rgba(255,220,115,0.72)] brightness-125 contrast-125"
+            />
+          </div>
+
+          <nav className="hidden lg:flex items-center gap-8 text-[12px] font-medium tracking-[0.18em] text-[#f7dfeb]">
+            <a href="#accueil" className="hover:text-white transition border-b border-transparent hover:border-[#ffd772] pb-1">ACCUEIL</a>
+            <a href="#boutique" className="hover:text-white transition border-b border-transparent hover:border-[#ffd772] pb-1">BOUTIQUE</a>
+            <a href="#apropos" className="hover:text-white transition border-b border-transparent hover:border-[#ffd772] pb-1">A PROPOS</a>
+            <a href="#blog" className="hover:text-white transition border-b border-transparent hover:border-[#ffd772] pb-1">BLOG</a>
+            <a href="#contact" className="hover:text-white transition border-b border-transparent hover:border-[#ffd772] pb-1">CONTACT</a>
+          </nav>
+
+          <div className="flex items-center gap-4 text-[#ffe7f2]">
+            <button type="button" className="hover:text-[#ffe4a0] transition" aria-label="Recherche">
+              <Search size={18} />
+            </button>
+            <button type="button" className="hover:text-[#ffe4a0] transition" aria-label="Compte">
+              <User size={18} />
+            </button>
+            <button type="button" className="hover:text-[#ffe4a0] transition relative" aria-label="Panier">
+              <ShoppingBag size={18} />
+              <span className="absolute -top-2 -right-2 text-[10px] rounded-full bg-[#f0c9e1] text-black w-4 h-4 grid place-items-center">0</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section id="accueil" className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-[0.95fr_1.05fr] gap-10 items-center">
+        <div>
+          <p className="text-xs tracking-[0.2em] text-[#f0c9e1] mb-4">LUXE • BEAUTE • CONFIANCE</p>
+          <h1 className="text-5xl md:text-6xl font-semibold leading-[0.95] mb-6 text-[#f4e8ef]">
+            REVELEZ
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f9e1ed] via-[#f0c9e1] to-[#e7abc9]">VOTRE EXCELLENCE</span>
+          </h1>
+          <p className="text-[#ccb7c2] leading-relaxed max-w-xl mb-8">
+            Chez Miss, nous sublimons votre beaute avec des produits d'exception. Qualite, elegance
+            et performance reunies pour vous.
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <LiquidMetalButton label="DECOUVRIR LA BOUTIQUE" viewMode="text" onClick={() => {}} />
+            <LiquidMetalButton label="EN SAVOIR PLUS" viewMode="text" onClick={() => {}} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-[#d4af37]/28 bg-gradient-to-b from-[#1a0f16] via-[#0a0609] to-black p-8 min-h-[420px] grid place-items-end shadow-[0_0_36px_rgba(212,175,55,0.16)]">
+          <div className="w-full aspect-[16/10] rounded-xl border border-[#d4af37]/20 bg-gradient-to-b from-black via-[#120b10] to-black p-6 grid grid-cols-5 gap-3 items-end">
+            {products.map((product) => (
+              <article key={product.name} className="rounded-lg border border-[#d4af37]/24 bg-white/[0.02] p-3 h-full flex items-end justify-center">
+                <div className="w-full h-36 rounded-md bg-[radial-gradient(circle_at_50%_15%,rgba(240,201,225,0.3),transparent_40%),linear-gradient(180deg,rgba(66,43,58,0.42),rgba(8,6,10,0.95))]" />
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 pb-12">
+        <div className="grid md:grid-cols-2 xl:grid-cols-4 border border-[#d4af37]/55 rounded-2xl overflow-hidden bg-black/72 shadow-[0_0_38px_rgba(212,175,55,0.16)]">
+          {values.map((value) => {
+            const Icon = value.icon;
+            return (
+              <article key={value.title} className="p-8 border-b md:border-b-0 md:border-r border-[#d4af37]/30 last:border-r-0">
+                <Icon size={22} className="mb-4 text-[#d9b45c]" />
+                <h3 className="text-sm tracking-[0.14em] font-semibold mb-3 text-[#f2d79f]">{value.title}</h3>
+                <p className="text-sm text-[#cfbcc6] leading-relaxed">{value.description}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="boutique" className="max-w-7xl mx-auto px-6 py-12">
+        <h2 className="text-center text-4xl font-semibold mb-10 text-[#f2d79f]">NOS INDISPENSABLES</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          {products.map((product) => (
+            <article key={product.name} className="border border-[#d4af37]/50 rounded-xl p-4 bg-gradient-to-b from-[#120b10]/90 to-black">
+              <div className="aspect-[3/4] rounded-lg mb-4 bg-[radial-gradient(circle_at_50%_85%,rgba(234,136,185,0.34),transparent_36%),linear-gradient(180deg,rgba(68,45,62,0.45),rgba(8,6,9,0.96))]" />
+              <h3 className="text-xs tracking-[0.12em] mb-1 text-[#f4e8ef]">{product.name}</h3>
+              <p className="text-xs text-[#cca8bb] mb-2">{product.subtitle}</p>
+              <p className="font-semibold mb-4 text-[#efcf94]">{product.price}</p>
+              <LiquidMetalButton label="AJOUTER" viewMode="text" onClick={() => {}} />
+            </article>
+          ))}
+        </div>
+        <div className="flex justify-center">
+          <LiquidMetalButton label="VOIR TOUTE LA BOUTIQUE" viewMode="text" onClick={() => {}} />
+        </div>
+      </section>
+
+      <section id="apropos" className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-2 gap-0 border border-[#d4af37]/55 rounded-2xl overflow-hidden shadow-[0_0_38px_rgba(212,175,55,0.13)]">
+        <div className="p-10 bg-[#f0c9e1] text-[#2d1622]">
+          <h2 className="text-4xl font-semibold leading-tight mb-4">L'ELEGANCE DANS CHAQUE DETAIL</h2>
+          <p className="text-[#4d2a3c] leading-relaxed mb-8">
+            Chez Miss, chaque produit est concu pour repondre aux exigences des professionnels de la
+            beaute. Offrez-vous l'excellence.
+          </p>
+          <LiquidMetalButton label="DECOUVRIR NOTRE UNIVERS" viewMode="text" onClick={() => {}} />
+        </div>
+
+        <div className="relative min-h-[320px] bg-[linear-gradient(180deg,#0e0a0c_0%,#040304_100%)] p-10 flex items-end">
+          <blockquote className="max-w-sm ml-auto text-right">
+            <p className="text-xl leading-relaxed mb-3">
+              Des produits d'une qualite exceptionnelle ! Mes clientes adorent le resultat.
+            </p>
+            <footer className="text-[#d7b1c4]">- Sarah B.</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <footer id="contact" className="border-t border-[#d4af37]/55 mt-14 bg-black/80">
+        <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-4 gap-8 text-sm">
+          <div>
+            <div className="w-44 h-12 bg-black rounded-lg flex items-center justify-center mb-4 overflow-hidden">
+              <Image
+                src="/logo-black.png"
+                alt="Chez Miss"
+                width={180}
+                height={46}
+                className="object-contain w-auto h-auto max-w-full max-h-full drop-shadow-[0_0_12px_rgba(212,175,55,0.28)]"
+              />
+            </div>
+            <p className="text-[#c8b3be] leading-relaxed">
+              L'excellence au service de votre beaute. Rejoignez l'univers Chez Miss.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="tracking-[0.12em] mb-4 text-[#efcf94]">NEWSLETTER</h3>
+            <p className="text-[#c8b3be] mb-4">Inscrivez-vous pour recevoir nos offres exclusives.</p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Votre email"
+                className="w-full bg-black border border-[#e8abc9]/25 rounded-lg px-3 py-2 text-sm outline-none placeholder:text-[#896d7b]"
+              />
+              <LiquidMetalButton label="S'INSCRIRE" viewMode="text" onClick={() => {}} />
+            </div>
+          </div>
+
+          <div>
+            <h3 className="tracking-[0.12em] mb-4 text-[#efcf94]">LIENS RAPIDES</h3>
+            <ul className="space-y-2 text-[#c8b3be]">
+              <li><a href="#accueil" className="hover:text-[#ffd5ea]">Accueil</a></li>
+              <li><a href="#boutique" className="hover:text-[#ffd5ea]">Boutique</a></li>
+              <li><a href="#apropos" className="hover:text-[#ffd5ea]">A propos</a></li>
+              <li><a href="#contact" className="hover:text-[#ffd5ea]">Contact</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="tracking-[0.12em] mb-4 text-[#efcf94]">AIDE & INFOS</h3>
+            <ul className="space-y-2 text-[#c8b3be]">
+              <li><a href="#" className="hover:text-[#ffd5ea]">FAQ</a></li>
+              <li><a href="#" className="hover:text-[#ffd5ea]">Livraison & Retours</a></li>
+              <li><a href="#" className="hover:text-[#ffd5ea]">CGV</a></li>
+              <li><a href="#" className="hover:text-[#ffd5ea]">Politique de confidentialite</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-[#b48548]/25 text-center py-4 text-xs text-[#8f7483]">
+          &copy; 2026 Chez Miss. Tous droits reserves.
+        </div>
+      </footer>
+    </main>
+  );
+}

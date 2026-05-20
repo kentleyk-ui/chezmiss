@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="chez-miss">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chez Miss</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./theme.css" />
+</head>
+<body>
+  <main class="page shell-theme">
+    <header class="header">
+      <div class="logo-block">
+        <div class="logo-image-wrap" aria-label="Chez Miss">
+          <img class="logo-image" src="./logo-black.png" alt="Chez Miss" />
+        </div>
+        <div class="logo-sub" data-i18n="brandTagline">LUXE &bull; BEAUT&Eacute; &bull; CONFIANCE</div>
+      </div>
+      <nav class="nav">
+        <a href="#accueil" data-i18n="nav.home">Accueil</a>
+        <a href="#boutique" data-i18n="nav.shop">Boutique</a>
+        <a href="#apropos" data-i18n="nav.about">&Agrave; propos</a>
+        <a href="#blog" data-i18n="nav.blog">Blog</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+      </nav>
+      <div class="header-cta">
+        <button type="button" class="appearance-toggle liquid-button liquid-button-secondary" data-appearance-toggle aria-pressed="false" aria-label="Activer le mode clair" title="Activer le mode clair">
+          <span class="appearance-toggle-sun" aria-hidden="true"></span>
+          <span class="appearance-toggle-moon" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="liquid-button liquid-button-secondary" data-i18n="actions.signIn">Se connecter</button>
+        <button type="button" class="liquid-button liquid-button-primary" data-i18n="actions.createAccount">
+          <span class="liquid-button-rotating-ring"></span>
+          Cr&eacute;er un compte
+        </button>
+      </div>
+    </header>
+
+    <section class="hero" id="accueil">
+      <div class="hero-text">
+        <div class="hero-pill">
+          <span class="hero-pill-dot"></span>
+          <span data-i18n="brandTagline">LUXE &bull; BEAUT&Eacute; &bull; CONFIANCE</span>
+        </div>
+        <h1 class="hero-title" data-i18n-html="hero.title">
+          R&Eacute;V&Eacute;LEZ VOTRE <span>EXCELLENCE</span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">
+          Chez Miss, nous sublimons votre beaut&eacute; avec des produits d&rsquo;exception. Qualit&eacute;, &eacute;l&eacute;gance et performance r&eacute;unies pour vous.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="liquid-button liquid-button-primary" data-i18n="actions.discoverShop">
+            <span class="liquid-button-rotating-ring"></span>
+            D&Eacute;COUVRIR LA BOUTIQUE
+          </button>
+          <button type="button" class="liquid-button liquid-button-secondary" data-i18n="actions.learnMore">EN SAVOIR PLUS</button>
+        </div>
+        <p class="hero-note" data-i18n="hero.note">
+          Une s&eacute;lection premium pens&eacute;e pour les professionnels et les passionn&eacute;s de beaut&eacute;.
+        </p>
+      </div>
+
+      <div class="hero-products">
+        <div class="hero-products-glow"></div>
+        <div class="hero-products-label" data-i18n="collection.label">Collection Dolls Mafia</div>
+        <div class="hero-products-inner">
+          <div class="product-card">
+            <div class="product-badge" data-i18n="products.cleanser.badge">Nettoyant</div>
+            <div class="product-image"></div>
+            <div class="product-name" data-i18n="products.cleanser.name">Whipped Cream Cleanser</div>
+            <div class="product-price" data-price="19.90"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-badge" data-i18n="products.spray.badge">Fixateur</div>
+            <div class="product-image"></div>
+            <div class="product-name" data-i18n="products.spray.name">Lash Setting Spray</div>
+            <div class="product-price" data-price="16.90"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-badge" data-i18n="products.primer.badge">Pr&eacute;paration</div>
+            <div class="product-image"></div>
+            <div class="product-name" data-i18n="products.primer.name">Lash Primer</div>
+            <div class="product-price" data-price="15.90"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-badge" data-i18n="products.bonder.badge">Finition</div>
+            <div class="product-image"></div>
+            <div class="product-name" data-i18n="products.bonder.name">Premium Bonder</div>
+            <div class="product-price" data-price="15.90"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-badge" data-i18n="products.remover.badge">D&eacute;maquillant</div>
+            <div class="product-image"></div>
+            <div class="product-name" data-i18n="products.remover.name">Cream Remover</div>
+            <div class="product-price" data-price="14.90"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="values">
+      <div class="value-item">
+        <div class="value-icon">&#9733;</div>
+        <div class="value-title" data-i18n="values.quality.title">QUALIT&Eacute; SUP&Eacute;RIEURE</div>
+        <div class="value-text" data-i18n="values.quality.text">
+          Des produits s&eacute;lectionn&eacute;s avec exigence pour des r&eacute;sultats professionnels.
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">&#10084;</div>
+        <div class="value-title" data-i18n="values.expertise.title">EXPERTISE & PASSION</div>
+        <div class="value-text" data-i18n="values.expertise.text">
+          Une marque pens&eacute;e par des experts pour sublimer chaque regard.
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">&#9889;</div>
+        <div class="value-title" data-i18n="values.shipping.title">LIVRAISON RAPIDE</div>
+        <div class="value-text" data-i18n="values.shipping.text">
+          Exp&eacute;dition rapide et s&eacute;curis&eacute;e partout au Canada et &agrave; l&rsquo;international.
+        </div>
+      </div>
+      <div class="value-item">
+        <div class="value-icon">&#10003;</div>
+        <div class="value-title" data-i18n="values.guarantee.title">SATISFAIT OU REMBOURS&Eacute;</div>
+        <div class="value-text" data-i18n="values.guarantee.text">
+          14 jours pour changer d&rsquo;avis, parce que votre satisfaction est notre priorit&eacute;.
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="boutique">
+      <div class="section-header">
+        <div>
+          <div class="section-title" data-i18n="shop.title">NOS INDISPENSABLES</div>
+          <div class="section-sub" data-i18n="shop.subtitle">
+            Les essentiels de la collection Dolls Mafia, s&eacute;lectionn&eacute;s pour des r&eacute;sultats impeccables.
+          </div>
+        </div>
+        <div class="section-link" data-i18n="shop.link">VOIR TOUTE LA BOUTIQUE</div>
+      </div>
+      <div class="products-grid">
+        <article class="product-card-main">
+          <div class="product-main-image"></div>
+          <div class="product-main-name" data-i18n="products.cleanser.name">Whipped Cream Cleanser</div>
+          <div class="product-main-price" data-price="19.90"></div>
+          <button type="button" class="liquid-button liquid-button-secondary compact-button" data-i18n="actions.addToCart">Ajouter au panier</button>
+        </article>
+        <article class="product-card-main">
+          <div class="product-main-image"></div>
+          <div class="product-main-name" data-i18n="products.spray.name">Lash Setting Spray</div>
+          <div class="product-main-price" data-price="16.90"></div>
+          <button type="button" class="liquid-button liquid-button-secondary compact-button" data-i18n="actions.addToCart">Ajouter au panier</button>
+        </article>
+        <article class="product-card-main">
+          <div class="product-main-image"></div>
+          <div class="product-main-name" data-i18n="products.primer.name">Lash Primer</div>
+          <div class="product-main-price" data-price="15.90"></div>
+          <button type="button" class="liquid-button liquid-button-secondary compact-button" data-i18n="actions.addToCart">Ajouter au panier</button>
+        </article>
+        <article class="product-card-main">
+          <div class="product-main-image"></div>
+          <div class="product-main-name" data-i18n="products.bonder.name">Premium Bonder</div>
+          <div class="product-main-price" data-price="15.90"></div>
+          <button type="button" class="liquid-button liquid-button-secondary compact-button" data-i18n="actions.addToCart">Ajouter au panier</button>
+        </article>
+        <article class="product-card-main">
+          <div class="product-main-image"></div>
+          <div class="product-main-name" data-i18n="products.remover.name">Cream Remover</div>
+          <div class="product-main-price" data-price="14.90"></div>
+          <button type="button" class="liquid-button liquid-button-secondary compact-button" data-i18n="actions.addToCart">Ajouter au panier</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section elegance" id="apropos">
+      <div class="elegance-text">
+        <div class="elegance-label" data-i18n="about.label">L&rsquo;&Eacute;L&Eacute;GANCE DANS CHAQUE D&Eacute;TAIL</div>
+        <h2 class="elegance-title" data-i18n="about.title">L&rsquo;EXCELLENCE AU SERVICE DE VOTRE BEAUT&Eacute;</h2>
+        <p class="elegance-body" data-i18n="about.body">
+          Chez Miss, chaque produit est con&ccedil;u pour r&eacute;pondre aux exigences des professionnels de la beaut&eacute;.
+          Des formules innovantes, des textures raffin&eacute;es et une exp&eacute;rience sensorielle unique pour sublimer chaque regard.
+        </p>
+        <div class="elegance-actions">
+          <button type="button" class="liquid-button liquid-button-primary" data-i18n="actions.discoverUniverse">
+            <span class="liquid-button-rotating-ring"></span>
+            D&Eacute;COUVRIR NOTRE UNIVERS
+          </button>
+          <button type="button" class="liquid-button liquid-button-secondary" data-i18n="actions.learnMore">EN SAVOIR PLUS</button>
+        </div>
+      </div>
+      <div class="elegance-visual">
+        <div class="elegance-photo"></div>
+        <div class="elegance-quote">
+          <strong data-i18n="testimonial.quote">&laquo; Des produits d&rsquo;une qualit&eacute; exceptionnelle ! Mes clientes adorent le r&eacute;sultat. &raquo;</strong>
+          <span data-i18n="testimonial.author">&mdash; Sarah B.</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="contact">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">CHEZ <span>MISS</span></div>
+          <p class="footer-tagline" data-i18n="footer.tagline">
+            L&rsquo;excellence au service de votre beaut&eacute;. Rejoignez l&rsquo;univers Chez Miss et d&eacute;couvrez une s&eacute;lection
+            de produits premium pour sublimer chaque d&eacute;tail.
+          </p>
+        </div>
+        <div class="footer-newsletter">
+          <div class="footer-newsletter-title" data-i18n="footer.newsletterTitle">RESTEZ INFORM&Eacute;E</div>
+          <p class="footer-newsletter-text" data-i18n="footer.newsletterText">
+            Inscrivez-vous pour recevoir nos offres exclusives et les nouveaut&eacute;s en avant-premi&egrave;re.
+          </p>
+          <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+            <input
+              type="email"
+              class="footer-newsletter-input"
+              data-i18n-placeholder="footer.emailPlaceholder"
+              placeholder="Votre adresse e-mail"
+              required
+            />
+            <button type="submit" class="liquid-button liquid-button-primary" data-i18n="actions.subscribe">
+              <span class="liquid-button-rotating-ring"></span>
+              S&rsquo;INSCRIRE
+            </button>
+          </form>
+        </div>
+      </div>
+      <nav class="footer-links">
+        <a href="#accueil" data-i18n="nav.home">Accueil</a>
+        <a href="#boutique" data-i18n="nav.shop">Boutique</a>
+        <a href="#apropos" data-i18n="nav.about">&Agrave; propos</a>
+        <a href="#blog" data-i18n="nav.blog">Blog</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <a href="#faq" data-i18n="footer.faq">FAQ</a>
+        <a href="#livraison" data-i18n="footer.shipping">Livraison &amp; Retours</a>
+        <a href="#cgv" data-i18n="footer.terms">CGV</a>
+        <a href="#confidentialite" data-i18n="footer.privacy">Politique de confidentialit&eacute;</a>
+      </nav>
+      <div class="footer-bottom" data-i18n="footer.copyright">
+        &copy; 2026 Chez Miss. Tous droits r&eacute;serv&eacute;s.
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

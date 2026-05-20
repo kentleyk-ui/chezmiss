@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chez Miss - Lien local</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050509;
+      --panel: rgba(12, 10, 18, 0.92);
+      --gold: #f5d27a;
+      --gold-soft: rgba(245, 210, 122, 0.2);
+      --text: #f7f1e4;
+      --muted: #b8ad95;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(245, 210, 122, 0.1), transparent 26%),
+        linear-gradient(180deg, #120d0a 0%, var(--bg) 58%, #020203 100%);
+      color: var(--text);
+    }
+
+    .card {
+      width: min(560px, 100%);
+      padding: 28px;
+      border-radius: 22px;
+      background: var(--panel);
+      border: 1px solid var(--gold-soft);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48), 0 0 42px rgba(245, 210, 122, 0.12);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    p {
+      margin: 0 0 16px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255, 224, 124, 0.34), rgba(194, 124, 36, 0.22) 48%, rgba(27, 16, 8, 0.5));
+      border: 1px solid rgba(255, 225, 145, 0.48);
+      color: #ffe8b0;
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.36), 0 0 42px rgba(245, 210, 122, 0.22);
+    }
+
+    .small {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #8f846e;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Chez Miss</h1>
+    <p id="status">Verification du serveur local en cours...</p>
+    <a id="open-link" href="http://localhost:3001">Ouvrir la version locale</a>
+    <p class="small" id="hint">Si le serveur n'est pas actif, bascule automatique vers la version statique.</p>
+  </main>
+  <script>
+    const primary = "http://localhost:3001";
+
+    const fallback = "./legacy/index.html";
+    const status = document.getElementById("status");
+    const openLink = document.getElementById("open-link");
+    const hint = document.getElementById("hint");
+
+    async function isReachable(url, timeoutMs = 1200) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+      try {
+        await fetch(url, {
+          method: "GET",
+          mode: "no-cors",
+          cache: "no-store",
+          signal: controller.signal
+        });
+        return true;
+      } catch (_) {
+        return false;
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
+    async function boot() {
+      const ok = await isReachable(primary);
+      if (ok) {
+        status.textContent = "Serveur detecte, redirection en cours...";
+        openLink.href = primary;
+        openLink.textContent = "Ouvrir la version locale";
+        hint.textContent = "Destination: " + primary;
+        window.location.replace(primary);
+        return;
+      }
+
+      status.textContent = "Serveur local indisponible. Ouverture de la version statique...";
+      openLink.href = fallback;
+      openLink.textContent = "Ouvrir la version statique";
+      hint.textContent = "Lance `npm run dev` ou `npm start` pour retrouver la version Next.";
+      window.location.replace(fallback);
+    }
+
+    void boot();
+  </script>
+</body>
+</html>
