@@ -65,16 +65,15 @@ export default function Home() {
               className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(197,151,1,0.62)]"
             />
           </div>
-          <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-[500px] xl:w-[560px] items-center justify-between text-[10px] xl:text-[11px] font-medium tracking-[0.24em]">
+          <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-3">
             {[
               { label: "ACCUEIL", href: "#accueil" },
               { label: "À PROPOS", href: "/a-propos" },
               { label: "BOUTIQUE", href: "#boutique" },
               { label: "CONTACTE", href: "#contact" },
             ].map((item) => (
-              <a key={item.label} href={item.href} className="py-1 text-[#f0c9e1]/55 hover:text-[#c59701] transition-colors duration-200 relative group">
-                {item.label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-gradient-to-r from-[#c59701] to-[#f0c9e1] group-hover:w-full transition-all duration-300" />
+              <a key={item.label} href={item.href}>
+                <LiquidMetalButton label={item.label} />
               </a>
             ))}
           </nav>
