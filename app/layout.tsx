@@ -1,10 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { RootLayoutClient } from "./root-layout-client";
 import "./globals.css";
 
 type RootLayoutProps = {
   children: ReactNode;
+};
+
+export const viewport: Viewport = {
+  themeColor: "#B79A5B",
 };
 
 export const metadata: Metadata = {
@@ -18,7 +22,6 @@ export const metadata: Metadata = {
     ],
     apple: "/logo-heart-192.png",
   },
-  themeColor: "#B79A5B",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

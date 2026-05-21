@@ -319,21 +319,68 @@ export default function Home() {
       {/* NOS VALEURS SECTION */}
       <section className="relative py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl sm:text-3xl font-light text-center text-[#f0c9e1] mb-12">
-            Nos <span className="text-[#B79A5B]">Valeurs</span>
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-light text-[#f0c9e1]">
+              Nos <span className="text-[#B79A5B]">Valeurs</span>
+            </h2>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((value, i) => {
               const Icon = value.icon;
               return (
-                <div key={i} className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group relative overflow-hidden">
+                <div
+                  key={i}
+                  className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group relative overflow-hidden hover:bg-[#0d0810]/80 hover:shadow-[0_0_20px_rgba(183,154,91,0.15)]"
+                >
                   <div className="absolute top-4 right-4 text-[#B79A5B]/20 text-2xl font-light">{value.number}</div>
-                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform" />
+                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform duration-300" />
                   <h4 className="text-[#B79A5B] font-semibold mb-2 text-sm tracking-wider">{value.title}</h4>
                   <p className="text-[#f0c9e1]/70 text-xs leading-relaxed">{value.description}</p>
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* PRODUITS SECTION */}
+      <section className="relative py-16 sm:py-24 bg-gradient-to-b from-[#080508] to-[#0d0810]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-light text-[#f0c9e1] mb-4">
+              Nos <span className="text-[#B79A5B]">Produits</span>
+            </h2>
+            <p className="text-[#f0c9e1]/70 text-sm">Découvrez notre gamme de produits premium</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {products.map((product, i) => (
+              <div key={i} className="group rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(183,154,91,0.15)]">
+                <div className="relative bg-[#1a1320]/50 aspect-square overflow-hidden flex items-center justify-center">
+                  {product.image && (
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={200}
+                      height={200}
+                      className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    />
+                  )}
+                  {product.tag && (
+                    <span className="absolute top-3 right-3 px-3 py-1 bg-[#B79A5B] text-[#080508] text-xs font-semibold rounded-full">
+                      {product.tag}
+                    </span>
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="text-[#B79A5B] font-semibold text-sm mb-1 line-clamp-2">{product.name}</h3>
+                  <p className="text-[#f0c9e1]/70 text-xs mb-3">{product.subtitle}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#B79A5B] font-semibold text-sm">{product.price}</span>
+                    <LiquidMetalButton label="Voir" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
