@@ -29,8 +29,8 @@ export default function Boutique() {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {products.map((product, i) => (
-          <article key={product.name} className="group rounded-2xl overflow-hidden border border-[#B79A5B]/[0.10] hover:border-[#B79A5B]/30 active:border-[#B79A5B]/30 transition-all duration-500 bg-gradient-to-b from-[#0d0810] to-black touch-manipulation">
-            <div className="aspect-[3/4] relative overflow-hidden bg-gradient-to-b from-[#140c12] to-black">
+          <article key={product.name} className="group rounded-2xl overflow-hidden border border-[#B79A5B]/[0.10] hover:border-[#B79A5B]/30 active:border-[#B79A5B]/30 transition-all duration-500 bg-gradient-to-b from-[#0d0810] to-black touch-manipulation flex flex-col h-full">
+            <div className="aspect-[3/4] relative overflow-hidden bg-gradient-to-b from-[#140c12] to-black flex-shrink-0">
               <div className="absolute inset-0 opacity-60 group-hover:opacity-90 transition-opacity duration-500" style={{ background: `radial-gradient(circle at 50% 75%, rgba(240,201,225,${0.18 + i*0.04}), transparent 55%), linear-gradient(180deg, rgba(60,30,50,0.3), #000)` }} />
               <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/70 to-transparent" />
               {product.image ? (
@@ -57,10 +57,10 @@ export default function Boutique() {
                 {[...Array(5)].map((_, k) => <Sparkle key={k} size={8} className="text-[#B79A5B] fill-[#B79A5B]" />)}
               </div>
             </div>
-            <div className="p-3 sm:p-4 cm-text-glass-soft">
+            <div className="p-3 sm:p-4 cm-text-glass-soft flex flex-col flex-1">
               <h3 className="text-[9px] sm:text-[10px] tracking-[0.12em] mb-1 text-[#f0c9e1]/80 font-medium leading-tight">{product.name}</h3>
-              <p className="text-[10px] sm:text-[11px] text-[#f0c9e1]/35 mb-3">{product.subtitle}</p>
-              <div className="flex items-center justify-between gap-1">
+              <p className="text-[10px] sm:text-[11px] text-[#f0c9e1]/35 mb-3 flex-1">{product.subtitle}</p>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 mt-auto">
                 <span className="text-[11px] sm:text-[13px] font-semibold text-[#B79A5B]">{product.price}</span>
                 <LiquidMetalButton label="AJOUTER" viewMode="text" onClick={() => {}} />
               </div>

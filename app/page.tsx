@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
+import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import { Alex_Brush } from "next/font/google";
 import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X } from "lucide-react";
@@ -13,6 +16,7 @@ const titleScript = Alex_Brush({
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t, isClient } = useLanguage();
   
   const navItems = [
     { label: "ACCUEIL", href: "#accueil" },
@@ -100,6 +104,9 @@ export default function Home() {
               <ShoppingCart size={16} />
               <span className="absolute -top-0.5 -right-0.5 text-[9px] rounded-full bg-[#B79A5B] text-black w-4 h-4 grid place-items-center font-bold">0</span>
             </button>
+            <div className="hidden sm:block">
+              {isClient && <LanguageSwitcher />}
+            </div>
           </div>
         </div>
         
@@ -243,6 +250,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {isClient && <DesktopShortcutInit />}
+      {isClient && <LanguageSwitcher />}
     </main>
   );
 }
