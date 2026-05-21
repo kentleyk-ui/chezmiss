@@ -19,38 +19,38 @@ export function QRCodeAdvanced() {
   const [copied, setCopied] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "https://chezmiss.netlify.app";
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "https://www.chezmiss.ca";
 
   // Produits pré-définis
   const products: QRGeneratorItem[] = [
     {
       id: "whipped-cream",
       label: "WHIPPED CREAM CLEANSER",
-      value: "https://chezmiss.netlify.app/boutique?product=whipped-cream-cleanser",
+      value: "https://www.chezmiss.ca/boutique?product=whipped-cream-cleanser",
       type: "product",
     },
     {
       id: "lash-setting",
       label: "LASH SETTING SPRAY",
-      value: "https://chezmiss.netlify.app/boutique?product=lash-setting-spray",
+      value: "https://www.chezmiss.ca/boutique?product=lash-setting-spray",
       type: "product",
     },
     {
       id: "lash-primer",
       label: "LASH PRIMER",
-      value: "https://chezmiss.netlify.app/boutique?product=lash-primer",
+      value: "https://www.chezmiss.ca/boutique?product=lash-primer",
       type: "product",
     },
     {
       id: "premium-bonder",
       label: "PREMIUM BONDER",
-      value: "https://chezmiss.netlify.app/boutique?product=premium-bonder",
+      value: "https://www.chezmiss.ca/boutique?product=premium-bonder",
       type: "product",
     },
     {
       id: "cream-remover",
       label: "CREAM REMOVER",
-      value: "https://chezmiss.netlify.app/boutique?product=cream-remover",
+      value: "https://www.chezmiss.ca/boutique?product=cream-remover",
       type: "product",
     },
   ];

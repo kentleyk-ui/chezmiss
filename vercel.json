@@ -1,5 +1,4 @@
 {
-  "projectId": "chez-miss",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "outputDirectory": ".next",
@@ -11,11 +10,11 @@
   "regions": ["iad1"],
   "domains": [
     {
-      "domain": "chezmiss.ca",
-      "redirect": "https://www.chezmiss.ca"
+      "domain": "www.chezmiss.ca"
     },
     {
-      "domain": "www.chezmiss.ca"
+      "domain": "chezmiss.ca",
+      "redirect": "https://www.chezmiss.ca"
     }
   ],
   "git": {
@@ -41,13 +40,7 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/",
-      "permanent": false
-    }
   ]
 }
+
 

@@ -9,7 +9,7 @@ export function QRCodeModal() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
 
-  const pageUrl = typeof window !== "undefined" ? window.location.href : "https://chezmiss.netlify.app";
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "https://www.chezmiss.ca";
 
   useEffect(() => {
     if (isOpen && canvasRef.current) {
