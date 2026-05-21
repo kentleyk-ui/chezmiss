@@ -12,11 +12,11 @@ const SectionSchema = z.object({
     "video",
   ]),
   position: z.number().int().nonnegative().optional(),
-  data: z.record(z.any()).optional(),
+  data: z.record(z.string(), z.any()).optional(),
 })
 
 const SectionUpdateSchema = z.object({
-  data: z.record(z.any()).optional(),
+  data: z.record(z.string(), z.any()).optional(),
 })
 
 export function validateSection(body: unknown) {

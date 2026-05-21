@@ -450,7 +450,7 @@ export default function Home() {
               className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
               aria-label="LinkedIn"
             >
-              <Linkedin size={24} className="group-hover:scale-110 transition-transform" />
+              <Briefcase size={24} className="group-hover:scale-110 transition-transform" />
             </a>
 
             <a
