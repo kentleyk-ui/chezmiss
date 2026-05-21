@@ -79,6 +79,10 @@ export function QRBarcodeGenerator() {
           left: 0 !important;
           border-radius: 100% !important;
         }
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
+        }
       `;
       document.head.appendChild(style);
     }
@@ -212,7 +216,7 @@ export function QRBarcodeGenerator() {
         {isExpanded && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: -450 }}
+            animate={{ opacity: 1, scale: 1, y: -380 }}
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="mb-4 w-96 rounded-3xl border border-[#B79A5B]/60 bg-gradient-to-br from-[#0d0810] via-[#1a0a12] to-[#080508] p-8 shadow-2xl backdrop-blur-2xl"
@@ -307,40 +311,83 @@ export function QRBarcodeGenerator() {
               rows={3}
             />
 
-            {/* Generated Code Display */}
+            {/* Generated Code Display - Glass Morphism with Liquid Metal Border */}
             {generated && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-6 flex flex-col items-center gap-4 rounded-xl bg-[#080508]/80 border border-[#B79A5B]/30 p-4"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="mb-6 relative rounded-2xl overflow-hidden"
               >
-                {mode === "qr" ? (
-                  <canvas ref={qrCanvasRef} className="w-40 h-40" />
-                ) : (
-                  <canvas ref={barcodeCanvasRef} />
-                )}
+                {/* Liquid Metal Border Glow */}
+                <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{
+                  background: `linear-gradient(135deg, rgba(183,154,91,0.3) 0%, rgba(240,201,225,0.1) 50%, rgba(183,154,91,0.2) 100%)`,
+                  opacity: 0.6,
+                  filter: "blur(1px)",
+                }} />
 
-                <div className="w-full space-y-2">
-                  <button
-                    onClick={copyToClipboard}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#B79A5B]/20 text-[#B79A5B] hover:bg-[#B79A5B]/30 transition-all text-sm font-medium"
-                  >
-                    {copied ? (
-                      <>
-                        <Check size={16} /> Copié!
-                      </>
-                    ) : (
-                      <>
-                        <Copy size={16} /> Copier
-                      </>
-                    )}
-                  </button>
-                  <button
-                    onClick={downloadCode}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#B79A5B] text-black hover:bg-[#B79A5B]/90 transition-all text-sm font-bold"
-                  >
-                    <Download size={16} /> Télécharger PNG
-                  </button>
+                {/* Main Glass Container */}
+                <div className="relative p-6 backdrop-blur-2xl bg-gradient-to-br from-[#B79A5B]/10 via-[#080508]/50 to-[#1a0a12]/30 border-2 border-[#B79A5B]/40 rounded-2xl shadow-2xl"
+                  style={{
+                    boxShadow: "0 8px 32px rgba(183, 154, 91, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.1)",
+                  }}
+                >
+                  {/* Top shine effect */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent rounded-t-2xl" />
+
+                  {/* Code Display Area */}
+                  <div className="flex flex-col items-center gap-4">
+                    {/* Code Canvas Container */}
+                    <div className="relative p-4 rounded-xl bg-gradient-to-b from-[#0d0810]/80 to-[#080508]/95 border border-[#B79A5B]/20">
+                      {/* Inner glow */}
+                      <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#B79A5B]/5 to-transparent pointer-events-none" />
+
+                      {mode === "qr" ? (
+                        <canvas ref={qrCanvasRef} className="w-48 h-48 relative z-10" />
+                      ) : (
+                        <canvas ref={barcodeCanvasRef} className="relative z-10" />
+                      )}
+                    </div>
+
+                    {/* Code Value Info */}
+                    <div className="w-full">
+                      <p className="text-xs text-[#B79A5B]/60 mb-2 font-semibold tracking-wider uppercase">
+                        {mode === "qr" ? "Contenu QR" : "Contenu Code-barres"}
+                      </p>
+                      <div className="px-3 py-2 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/20 backdrop-blur-sm">
+                        <p className="text-xs text-[#f0c9e1]/70 font-mono break-all line-clamp-2 hover:line-clamp-none transition-all">
+                          {generated.length > 50 ? `${generated.substring(0, 50)}...` : generated}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="w-full grid grid-cols-2 gap-2 pt-2">
+                      <button
+                        onClick={copyToClipboard}
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#B79A5B]/20 hover:bg-[#B79A5B]/30 border border-[#B79A5B]/30 text-[#B79A5B] transition-all text-xs font-semibold group"
+                      >
+                        {copied ? (
+                          <>
+                            <Check size={14} className="group-hover:scale-110 transition-transform" />
+                            <span className="hidden sm:inline">Copié</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} className="group-hover:scale-110 transition-transform" />
+                            <span className="hidden sm:inline">Copier</span>
+                          </>
+                        )}
+                      </button>
+                      <button
+                        onClick={downloadCode}
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#B79A5B] hover:bg-[#B79A5B]/90 border border-[#B79A5B]/50 text-black transition-all text-xs font-bold group"
+                      >
+                        <Download size={14} className="group-hover:scale-110 transition-transform" />
+                        <span className="hidden sm:inline">PNG</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -378,8 +425,8 @@ export function QRBarcodeGenerator() {
             }
           }}
         >
-          {/* Button Container */}
-          <div className="w-24 h-24 rounded-full overflow-hidden shadow-2xl border border-[#B79A5B]/40">
+          {/* Button Container - 48x48 (half of 96x96) */}
+          <div className="w-12 h-12 rounded-full overflow-hidden shadow-xl border border-[#B79A5B]/40">
             {/* Shader Background */}
             <div
               ref={shaderRef}
@@ -394,7 +441,7 @@ export function QRBarcodeGenerator() {
                 }}
                 transition={{ duration: 0.5 }}
               >
-                <QrCode size={48} className="drop-shadow-2xl text-[#B79A5B]" />
+                <QrCode size={24} className="drop-shadow-lg text-[#B79A5B]" />
               </motion.div>
             </div>
 
@@ -403,7 +450,7 @@ export function QRBarcodeGenerator() {
               animate={{
                 boxShadow: [
                   "0 0 0 0 rgba(183,154,91,0.6)",
-                  "0 0 0 20px rgba(183,154,91,0)",
+                  "0 0 0 12px rgba(183,154,91,0)",
                 ],
               }}
               transition={{ duration: 2.5, repeat: Infinity }}
