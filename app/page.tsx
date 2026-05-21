@@ -197,13 +197,42 @@ export default function Home() {
                 />
                 {/* voile global pour encrer la photo dans le fond */}
                 <div className="absolute inset-0 bg-[#080508]/36" />
-                {/* fondu elegant theme gold/pink + ombrage */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/46 via-transparent to-[#080508]/80" />
-                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#080508]/90 to-transparent" />
-                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#080508]/85 to-transparent" />
-                <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#080508]/76 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#080508]/92 to-transparent" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_34%,rgba(8,5,8,0.58)_100%)]" />
+                {/* Fades progressifs sur les contours pour ancrer dans le fond */}
+                {/* Haut */}
+                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#080508]/95 via-[#080508]/60 to-transparent" />
+                {/* Bas */}
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#080508]/95 via-[#080508]/60 to-transparent" />
+                {/* Gauche */}
+                <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#080508]/95 via-[#080508]/60 to-transparent" />
+                {/* Droite */}
+                <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#080508]/95 via-[#080508]/60 to-transparent" />
+                {/* Coin haut-gauche */}
+                <div className="absolute top-0 left-0 w-32 h-32 bg-radial-gradient pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at top left, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
+                  }}
+                />
+                {/* Coin haut-droite */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-radial-gradient pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at top right, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
+                  }}
+                />
+                {/* Coin bas-gauche */}
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-radial-gradient pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at bottom left, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
+                  }}
+                />
+                {/* Coin bas-droite */}
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-radial-gradient pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse at bottom right, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
+                  }}
+                />
+                {/* fondu elegant theme gold/pink + ombrage global */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/30 via-transparent to-[#080508]/50" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,5,8,0.5)_100%)]" />
                 {/* Titre hommage */}
                 <div className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none">
                   <p className="text-center text-[11px] sm:text-[12px] tracking-[0.15em] text-[#f0c9e1]/80 italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
