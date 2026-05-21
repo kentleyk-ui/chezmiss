@@ -240,7 +240,165 @@ export default function Home() {
         </div>
       </section>
 
-{/* Section produits déplacée vers /boutique */}
+{/* Section À PROPOS */}
+      <section className="relative py-16 sm:py-24 bg-gradient-to-b from-[#080508] via-[#0a050a] to-[#080508]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center mb-16">
+            {/* Texte */}
+            <div className="space-y-6 order-2 lg:order-1">
+              <div>
+                <span className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 uppercase">Notre histoire</span>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#f0c9e1] mt-3 leading-tight">
+                  À <span className="text-[#B79A5B]">PROPOS</span> de <span className="text-[#B79A5B]">CHEZ MISS</span>
+                </h2>
+              </div>
+              <p className="text-sm sm:text-base text-[#f0c9e1]/80 leading-relaxed">
+                CHEZ MISS est une marque de beauté premium née de la passion pour l'excellence et l'innovation. Chaque produit est conçu avec précision pour sublimer votre beauté naturelle.
+              </p>
+              <p className="text-sm sm:text-base text-[#f0c9e1]/70 leading-relaxed">
+                Fondée au cœur de Québec, notre mission est de fournir des produits exceptionnels aux professionnelles en salon et aux clientes à domicile. Nous croyons que la beauté est un art.
+              </p>
+              <a href="/a-propos" className="inline-block">
+                <LiquidMetalButton label="EN SAVOIR PLUS" viewMode="text" onClick={() => {}} />
+              </a>
+            </div>
+
+            {/* Image */}
+            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/20 order-1 lg:order-2" style={{ aspectRatio: "4/3" }}>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#B79A5B]/10 to-[#8B5CF6]/10" />
+              <Image
+                src="/Révélez.png"
+                alt="À Propos"
+                fill
+                className="object-cover opacity-70 hover:opacity-90 transition-opacity duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080508] via-transparent to-transparent" />
+            </div>
+          </div>
+
+          {/* Valeurs */}
+          <div className="mt-20 pt-16 border-t border-[#B79A5B]/20">
+            <h3 className="text-2xl sm:text-3xl font-light text-center text-[#f0c9e1] mb-12">
+              Nos <span className="text-[#B79A5B]">Valeurs</span>
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { icon: Diamond, title: "QUALITÉ", desc: "Produits sélectionnés avec exigence" },
+                { icon: Wand2, title: "EXPERTISE", desc: "Une marque pensée par des experts" },
+                { icon: Rocket, title: "RAPIDITÉ", desc: "Livraison rapide et sécurisée" },
+                { icon: Fingerprint, title: "CONFIANCE", desc: "14 jours satisfait ou remboursé" }
+              ].map((value, i) => {
+                const Icon = value.icon;
+                return (
+                  <div key={i} className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group">
+                    <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform" />
+                    <h4 className="text-[#B79A5B] font-semibold mb-2 text-sm tracking-wider">{value.title}</h4>
+                    <p className="text-[#f0c9e1]/70 text-xs leading-relaxed">{value.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Produits en Avant */}
+      <section className="relative py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12">
+            <span className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 uppercase">collection</span>
+            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mt-3">
+              Nos <span className="text-[#B79A5B]">Indispensables</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {[
+              { name: "WHIPPED CREAM CLEANSER", price: "29,90 $", tag: "BESTSELLER", image: "/whipped-cream-cleanser.png" },
+              { name: "LASH SETTING SPRAY", price: "25,90 $", tag: "NOUVEAU", image: "/lash-setting-spray.png" },
+              { name: "LASH PRIMER", price: "23,90 $", tag: null, image: "/lash-primer.png" },
+              { name: "PREMIUM BONDER", price: "23,90 $", tag: "PRO", image: "/premium-bonder.png" },
+              { name: "CREAM REMOVER", price: "21,90 $", tag: null, image: null }
+            ].map((product, i) => (
+              <div key={i} className="group rounded-lg border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/30 overflow-hidden transition-all duration-300">
+                <div className="aspect-square bg-gradient-to-br from-[#140c12] to-black relative overflow-hidden">
+                  {product.image && (
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
+                  )}
+                  {product.tag && (
+                    <span className="absolute top-2 left-2 text-[8px] bg-[#B79A5B] text-black px-2 py-1 rounded-full font-semibold">{product.tag}</span>
+                  )}
+                </div>
+                <div className="p-3">
+                  <h4 className="text-[9px] text-[#f0c9e1]/80 font-semibold tracking-wider truncate">{product.name}</h4>
+                  <p className="text-[11px] text-[#B79A5B] mt-2 font-semibold">{product.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <a href="/boutique">
+              <LiquidMetalButton label="VOIR TOUTE LA COLLECTION" viewMode="text" onClick={() => {}} />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Infolettre */}
+      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#8B5CF6]/10 via-transparent to-[#B79A5B]/10 border-y border-[#B79A5B]/20">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
+            Restez <span className="text-[#B79A5B]">Connectée</span>
+          </h2>
+          <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-8">
+            Inscrivez-vous à notre infolettre pour recevoir les dernières tendances beauté et offres exclusives.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="email"
+              placeholder="votre@email.com"
+              className="flex-1 px-4 py-3 bg-[#1a1320] border border-[#B79A5B]/30 rounded-lg text-[#f0c9e1] text-sm focus:border-[#B79A5B] outline-none transition-colors"
+            />
+            <button className="px-6 py-3 bg-[#B79A5B] text-black font-semibold rounded-lg hover:bg-[#B79A5B]/90 transition-colors whitespace-nowrap">
+              S'ABONNER
+            </button>
+          </div>
+
+          <p className="text-xs text-[#f0c9e1]/50 mt-4">
+            Nous respectons votre vie privée. Désabonnez-vous à tout moment.
+          </p>
+        </div>
+      </section>
+
+      {/* Section Contact */}
+      <section className="relative py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
+            Nous <span className="text-[#B79A5B]">Contacter</span>
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { icon: "📧", title: "Email", value: "info@chezmiss.ca" },
+              { icon: "📱", title: "Téléphone", value: "+1 (418) 555-MISS" },
+              { icon: "📍", title: "Adresse", value: "Québec, Canada" }
+            ].map((contact, i) => (
+              <div key={i} className="text-center">
+                <div className="text-4xl mb-4">{contact.icon}</div>
+                <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
+                <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10 mt-16 sm:mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
