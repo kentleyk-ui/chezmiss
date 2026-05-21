@@ -1,12 +1,17 @@
 import { supabase } from "@/lib/supabase"
-import Renderer from "@/app/components/builder/Renderer"
+import PublicRenderer from "@/app/components/builder/PublicRenderer"
+import { notFound } from "next/navigation"
 
 export default async function PublicPage({ params }: any) {
+  const { slug } = await params
+
   const { data: page } = await supabase
     .from("pages")
     .select("*")
-    .eq("slug", params.slug)
+    .eq("slug", slug)
     .single()
+
+  if (!page) notFound()
 
   const { data: sections } = await supabase
     .from("sections")
@@ -16,8 +21,9 @@ export default async function PublicPage({ params }: any) {
 
   return (
     <div>
-      <Renderer sections={sections} />
+      <PublicRenderer sections={sections || []} />
     </div>
   )
 }
+
 

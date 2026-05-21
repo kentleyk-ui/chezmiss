@@ -9,7 +9,7 @@ export default function Renderer({ sections, onSelect }: any) {
         const props = { data: s.data }
 
         return (
-          <div key={s.id} onClick={() => onSelect(s)}>
+          <div key={s.id} onClick={() => onSelect?.(s)}>
             {s.type === "hero" && <Hero {...props} />}
             {s.type === "texte" && <Texte {...props} />}
             {s.type === "image" && <ImageBlock {...props} />}
