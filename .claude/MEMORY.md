@@ -1,1 +1,2 @@
 - [Liquid Metal Button Convention](button_liquid_metal_convention.md) — All buttons must use LiquidMetalButton component
+- [2FA TOTP Implementation](2fa_totp_implementation.md) — Complete 2FA authentication system with Google Authenticator
