@@ -50,8 +50,8 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
       style.id = styleId
       style.textContent = `
         @keyframes cm-glow-pulse {
-          0%, 100% { box-shadow: 0 0 12px rgba(197,151,1,0.45), 0 0 28px rgba(197,151,1,0.18); }
-          50%       { box-shadow: 0 0 22px rgba(197,151,1,0.70), 0 0 50px rgba(197,151,1,0.28); }
+          0%, 100% { box-shadow: 0 0 12px rgba(183,154,91,0.45), 0 0 28px rgba(183,154,91,0.18); }
+          50%       { box-shadow: 0 0 22px rgba(183,154,91,0.70), 0 0 50px rgba(183,154,91,0.28); }
         }
         .shader-container-exploded canvas {
           width: 100% !important;
@@ -208,7 +208,7 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
                   color: "#f5dce9",
                   fontWeight: 600,
                   letterSpacing: "0.12em",
-                  textShadow: "0px 0px 6px rgba(197,151,1,0.75), 0px 0px 14px rgba(240,201,225,0.55), 0px 1px 2px rgba(0,0,0,0.7)",
+                  textShadow: "0px 0px 6px rgba(183,154,91,0.75), 0px 0px 14px rgba(240,201,225,0.55), 0px 1px 2px rgba(0,0,0,0.7)",
                   transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
                   transform: "scale(1)",
                   whiteSpace: "nowrap",
@@ -268,10 +268,10 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
                 width: `${dimensions.width}px`,
                 borderRadius: "100px",
                 boxShadow: isPressed
-                  ? "0 0 10px rgba(197,151,1,0.35), 0 0 0 1.2px rgba(197,151,1,0.55), inset 0 0 0 1px rgba(197,151,1,0.25)"
+                  ? "0 0 10px rgba(183,154,91,0.35), 0 0 0 1.2px rgba(183,154,91,0.55), inset 0 0 0 1px rgba(183,154,91,0.25)"
                   : isHovered
-                    ? "0 0 30px rgba(197,151,1,0.85), 0 0 64px rgba(197,151,1,0.38), 0 0 0 1.4px rgba(197,151,1,0.88), inset 0 0 0 1px rgba(197,151,1,0.35)"
-                    : "0 0 16px rgba(197,151,1,0.5), 0 0 36px rgba(197,151,1,0.20), 0 0 0 1.2px rgba(197,151,1,0.62), inset 0 0 0 1px rgba(197,151,1,0.20)",
+                    ? "0 0 30px rgba(183,154,91,0.85), 0 0 64px rgba(183,154,91,0.38), 0 0 0 1.4px rgba(183,154,91,0.88), inset 0 0 0 1px rgba(183,154,91,0.35)"
+                    : "0 0 16px rgba(183,154,91,0.5), 0 0 36px rgba(183,154,91,0.20), 0 0 0 1.2px rgba(183,154,91,0.62), inset 0 0 0 1px rgba(183,154,91,0.20)",
                 transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.4s ease, height 0.4s ease, box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
                 background: "rgb(0 0 0 / 0)",
                 animation: "cm-glow-pulse 3s ease-in-out infinite",
@@ -296,7 +296,7 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
                   position: "absolute",
                   inset: 0,
                   borderRadius: "100px",
-                  background: "linear-gradient(135deg, rgba(197,151,1,0.58) 0%, rgba(197,151,1,0.32) 35%, rgba(240,201,225,0.18) 65%, rgba(197,151,1,0.52) 100%)",
+                  background: "linear-gradient(135deg, rgba(183,154,91,0.58) 0%, rgba(183,154,91,0.32) 35%, rgba(240,201,225,0.18) 65%, rgba(183,154,91,0.52) 100%)",
                   mixBlendMode: "multiply",
                   pointerEvents: "none",
                 }}
@@ -306,8 +306,8 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
                   position: "absolute",
                   inset: 0,
                   borderRadius: "100px",
-                  border: "1.5px solid rgba(197,151,1,0.95)",
-                  boxShadow: "inset 0 1px 0 rgba(240,201,225,0.32), inset 0 0 14px rgba(197,151,1,0.38), 0 0 12px rgba(197,151,1,0.26)",
+                  border: "1.5px solid rgba(183,154,91,0.95)",
+                  boxShadow: "inset 0 1px 0 rgba(240,201,225,0.32), inset 0 0 14px rgba(183,154,91,0.38), 0 0 12px rgba(183,154,91,0.26)",
                   pointerEvents: "none",
                 }}
               />
@@ -351,7 +351,7 @@ export function LiquidMetalButton({ label = "Get Started", onClick, viewMode = "
                   width: "20px",
                   height: "20px",
                   borderRadius: "50%",
-                  background: "radial-gradient(circle, rgba(197,151,1,0.5) 0%, rgba(240,201,225,0.15) 50%, rgba(197,151,1,0) 70%)",
+                  background: "radial-gradient(circle, rgba(183,154,91,0.5) 0%, rgba(240,201,225,0.15) 50%, rgba(183,154,91,0) 70%)",
                   pointerEvents: "none",
                   animation: "ripple-animation 0.6s ease-out",
                 }}

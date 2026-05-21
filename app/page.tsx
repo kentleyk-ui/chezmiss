@@ -40,12 +40,12 @@ export default function Home() {
     <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden">
 
       {/* TOP STRIP */}
-      <div className="relative z-30 border-b border-[#B79A5B]/20 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/10 to-[#1a0a12] text-center text-[13px] sm:text-[15px] tracking-[0.24em] sm:tracking-[0.3em] py-2.5 text-[#f0c9e1] font-medium">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center">
-          <span className="inline-flex items-center gap-2.5 sm:gap-3">
-            <span className="w-10 h-px bg-gradient-to-r from-transparent to-[#B79A5B]/60" />
+      <div className="relative z-30 border-b border-[#B79A5B]/20 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/10 to-[#1a0a12] text-center text-[11px] sm:text-[13px] tracking-[0.18em] sm:tracking-[0.28em] py-2 sm:py-2.5 text-[#f0c9e1] font-medium">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center overflow-hidden">
+          <span className="inline-flex items-center gap-2 sm:gap-3">
+            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-r from-transparent to-[#B79A5B]/60" />
             <span className="whitespace-nowrap">ACT LIKE A LADY</span>
-            <span className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-[#B79A5B]/55 shadow-[0_0_12px_rgba(197,151,1,0.22)]">
+            <span className="relative w-5 h-5 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-[#B79A5B]/55 shadow-[0_0_12px_rgba(183,154,91,0.22)] flex-shrink-0">
               <Image
                 src="/eyes.png.jpeg"
                 alt="Eyes accent"
@@ -57,14 +57,14 @@ export default function Home() {
               <span className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/20 via-transparent to-[#080508]/40" />
             </span>
             <span className="whitespace-nowrap">LASH LIKE A BOSS</span>
-            <span className="w-10 h-px bg-gradient-to-l from-transparent to-[#B79A5B]/60" />
+            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-l from-transparent to-[#B79A5B]/60" />
           </span>
         </div>
       </div>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/60 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4 sm:gap-6 relative overflow-visible">
+      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/70 backdrop-blur-2xl">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 lg:h-18 flex items-center justify-between gap-2 sm:gap-6 relative overflow-visible">
           <div className="flex items-center gap-3 shrink-0 relative -top-0.5 sm:-top-1 pl-0.5">
             <Image
               src="/logo-chezmiss.png"
@@ -72,7 +72,7 @@ export default function Home() {
               width={1528}
               height={354}
               priority
-              className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(197,151,1,0.62)]"
+              className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(183,154,91,0.62)]"
             />
           </div>
           <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-2">
@@ -83,69 +83,73 @@ export default function Home() {
             ))}
           </nav>
           
-          {/* Mobile menu button */}
+          {/* Mobile menu button — 44px touch target */}
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors mr-auto ml-2"
-            aria-label="Menu"
+            className="lg:hidden w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 active:text-[#B79A5B] active:bg-[#B79A5B]/[0.14] hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors mr-auto ml-1 touch-manipulation"
+            aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Recherche"><ScanSearch size={15} /></button>
-            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Compte"><CircleUser size={15} /></button>
-            <button type="button" className="relative w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Panier">
-              <ShoppingCart size={15} />
-              <span className="absolute -top-1 -right-1 text-[9px] rounded-full bg-[#B79A5B] text-black w-3.5 h-3.5 grid place-items-center font-bold">0</span>
+          <div className="flex items-center gap-1 sm:gap-3">
+            <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Recherche"><ScanSearch size={16} /></button>
+            <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Compte"><CircleUser size={16} /></button>
+            <button type="button" className="relative w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Panier">
+              <ShoppingCart size={16} />
+              <span className="absolute -top-0.5 -right-0.5 text-[9px] rounded-full bg-[#B79A5B] text-black w-4 h-4 grid place-items-center font-bold">0</span>
             </button>
           </div>
         </div>
         
-        {/* Mobile menu overlay */}
+        {/* Mobile menu — full overlay avec grands touch targets */}
         {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-[#B79A5B]/[0.15]">
-            <nav className="flex flex-col items-center gap-3 py-6 px-4">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-2xl border-b border-[#B79A5B]/[0.15] shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+            <nav className="flex flex-col items-center gap-2 py-8 px-6">
               {navItems.map((item) => (
                 <a 
                   key={item.label} 
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex justify-center py-1 touch-manipulation"
                 >
                   <LiquidMetalButton label={item.label} />
                 </a>
               ))}
+              <div className="mt-4 w-16 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/30 to-transparent" />
+              <p className="text-[10px] tracking-[0.25em] text-[#f0c9e1]/25 mt-1">CHEZ MISS</p>
             </nav>
           </div>
         )}
       </header>
 
       {/* HERO */}
-      <section id="accueil" className="relative min-h-[92vh] flex items-center overflow-hidden">
+      <section id="accueil" className="relative min-h-[88vh] sm:min-h-[92vh] flex items-center overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(240,201,225,0.12)_0%,transparent_65%)]" />
-          <div className="absolute bottom-[-5%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(197,151,1,0.09)_0%,transparent_60%)]" />
+          <div className="absolute bottom-[-5%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(183,154,91,0.09)_0%,transparent_60%)]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1px] bg-gradient-to-r from-transparent via-[#B79A5B]/15 to-transparent rotate-12" />
         </div>
-        <div className="absolute top-4 sm:top-5 left-6 sm:left-8 lg:left-10">
+        <div className="absolute top-3 sm:top-5 left-4 sm:left-8 lg:left-10">
           <div 
-            className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#B79A5B] rounded-full px-4 py-1.5 bg-[#B79A5B]/5"
+            className="inline-flex items-center gap-2 text-[9px] sm:text-[10px] tracking-[0.22em] sm:tracking-[0.3em] text-[#B79A5B] rounded-full px-3 sm:px-4 py-1 sm:py-1.5 bg-[#B79A5B]/5"
             style={{
-              border: "1px solid rgba(197,151,1,0.35)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3), 0 0 12px rgba(197,151,1,0.15)",
-              textShadow: "0 1px 2px rgba(0,0,0,0.5), 0 0 8px rgba(197,151,1,0.3)",
+              border: "1px solid rgba(183,154,91,0.35)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3), 0 0 12px rgba(183,154,91,0.15)",
+              textShadow: "0 1px 2px rgba(0,0,0,0.5), 0 0 8px rgba(183,154,91,0.3)",
             }}
           >
             LUXE · BEAUTÉ · CONFIANCE
           </div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-6 w-full pt-16 pb-8 flex flex-col gap-6">
-          {/* RANGÉE 3 BLOCS */}
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-6 lg:gap-8 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full pt-14 sm:pt-16 pb-8 flex flex-col gap-5 sm:gap-6">
+          {/* RANGÉE 3 BLOCS — sur mobile: titre en premier */}
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-5 sm:gap-6 lg:gap-8 items-center">
 
-            {/* BLOC 1 — Glace texte, taille calée sur son contenu */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/8 lg:max-w-[500px] lg:justify-self-start"
-              style={{ boxShadow: "0 0 0 1px rgba(197,151,1,0.06), 0 0 50px 24px #080508, 0 0 86px 42px #040204" }}>
+            {/* BLOC 1 — Glace texte */}
+            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/8 lg:max-w-[500px] lg:justify-self-start order-2 lg:order-1"
+              style={{ boxShadow: "0 0 0 1px rgba(183,154,91,0.06), 0 0 50px 24px #080508, 0 0 86px 42px #040204" }}>
               {/* fond verre */}
               <div className="absolute inset-0 bg-gradient-to-b from-[#18090f]/75 to-[#0a050a]/85 backdrop-blur-xl" />
               {/* fond icône à peine visible */}
@@ -162,11 +166,11 @@ export default function Home() {
               {/* reflet haut */}
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/45 to-transparent" />
               {/* texte justifié */}
-              <div className="relative z-10 px-7 py-9 flex flex-col gap-4">
-                <p className="text-[13.5px] leading-[1.75] text-[#f0c9e1] text-justify">
+              <div className="relative z-10 px-5 sm:px-7 py-6 sm:py-9 flex flex-col gap-3 sm:gap-4">
+                <p className="text-[13px] sm:text-[13.5px] leading-[1.7] sm:leading-[1.75] text-[#f0c9e1] text-justify">
                   <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre autant aux exigences des professionnelles en salon, qu'aux clientes à domicile.
                 </p>
-                <p className="text-[13.5px] leading-[1.75] text-[#f0c9e1] italic text-justify">
+                <p className="text-[13px] sm:text-[13.5px] leading-[1.7] sm:leading-[1.75] text-[#f0c9e1] italic text-justify">
                   <span className="text-[#B79A5B]/92">Vous le constaterez.</span> Les résultats parlent d'eux-mêmes.
                 </p>
               </div>
@@ -174,17 +178,17 @@ export default function Home() {
               <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#080508] to-transparent" />
             </div>
 
-            {/* BLOC 2 — Titre script, invisible */}
-            <div className="flex items-center justify-center px-4 lg:px-6">
+            {/* BLOC 2 — Titre script */}
+            <div className="flex items-center justify-center px-2 sm:px-4 lg:px-6 order-1 lg:order-2">
               <h1 className={`${titleScript.className} font-normal leading-[0.84] tracking-[0.01em] text-center`}>
-                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Révélez</span>
-                <span className="block text-[clamp(2.4rem,4.8vw,4.6rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.30)]">votre</span>
-                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Élégance</span>
+                <span className="block text-[clamp(3.2rem,8vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(183,154,91,0.45)]">Révélez</span>
+                <span className="block text-[clamp(2.8rem,7vw,4.6rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.30)]">votre</span>
+                <span className="block text-[clamp(3.2rem,8vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(183,154,91,0.45)]">Élégance</span>
               </h1>
             </div>
 
             {/* BLOC 3 — Photo fondue dans le fond */}
-            <div className="relative rounded-2xl overflow-hidden w-full lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end"
+            <div className="relative rounded-2xl overflow-hidden w-full sm:w-3/4 mx-auto lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end order-3"
               style={{ boxShadow: "0 0 55px 28px #080508, 0 0 90px 45px #040204" }}>
               <div className="relative" style={{ paddingBottom: "125%" }}>
                 <Image
@@ -252,11 +256,11 @@ export default function Home() {
 
 {/* Section produits déplacée vers /boutique */}
 
-      <footer className="border-t border-[#B79A5B]/[0.08] py-10 mt-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between">
+      <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10 mt-16 sm:mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="pt-4 sm:pt-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-between sm:gap-0 text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.08em]">
             <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
-            <span className="tracking-[0.12em]">QUEBEC · CANADA</span>
+            <span className="tracking-[0.12em]">QUÉBEC · CANADA</span>
           </div>
         </div>
       </footer>
