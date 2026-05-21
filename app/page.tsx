@@ -17,8 +17,8 @@ export default function Home() {
   const navItems = [
     { label: "ACCUEIL", href: "#accueil" },
     { label: "À PROPOS", href: "/a-propos" },
-    { label: "BOUTIQUE", href: "#boutique" },
-    { label: "CONTACTE", href: "#contact" },
+    { label: "BOUTIQUE", href: "/boutique" },
+    { label: "CONTACT", href: "#contact" },
   ];
 
   const values = [
@@ -210,7 +210,7 @@ export default function Home() {
                   alt="Révélez votre Élégance"
                   fill
                   sizes="(max-width: 1024px) 100vw, 300px"
-                  className="object-contain opacity-[0.82]"
+                  className="object-contain opacity-[0.68]"
                   style={{ objectPosition: "28% center" }}
                   priority
                 />

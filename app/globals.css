@@ -10,6 +10,12 @@
   --cm-bg-1: #080508;
   --cm-bg-2: #040204;
   --cm-bg-3: #020102;
+
+  /* Nebula Theme Accent */
+  --nebula-purple: #8B5CF6;
+  --nebula-blue: #3B82F6;
+  --nebula-cyan: #06B6D4;
+  --nebula-glow: rgba(139, 92, 246, 0.3);
 }
 
 html,
@@ -129,6 +135,36 @@ body {
     rgba(0, 0, 0, 0.92) 82%,
     rgba(0, 0, 0, 0.85) 100%
   );
+}
+
+/* ── NEBULA THEME ACCENT ── */
+.cm-nebula-accent {
+  background:
+    radial-gradient(ellipse 40% 60% at 80% 20%, rgba(139, 92, 246, 0.08), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(6, 182, 212, 0.06), transparent 50%);
+  position: relative;
+}
+
+.cm-nebula-glow {
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2), 0 0 60px rgba(6, 182, 212, 0.1);
+}
+
+.cm-nebula-border {
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: inset 0 1px 0 rgba(139, 92, 246, 0.2);
+}
+
+@keyframes nebula-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 0 15px rgba(139, 92, 246, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.35), inset 0 0 25px rgba(139, 92, 246, 0.12);
+  }
+}
+
+.cm-nebula-pulse {
+  animation: nebula-pulse 4s ease-in-out infinite;
 }
 
 /* ── LOGO ABSOLU (conservé pour compatibilité) ── */
