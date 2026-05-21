@@ -6,29 +6,57 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const page_id = searchParams.get("page_id")
 
-  if (!page_id) return NextResponse.json([])
+  if (!page_id) {
+    return NextResponse.json(
+      { error: "Missing page_id parameter" },
+      { status: 400 }
+    )
+  }
 
-  const { data, error } = await supabase
-    .from("sections")
-    .select("*")
-    .eq("page_id", page_id)
-    .order("position", { ascending: true })
+  try {
+    const { data, error } = await supabase
+      .from("sections")
+      .select("*")
+      .eq("page_id", page_id)
+      .order("position", { ascending: true })
 
-  if (error) return NextResponse.json({ error }, { status: 500 })
-  return NextResponse.json(data)
+    if (error) throw error
+
+    return NextResponse.json(data)
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: "Failed to fetch sections" },
+      { status: 500 }
+    )
+  }
 }
 
 // POST — créer une section
 export async function POST(req: Request) {
-  const body = await req.json()
-  const { page_id, type, position, data } = body
+  try {
+    const body = await req.json()
+    const { page_id, type, position, data } = body
 
-  const { data: section, error } = await supabase
-    .from("sections")
-    .insert([{ page_id, type, position, data }])
-    .select()
-    .single()
+    if (!page_id || !type) {
+      return NextResponse.json(
+        { error: "Missing required fields: page_id, type" },
+        { status: 400 }
+      )
+    }
 
-  if (error) return NextResponse.json({ error }, { status: 500 })
-  return NextResponse.json(section)
+    const { data: section, error } = await supabase
+      .from("sections")
+      .insert([{ page_id, type, position, data: data || {} }])
+      .select()
+      .single()
+
+    if (error) throw error
+
+    return NextResponse.json(section)
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: "Failed to create section" },
+      { status: 500 }
+    )
+  }
 }

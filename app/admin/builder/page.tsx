@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Renderer from "@/app/components/builder/Renderer";
 import PropertiesPanel from "@/app/components/builder/PropertiesPanel";
-import { Plus, Save, X, Loader2 } from "lucide-react";
+import { Plus, Save, X, Loader2, Check } from "lucide-react";
 import { Section } from "@/types";
 
 export default function BuilderCanvas() {
@@ -17,6 +17,8 @@ export default function BuilderCanvas() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | number | null>(null);
 
   // Load sections
   useEffect(() => {
@@ -29,10 +31,35 @@ export default function BuilderCanvas() {
     loadSections();
   }, [pageId]);
 
+  const validatePageId = async (id: string): Promise<boolean> => {
+    try {
+      const { data } = await supabase
+        .from("pages")
+        .select("id")
+        .eq("id", id)
+        .single();
+
+      return !!data;
+    } catch {
+      return false;
+    }
+  };
+
   const loadSections = async () => {
     try {
       setIsLoading(true);
       setError(null);
+
+      if (!pageId) {
+        setError("Page ID manquant");
+        return;
+      }
+
+      const isValidPage = await validatePageId(pageId);
+      if (!isValidPage) {
+        setError("Page non trouvée");
+        return;
+      }
 
       const { data, error: err } = await supabase
         .from("sections")
@@ -57,23 +84,27 @@ export default function BuilderCanvas() {
     try {
       const maxPosition = sections.length > 0 ? Math.max(...sections.map(s => s.position)) : -1;
 
-      const { data, error: err } = await supabase
-        .from("sections")
-        .insert([
-          {
-            page_id: pageId,
-            type,
-            position: maxPosition + 1,
-            data: {},
-          },
-        ])
-        .select()
-        .single();
+      const response = await fetch("/api/sections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          page_id: pageId,
+          type,
+          position: maxPosition + 1,
+          data: {},
+        }),
+      });
 
-      if (err) throw err;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de la création");
+      }
 
       setSections([...sections, data]);
       setSelectedSection(data);
+      setSuccess("Section ajoutée");
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Erreur création section: ${String(err)}`);
     }
@@ -81,31 +112,57 @@ export default function BuilderCanvas() {
 
   const updateSection = async (updatedSection: Section) => {
     try {
-      const { error: err } = await supabase
-        .from("sections")
-        .update({ data: updatedSection.data })
-        .eq("id", updatedSection.id);
+      setError(null);
 
-      if (err) throw err;
+      const response = await fetch(`/api/sections/${updatedSection.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: updatedSection.data }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de la mise à jour");
+      }
 
       setSections(sections.map(s => s.id === updatedSection.id ? updatedSection : s));
       setSelectedSection(updatedSection);
+      setSuccess("Section mise à jour");
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Erreur mise à jour: ${String(err)}`);
     }
   };
 
+  const handleDeleteClick = (sectionId: string | number) => {
+    if (deleteConfirm === sectionId) {
+      deleteSection(sectionId);
+    } else {
+      setDeleteConfirm(sectionId);
+      setTimeout(() => setDeleteConfirm(null), 3000);
+    }
+  };
+
   const deleteSection = async (sectionId: string | number) => {
     try {
-      const { error: err } = await supabase
-        .from("sections")
-        .delete()
-        .eq("id", sectionId);
+      setError(null);
 
-      if (err) throw err;
+      const response = await fetch(`/api/sections/${sectionId}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de la suppression");
+      }
 
       setSections(sections.filter(s => s.id !== sectionId));
       setSelectedSection(null);
+      setDeleteConfirm(null);
+      setSuccess("Section supprimée");
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Erreur suppression: ${String(err)}`);
     }
@@ -114,16 +171,22 @@ export default function BuilderCanvas() {
   const saveOrder = async () => {
     try {
       setIsSaving(true);
+      setError(null);
 
-      const { error: err } = await fetch("/api/sections/reorder", {
+      const response = await fetch("/api/sections/reorder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sections }),
-      }).then(r => r.json());
+      });
 
-      if (err) throw err;
+      const data = await response.json();
 
-      setError(null);
+      if (!response.ok || data.error) {
+        throw new Error(data.error || "Erreur de sauvegarde");
+      }
+
+      setSuccess("Ordre sauvegardé");
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       setError(`Erreur sauvegarde ordre: ${String(err)}`);
     } finally {
@@ -162,10 +225,15 @@ export default function BuilderCanvas() {
         </div>
       </div>
 
-      {/* Error Message */}
+      {/* Error/Success Messages */}
       {error && (
         <div className="bg-red-900/20 border border-red-700/30 text-red-400 p-4 mx-6 mt-6 rounded">
           {error}
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-900/20 border border-green-700/30 text-green-400 p-4 mx-6 mt-6 rounded flex items-center gap-2">
+          <Check size={18} /> {success}
         </div>
       )}
 
@@ -226,11 +294,15 @@ export default function BuilderCanvas() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteSection(section.id);
+                              handleDeleteClick(section.id);
                             }}
-                            className="p-2 hover:bg-red-900/20 rounded transition text-red-400"
+                            className={`p-2 rounded transition ${
+                              deleteConfirm === section.id
+                                ? "bg-red-600 text-white font-semibold"
+                                : "hover:bg-red-900/20 text-red-400"
+                            }`}
                           >
-                            <X size={18} />
+                            {deleteConfirm === section.id ? "Confirmer?" : <X size={18} />}
                           </button>
                         </div>
                       </div>
