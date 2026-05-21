@@ -40,12 +40,12 @@ export default function Home() {
     <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden">
 
       {/* TOP STRIP */}
-      <div className="relative z-30 border-b border-[#c59701]/20 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/10 to-[#1a0a12] text-center text-[13px] sm:text-[15px] tracking-[0.24em] sm:tracking-[0.3em] py-2.5 text-[#f0c9e1] font-medium">
+      <div className="relative z-30 border-b border-[#B79A5B]/20 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/10 to-[#1a0a12] text-center text-[13px] sm:text-[15px] tracking-[0.24em] sm:tracking-[0.3em] py-2.5 text-[#f0c9e1] font-medium">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center">
           <span className="inline-flex items-center gap-2.5 sm:gap-3">
-            <span className="w-10 h-px bg-gradient-to-r from-transparent to-[#c59701]/60" />
+            <span className="w-10 h-px bg-gradient-to-r from-transparent to-[#B79A5B]/60" />
             <span className="whitespace-nowrap">ACT LIKE A LADY</span>
-            <span className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-[#c59701]/55 shadow-[0_0_12px_rgba(197,151,1,0.22)]">
+            <span className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-[#B79A5B]/55 shadow-[0_0_12px_rgba(197,151,1,0.22)]">
               <Image
                 src="/eyes.png.jpeg"
                 alt="Eyes accent"
@@ -57,13 +57,13 @@ export default function Home() {
               <span className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/20 via-transparent to-[#080508]/40" />
             </span>
             <span className="whitespace-nowrap">LASH LIKE A BOSS</span>
-            <span className="w-10 h-px bg-gradient-to-l from-transparent to-[#c59701]/60" />
+            <span className="w-10 h-px bg-gradient-to-l from-transparent to-[#B79A5B]/60" />
           </span>
         </div>
       </div>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-[#c59701]/[0.10] bg-black/60 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-4 sm:gap-6 relative overflow-visible">
           <div className="flex items-center gap-3 shrink-0 relative -top-0.5 sm:-top-1 pl-0.5">
             <Image
@@ -87,24 +87,24 @@ export default function Home() {
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors mr-auto ml-2"
+            className="lg:hidden w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors mr-auto ml-2"
             aria-label="Menu"
           >
             {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors" aria-label="Recherche"><ScanSearch size={15} /></button>
-            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors" aria-label="Compte"><CircleUser size={15} /></button>
-            <button type="button" className="relative w-9 h-9 grid place-items-center rounded-full border border-[#c59701]/[0.14] bg-[#c59701]/[0.05] text-[#f0c9e1]/50 hover:text-[#c59701] hover:bg-[#c59701]/[0.10] transition-colors" aria-label="Panier">
+            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Recherche"><ScanSearch size={15} /></button>
+            <button type="button" className="w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Compte"><CircleUser size={15} /></button>
+            <button type="button" className="relative w-9 h-9 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors" aria-label="Panier">
               <ShoppingCart size={15} />
-              <span className="absolute -top-1 -right-1 text-[9px] rounded-full bg-[#c59701] text-black w-3.5 h-3.5 grid place-items-center font-bold">0</span>
+              <span className="absolute -top-1 -right-1 text-[9px] rounded-full bg-[#B79A5B] text-black w-3.5 h-3.5 grid place-items-center font-bold">0</span>
             </button>
           </div>
         </div>
         
         {/* Mobile menu overlay */}
         {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-[#c59701]/[0.15]">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-[#B79A5B]/[0.15]">
             <nav className="flex flex-col items-center gap-3 py-6 px-4">
               {navItems.map((item) => (
                 <a 
@@ -125,11 +125,11 @@ export default function Home() {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(240,201,225,0.12)_0%,transparent_65%)]" />
           <div className="absolute bottom-[-5%] left-[-10%] w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(197,151,1,0.09)_0%,transparent_60%)]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1px] bg-gradient-to-r from-transparent via-[#c59701]/15 to-transparent rotate-12" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1px] bg-gradient-to-r from-transparent via-[#B79A5B]/15 to-transparent rotate-12" />
         </div>
         <div className="absolute top-4 sm:top-5 left-6 sm:left-8 lg:left-10">
           <div 
-            className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#c59701] rounded-full px-4 py-1.5 bg-[#c59701]/5"
+            className="inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-[#B79A5B] rounded-full px-4 py-1.5 bg-[#B79A5B]/5"
             style={{
               border: "1px solid rgba(197,151,1,0.35)",
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3), 0 0 12px rgba(197,151,1,0.15)",
@@ -144,7 +144,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-6 lg:gap-8 items-center">
 
             {/* BLOC 1 — Glace texte, taille calée sur son contenu */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#c59701]/8 lg:max-w-[500px] lg:justify-self-start"
+            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/8 lg:max-w-[500px] lg:justify-self-start"
               style={{ boxShadow: "0 0 0 1px rgba(197,151,1,0.06), 0 0 50px 24px #080508, 0 0 86px 42px #040204" }}>
               {/* fond verre */}
               <div className="absolute inset-0 bg-gradient-to-b from-[#18090f]/75 to-[#0a050a]/85 backdrop-blur-xl" />
@@ -160,14 +160,14 @@ export default function Home() {
                 />
               </div>
               {/* reflet haut */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#c59701]/45 to-transparent" />
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/45 to-transparent" />
               {/* texte justifié */}
               <div className="relative z-10 px-7 py-9 flex flex-col gap-4">
                 <p className="text-[13.5px] leading-[1.75] text-[#f0c9e1] text-justify">
-                  <span className="text-[#c59701] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre autant aux exigences des professionnelles en salon, qu'aux clientes à domicile.
+                  <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre autant aux exigences des professionnelles en salon, qu'aux clientes à domicile.
                 </p>
                 <p className="text-[13.5px] leading-[1.75] text-[#f0c9e1] italic text-justify">
-                  <span className="text-[#c59701]/92">Vous le constaterez.</span> Les résultats parlent d'eux-mêmes.
+                  <span className="text-[#B79A5B]/92">Vous le constaterez.</span> Les résultats parlent d'eux-mêmes.
                 </p>
               </div>
               {/* fondu bas */}
@@ -177,9 +177,9 @@ export default function Home() {
             {/* BLOC 2 — Titre script, invisible */}
             <div className="flex items-center justify-center px-4 lg:px-6">
               <h1 className={`${titleScript.className} font-normal leading-[0.84] tracking-[0.01em] text-center`}>
-                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#c59701]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Révélez</span>
+                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Révélez</span>
                 <span className="block text-[clamp(2.4rem,4.8vw,4.6rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.30)]">votre</span>
-                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#c59701]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Élégance</span>
+                <span className="block text-[clamp(2.8rem,5.5vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(197,151,1,0.45)]">Élégance</span>
               </h1>
             </div>
 
@@ -246,13 +246,13 @@ export default function Home() {
 
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#f0c9e1]/22 text-[9px] tracking-[0.2em]">
-          <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#c59701]/40 animate-pulse" />
+          <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#B79A5B]/40 animate-pulse" />
         </div>
       </section>
 
 {/* Section produits déplacée vers /boutique */}
 
-      <footer className="border-t border-[#c59701]/[0.08] py-10 mt-20">
+      <footer className="border-t border-[#B79A5B]/[0.08] py-10 mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-between">
             <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
