@@ -1,8 +1,9 @@
 "use client";
 
 import { QRCodeAdvanced } from "@/components/QRCodeAdvanced";
+import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Lock } from "lucide-react";
 
 export default function StaffPage() {
   return (
@@ -20,6 +21,26 @@ export default function StaffPage() {
           <div className="w-12" />
         </div>
       </header>
+
+      {/* Security Section */}
+      <div className="border-b border-[#B79A5B]/[0.10] bg-[#B79A5B]/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-2 text-[#B79A5B]">
+              <Lock size={18} />
+              <span className="text-sm font-medium">Sécurité Staff</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link href="/staff/setup-2fa" className="hidden sm:block">
+                <LiquidMetalButton label="Configuration 2FA" />
+              </Link>
+              <Link href="/staff/login" className="hidden sm:block">
+                <LiquidMetalButton label="Connexion Staff" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">

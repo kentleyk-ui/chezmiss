@@ -1,0 +1,1 @@
+- [Liquid Metal Button Convention](button_liquid_metal_convention.md) — All buttons must use LiquidMetalButton component

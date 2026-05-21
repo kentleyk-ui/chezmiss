@@ -15,16 +15,23 @@ export function useLanguage() {
       return;
     }
 
-    // Get browser language
-    const browserLang = navigator.language.split("-")[0].toLowerCase();
+    // Get browser/OS language
+    const browserLangs = navigator.languages || [navigator.language];
     let detectedLang: Language = "fr"; // default
 
-    if (browserLang === "en") {
-      detectedLang = "en";
-    } else if (browserLang === "es") {
-      detectedLang = "es";
-    } else if (browserLang === "fr") {
-      detectedLang = "fr";
+    for (const lang of browserLangs) {
+      const primaryLang = lang.split("-")[0].toLowerCase();
+
+      if (primaryLang === "en") {
+        detectedLang = "en";
+        break;
+      } else if (primaryLang === "es") {
+        detectedLang = "es";
+        break;
+      } else if (primaryLang === "fr") {
+        detectedLang = "fr";
+        break;
+      }
     }
 
     setLanguage(detectedLang);
@@ -42,3 +49,4 @@ export function useLanguage() {
 
   return { language, setLanguage: setLang, t, isClient };
 }
+

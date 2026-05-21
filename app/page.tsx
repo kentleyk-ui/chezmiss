@@ -4,11 +4,12 @@ import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
+import { LiquidMetalSocialIcon } from "@/components/LiquidMetalSocialIcon";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Heart, Share2, Music, Briefcase, Play } from "lucide-react";
+import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -98,13 +99,20 @@ export default function Home() {
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Recherche"><ScanSearch size={16} /></button>
-            <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Compte"><CircleUser size={16} /></button>
             <button type="button" className="relative w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Panier">
               <ShoppingCart size={16} />
               <span className="absolute -top-0.5 -right-0.5 text-[9px] rounded-full bg-[#B79A5B] text-black w-4 h-4 grid place-items-center font-bold">0</span>
             </button>
+            <div className="hidden lg:flex items-center gap-2">
+              <Link href="/signin">
+                <LiquidMetalButton label="Se connecter" />
+              </Link>
+              <Link href="/signup">
+                <LiquidMetalButton label="Créer un compte" />
+              </Link>
+            </div>
             <div className="hidden sm:block">
               {isClient && <LanguageSwitcher />}
             </div>
@@ -126,7 +134,15 @@ export default function Home() {
                 </a>
               ))}
               <div className="mt-4 w-16 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/30 to-transparent" />
-              <p className="text-[10px] tracking-[0.25em] text-[#f0c9e1]/25 mt-1">CHEZ MISS</p>
+              <div className="flex flex-col items-center gap-2 mt-4 w-full">
+                <Link href="/signin" className="w-full flex justify-center" onClick={() => setMobileMenuOpen(false)}>
+                  <LiquidMetalButton label="Se connecter" />
+                </Link>
+                <Link href="/signup" className="w-full flex justify-center" onClick={() => setMobileMenuOpen(false)}>
+                  <LiquidMetalButton label="Créer un compte" />
+                </Link>
+              </div>
+              <p className="text-[10px] tracking-[0.25em] text-[#f0c9e1]/25 mt-4">CHEZ MISS</p>
             </nav>
           </div>
         )}
@@ -413,55 +429,31 @@ export default function Home() {
 
           {/* Social Links */}
           <div className="flex justify-center gap-4 sm:gap-6 flex-wrap">
-            <a
+            <LiquidMetalSocialIcon
+              icon="instagram"
               href="https://instagram.com/chezmiss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
-              aria-label="Instagram"
-            >
-              <Heart size={24} className="group-hover:scale-110 transition-transform" />
-            </a>
-
-            <a
+              label="Instagram"
+            />
+            <LiquidMetalSocialIcon
+              icon="facebook"
               href="https://facebook.com/chezmiss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
-              aria-label="Facebook"
-            >
-              <Share2 size={24} className="group-hover:scale-110 transition-transform" />
-            </a>
-
-            <a
+              label="Facebook"
+            />
+            <LiquidMetalSocialIcon
+              icon="tiktok"
               href="https://tiktok.com/chezmiss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
-              aria-label="TikTok"
-            >
-              <Music size={24} className="group-hover:scale-110 transition-transform" />
-            </a>
-
-            <a
+              label="TikTok"
+            />
+            <LiquidMetalSocialIcon
+              icon="linkedin"
               href="https://linkedin.com/company/chezmiss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
-              aria-label="LinkedIn"
-            >
-              <Briefcase size={24} className="group-hover:scale-110 transition-transform" />
-            </a>
-
-            <a
+              label="LinkedIn"
+            />
+            <LiquidMetalSocialIcon
+              icon="youtube"
               href="https://youtube.com/chezmiss"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
-              aria-label="YouTube"
-            >
-              <Play size={24} className="group-hover:scale-110 transition-transform" />
-            </a>
+              label="YouTube"
+            />
           </div>
         </div>
       </section>
