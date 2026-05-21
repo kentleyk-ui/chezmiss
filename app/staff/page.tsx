@@ -2,6 +2,8 @@
 
 import { QRBarcodeGenerator } from "@/components/QRBarcodeGenerator";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
+import { ChezmissAide } from "@/components/ChezmissAide";
+import { KseniaMemorial } from "@/components/KseniaMemorial";
 import Link from "next/link";
 import { ArrowLeft, Lock } from "lucide-react";
 
@@ -174,6 +176,8 @@ export default function StaffPage() {
 
       {/* QR Code & Barcode Generator Component */}
       <QRBarcodeGenerator />
+
+      <ChezmissAide />
     </main>
   );
 }

@@ -2,7 +2,9 @@
 
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import Image from "next/image";
-import { Sparkle } from "lucide-react";
+import Link from "next/link";
+import { ChezmissAide } from "@/components/ChezmissAide";
+import { Sparkle, ArrowLeft } from "lucide-react";
 
 const products = [
   { name: "WHIPPED CREAM CLEANSER", subtitle: "Nettoyant creme fouettee", price: "29,90 $ CA", tag: "BESTSELLER", image: "/whipped-cream-cleanser.png", mockup: "tube" },
@@ -14,19 +16,35 @@ const products = [
 
 export default function Boutique() {
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 text-[#f8edf3]">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-14">
-        <div>
-          <div className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 mb-3">COLLECTION</div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-[#B79A5B]/90 leading-tight">
-            Nos<br />
-            <span className="text-[#f0c9e1]">Indispensables</span>
-          </h2>
+    <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/70 backdrop-blur-2xl">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-6">
+          <Link href="/" className="flex items-center gap-2 text-[#B79A5B] hover:text-[#B79A5B]/80 transition">
+            <ArrowLeft size={20} />
+            <span className="text-sm font-semibold">Retour</span>
+          </Link>
+          <h1 className="text-lg sm:text-xl font-semibold text-[#B79A5B]">BOUTIQUE</h1>
+          <div className="w-12" />
         </div>
-        <div className="self-start sm:self-end">
-          <LiquidMetalButton label="TOUT VOIR" viewMode="text" onClick={() => {}} />
+      </header>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+        {/* Section Title */}
+        <div className="mb-16">
+          <div className="text-center">
+            <span className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 uppercase mb-3 block">collection complète</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#f0c9e1] mb-6">
+              Nos <span className="text-[#B79A5B]">Indispensables</span>
+            </h2>
+            <p className="text-sm sm:text-base text-[#f0c9e1]/70 max-w-2xl mx-auto">
+              Découvrez notre gamme complète de produits de beauté conçus pour les professionnelles et les clientes à domicile.
+            </p>
+          </div>
         </div>
-      </div>
+
+        {/* Products Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {products.map((product, i) => (
           <article key={product.name} className="group rounded-2xl overflow-hidden border border-[#B79A5B]/[0.10] hover:border-[#B79A5B]/30 active:border-[#B79A5B]/30 transition-all duration-500 bg-gradient-to-b from-[#0d0810] to-black touch-manipulation flex flex-col h-full">
@@ -68,6 +86,22 @@ export default function Boutique() {
           </article>
         ))}
       </div>
+
+        {/* CTA Section */}
+        <div className="mt-20 pt-16 border-t border-[#B79A5B]/20 text-center">
+          <h3 className="text-2xl sm:text-3xl font-light text-[#f0c9e1] mb-6">
+            Vous avez des <span className="text-[#B79A5B]">Questions?</span>
+          </h3>
+          <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-8 max-w-2xl mx-auto">
+            Notre équipe est disponible pour vous aider avec vos questions sur nos produits et vos commandes.
+          </p>
+          <Link href="/#contact">
+            <LiquidMetalButton label="NOUS CONTACTER" />
+          </Link>
+        </div>
+      </div>
+
+      <ChezmissAide />
     </main>
   );
 }

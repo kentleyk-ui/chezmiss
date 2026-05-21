@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import JsBarcode from "jsbarcode";
-import { QrCode, Barcode, Shuffle, Download, Copy, Check } from "lucide-react";
-import { motion } from "framer-motion";
+import { QrCode, Barcode, Shuffle, Download, Copy, Check, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface GeneratorItem {
   id: string;
@@ -15,19 +15,35 @@ interface GeneratorItem {
 
 export function QRBarcodeGenerator() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
   const [mode, setMode] = useState<"qr" | "barcode">("qr");
   const [selectedItem, setSelectedItem] = useState<GeneratorItem | null>(null);
   const [customValue, setCustomValue] = useState("");
   const [copied, setCopied] = useState(false);
   const [generated, setGenerated] = useState<string | null>(null);
   const [isRandom, setIsRandom] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
   const barcodeCanvasRef = useRef<HTMLCanvasElement>(null);
+  const tempCanvasRef = useRef<HTMLCanvasElement>(null);
+  const displayCanvasRef = useRef<HTMLCanvasElement>(null);
   const shaderRef = useRef<HTMLDivElement>(null);
   const shaderMount = useRef<any>(null);
 
   const products: GeneratorItem[] = [
+    {
+      id: "chezmiss-home",
+      label: "CHEZ MISS HOME",
+      value: "https://www.chezmiss.ca",
+      type: "product",
+    },
+    {
+      id: "milele",
+      label: "MILELE MEMORIAL",
+      value: "https://www.milele4ever.com",
+      type: "product",
+    },
     {
       id: "whipped-cream",
       label: "WHIPPED CREAM",
@@ -79,9 +95,14 @@ export function QRBarcodeGenerator() {
           left: 0 !important;
           border-radius: 100% !important;
         }
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes transformer {
+          0% { transform: perspective(1000px) rotateY(0deg) scale(1); }
+          50% { transform: perspective(1000px) rotateY(90deg) scale(1.05); }
+          100% { transform: perspective(1000px) rotateY(0deg) scale(1); }
         }
       `;
       document.head.appendChild(style);
@@ -130,6 +151,33 @@ export function QRBarcodeGenerator() {
     };
   }, []);
 
+  // Initialize with Chezmiss Home by default
+  useEffect(() => {
+    const chezmissItem = products.find(p => p.id === "chezmiss-home");
+    if (chezmissItem) {
+      setSelectedItem(chezmissItem);
+    }
+  }, []);
+
+  const addWatermark = (canvas: HTMLCanvasElement): HTMLCanvasElement => {
+    const watermarkCanvas = document.createElement("canvas");
+    watermarkCanvas.width = canvas.width;
+    watermarkCanvas.height = canvas.height;
+
+    const ctx = watermarkCanvas.getContext("2d");
+    if (!ctx) return canvas;
+
+    ctx.drawImage(canvas, 0, 0);
+
+    ctx.font = `bold ${Math.max(12, canvas.width * 0.08)}px Arial`;
+    ctx.fillStyle = "rgba(183, 154, 91, 0.4)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "bottom";
+    ctx.fillText("CHEZ MISS", canvas.width / 2, canvas.height - 8);
+
+    return watermarkCanvas;
+  };
+
   const generateRandomCode = () => {
     setIsRandom(true);
     const randomId = "CHZ" + Math.random().toString(36).substring(2, 11).toUpperCase();
@@ -145,6 +193,7 @@ export function QRBarcodeGenerator() {
 
   const generateQRCode = async (value: string) => {
     if (!qrCanvasRef.current) return;
+    setIsGenerating(true);
     try {
       await QRCode.toCanvas(qrCanvasRef.current, value, {
         width: 300,
@@ -154,14 +203,20 @@ export function QRBarcodeGenerator() {
           light: "#080508",
         },
       });
-      setGenerated(value);
+
+      const watermarkedCanvas = addWatermark(qrCanvasRef.current);
+      setGenerated(watermarkedCanvas.toDataURL("image/png"));
+      setShowPanel(true);
     } catch (err) {
       console.error("QR Code error:", err);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
-  const generateBarcode = (value: string) => {
+  const generateBarcode = async (value: string) => {
     if (!barcodeCanvasRef.current) return;
+    setIsGenerating(true);
     try {
       JsBarcode(barcodeCanvasRef.current, value, {
         format: "CODE128",
@@ -174,19 +229,24 @@ export function QRBarcodeGenerator() {
         background: "#080508",
         margin: 10,
       });
-      setGenerated(value);
+
+      const watermarkedCanvas = addWatermark(barcodeCanvasRef.current);
+      setGenerated(watermarkedCanvas.toDataURL("image/png"));
+      setShowPanel(true);
     } catch (err) {
       console.error("Barcode error:", err);
+    } finally {
+      setIsGenerating(false);
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     const value = customValue || selectedItem?.value;
     if (value) {
       if (mode === "qr") {
-        generateQRCode(value);
+        await generateQRCode(value);
       } else {
-        generateBarcode(value);
+        await generateBarcode(value);
       }
     }
   };
@@ -200,11 +260,10 @@ export function QRBarcodeGenerator() {
   };
 
   const downloadCode = () => {
-    const canvas = mode === "qr" ? qrCanvasRef.current : barcodeCanvasRef.current;
-    if (canvas) {
+    if (generated) {
       const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = `${mode}-${Date.now()}.png`;
+      link.href = generated;
+      link.download = `chezmiss-${mode}-${Date.now()}.png`;
       link.click();
     }
   };
@@ -212,211 +271,257 @@ export function QRBarcodeGenerator() {
   return (
     <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none">
       <motion.div className="pointer-events-auto">
-        {/* Expanded Panel */}
-        {isExpanded && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: -380 }}
-            exit={{ opacity: 0, scale: 0.9, y: 50 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="mb-4 w-96 rounded-3xl border border-[#B79A5B]/60 bg-gradient-to-br from-[#0d0810] via-[#1a0a12] to-[#080508] p-8 shadow-2xl backdrop-blur-2xl"
-            style={{
-              boxShadow:
-                "0 0 60px rgba(183, 154, 91, 0.4), 0 0 100px rgba(183, 154, 91, 0.2), inset 0 0 40px rgba(183, 154, 91, 0.1)",
-            }}
-          >
-            {/* Header with Mode Switch */}
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-[#B79A5B]">
-                {mode === "qr" ? "QR Code" : "Code-barres"} Generator
-              </h3>
+        <AnimatePresence>
+          {/* Sliding Panel - Emerges from button */}
+          {showPanel && generated && (
+            <motion.div
+              initial={{ opacity: 0, x: 50, y: 20 }}
+              animate={{ opacity: 1, x: 0, y: -380 }}
+              exit={{ opacity: 0, x: 50, y: 20 }}
+              transition={{ duration: 0.6, ease: "easeOut", type: "spring", stiffness: 100 }}
+              className="mb-4 w-96 rounded-3xl overflow-hidden pointer-events-auto"
+            >
+              {/* Glass backdrop */}
+              <div className="absolute inset-0 rounded-3xl backdrop-blur-3xl bg-gradient-to-br from-[#B79A5B]/15 via-[#080508]/60 to-[#1a0a12]/40 border border-[#B79A5B]/50" />
 
-              {/* Mode Switch */}
-              <div className="flex gap-1 rounded-lg bg-[#080508]/80 border border-[#B79A5B]/30 p-1 backdrop-blur-sm">
-                <button
-                  onClick={() => setMode("qr")}
-                  className={`px-3 py-1 rounded transition-all duration-300 text-xs font-bold ${
-                    mode === "qr"
-                      ? "bg-[#B79A5B] text-black shadow-lg"
-                      : "text-[#B79A5B]/70 hover:text-[#B79A5B]"
-                  }`}
-                >
-                  <QrCode size={14} className="inline mr-1" /> QR
-                </button>
-                <button
-                  onClick={() => setMode("barcode")}
-                  className={`px-3 py-1 rounded transition-all duration-300 text-xs font-bold ${
-                    mode === "barcode"
-                      ? "bg-[#B79A5B] text-black shadow-lg"
-                      : "text-[#B79A5B]/70 hover:text-[#B79A5B]"
-                  }`}
-                >
-                  <Barcode size={14} className="inline mr-1" /> CODE
-                </button>
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="mb-6 flex gap-2 border-b border-[#B79A5B]/20 pb-3">
-              {["Page", "Produits", "Personnalisé", "Aléatoire"].map((tab) => (
-                <button
-                  key={tab}
-                  className={`px-3 py-1 text-xs font-medium rounded transition-all ${
-                    tab === "Aléatoire" && isRandom
-                      ? "bg-[#B79A5B]/20 text-[#B79A5B] border border-[#B79A5B]"
-                      : tab === "Produits" && selectedItem?.type === "product"
-                      ? "bg-[#B79A5B]/20 text-[#B79A5B] border border-[#B79A5B]"
-                      : tab === "Personnalisé" && customValue
-                      ? "bg-[#B79A5B]/20 text-[#B79A5B] border border-[#B79A5B]"
-                      : "bg-[#080508]/50 text-[#f0c9e1]/60 border border-[#B79A5B]/20"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Products Grid */}
-            {!isRandom && !customValue && (
-              <div className="mb-6 grid gap-2 max-h-40 overflow-y-auto">
-                {products.map((product) => (
-                  <button
-                    key={product.id}
-                    onClick={() => {
-                      setSelectedItem(product);
-                      setIsRandom(false);
-                      setCustomValue("");
-                    }}
-                    className={`p-2 rounded text-sm transition-all text-left ${
-                      selectedItem?.id === product.id
-                        ? "bg-[#B79A5B]/20 border border-[#B79A5B] text-[#f0c9e1]"
-                        : "bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1]/70 hover:border-[#B79A5B]/50"
-                    }`}
-                  >
-                    {product.label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Custom Input */}
-            <textarea
-              value={customValue}
-              onChange={(e) => {
-                setCustomValue(e.target.value);
-                setIsRandom(false);
-              }}
-              placeholder="Entrez une URL, du texte, ou un code personnalisé..."
-              className="mb-4 w-full rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 p-3 text-sm text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:border-[#B79A5B]/50 focus:outline-none"
-              rows={3}
-            />
-
-            {/* Generated Code Display - Glass Morphism with Liquid Metal Border */}
-            {generated && (
+              {/* Animated glow edges */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="mb-6 relative rounded-2xl overflow-hidden"
-              >
-                {/* Liquid Metal Border Glow */}
-                <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{
-                  background: `linear-gradient(135deg, rgba(183,154,91,0.3) 0%, rgba(240,201,225,0.1) 50%, rgba(183,154,91,0.2) 100%)`,
-                  opacity: 0.6,
-                  filter: "blur(1px)",
-                }} />
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 20px rgba(183,154,91,0.2), 0 0 40px rgba(183,154,91,0.3)",
+                    "inset 0 0 40px rgba(183,154,91,0.4), 0 0 80px rgba(183,154,91,0.5)",
+                    "inset 0 0 20px rgba(183,154,91,0.2), 0 0 40px rgba(183,154,91,0.3)",
+                  ],
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute inset-0 rounded-3xl pointer-events-none"
+              />
 
-                {/* Main Glass Container */}
-                <div className="relative p-6 backdrop-blur-2xl bg-gradient-to-br from-[#B79A5B]/10 via-[#080508]/50 to-[#1a0a12]/30 border-2 border-[#B79A5B]/40 rounded-2xl shadow-2xl"
-                  style={{
-                    boxShadow: "0 8px 32px rgba(183, 154, 91, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.1)",
-                  }}
+              {/* Content */}
+              <div className="relative p-8 space-y-6">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold bg-gradient-to-r from-[#B79A5B] to-[#f0c9e1] bg-clip-text text-transparent">
+                    {mode === "qr" ? "QR Code" : "Code-barres"}
+                  </h3>
+                  <motion.button
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowPanel(false)}
+                    className="p-2 hover:bg-[#B79A5B]/20 rounded-full transition-colors"
+                  >
+                    <X size={18} className="text-[#B79A5B]" />
+                  </motion.button>
+                </div>
+
+                {/* Code Display */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="flex justify-center"
                 >
-                  {/* Top shine effect */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent rounded-t-2xl" />
-
-                  {/* Code Display Area */}
-                  <div className="flex flex-col items-center gap-4">
-                    {/* Code Canvas Container */}
-                    <div className="relative p-4 rounded-xl bg-gradient-to-b from-[#0d0810]/80 to-[#080508]/95 border border-[#B79A5B]/20">
-                      {/* Inner glow */}
-                      <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-[#B79A5B]/5 to-transparent pointer-events-none" />
-
-                      {mode === "qr" ? (
-                        <canvas ref={qrCanvasRef} className="w-48 h-48 relative z-10" />
-                      ) : (
-                        <canvas ref={barcodeCanvasRef} className="relative z-10" />
-                      )}
-                    </div>
-
-                    {/* Code Value Info */}
-                    <div className="w-full">
-                      <p className="text-xs text-[#B79A5B]/60 mb-2 font-semibold tracking-wider uppercase">
-                        {mode === "qr" ? "Contenu QR" : "Contenu Code-barres"}
-                      </p>
-                      <div className="px-3 py-2 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/20 backdrop-blur-sm">
-                        <p className="text-xs text-[#f0c9e1]/70 font-mono break-all line-clamp-2 hover:line-clamp-none transition-all">
-                          {generated.length > 50 ? `${generated.substring(0, 50)}...` : generated}
-                        </p>
+                  {generated && (
+                    <div className="relative">
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#B79A5B]/30 via-transparent to-[#B79A5B]/20 blur-2xl" />
+                      <img
+                        src={generated}
+                        alt={mode}
+                        className="relative w-64 h-64 rounded-2xl border-2 border-[#B79A5B]/40 shadow-2xl object-contain bg-[#0d0810]/80 p-2"
+                      />
+                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-[#B79A5B]/60 tracking-widest">
+                        ✓ SIGNÉ CHEZ MISS
                       </div>
                     </div>
+                  )}
+                </motion.div>
 
-                    {/* Action Buttons */}
-                    <div className="w-full grid grid-cols-2 gap-2 pt-2">
-                      <button
-                        onClick={copyToClipboard}
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#B79A5B]/20 hover:bg-[#B79A5B]/30 border border-[#B79A5B]/30 text-[#B79A5B] transition-all text-xs font-semibold group"
+                {/* Action Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                  className="grid grid-cols-2 gap-3 pt-8"
+                >
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={copyToClipboard}
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-[#B79A5B]/30 to-[#f0c9e1]/10 hover:from-[#B79A5B]/50 hover:to-[#f0c9e1]/20 border border-[#B79A5B]/40 text-[#B79A5B] font-bold transition-all flex items-center justify-center gap-2 group"
+                  >
+                    {copied ? (
+                      <>
+                        <Check size={16} className="group-hover:scale-110 transition-transform" />
+                        <span>Copié!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={16} className="group-hover:scale-110 transition-transform" />
+                        <span>Copier</span>
+                      </>
+                    )}
+                  </motion.button>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={downloadCode}
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-[#B79A5B] to-[#c8a76b] hover:from-[#B79A5B]/90 hover:to-[#c8a76b]/90 text-black font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
+                  >
+                    <Download size={16} className="group-hover:scale-110 transition-transform" />
+                    <span>PNG</span>
+                  </motion.button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Expanded Control Panel */}
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: -420 }}
+              exit={{ opacity: 0, scale: 0.9, y: 50 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="mb-4 w-96 rounded-3xl border border-[#B79A5B]/60 overflow-hidden pointer-events-auto"
+              style={{
+                boxShadow:
+                  "0 0 60px rgba(183, 154, 91, 0.4), 0 0 100px rgba(183, 154, 91, 0.2), inset 0 0 40px rgba(183, 154, 91, 0.1)",
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0d0810] via-[#1a0a12] to-[#080508] backdrop-blur-2xl" />
+
+              {/* Content */}
+              <div className="relative p-8 space-y-6">
+                {/* Header with Mode Switch */}
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold bg-gradient-to-r from-[#B79A5B] to-[#f0c9e1] bg-clip-text text-transparent">
+                    {mode === "qr" ? "QR Code" : "Code-barres"}
+                  </h3>
+
+                  {/* Mode Switch - Transformer Style */}
+                  <motion.div
+                    className="flex gap-1 rounded-xl bg-[#080508]/80 border border-[#B79A5B]/30 p-1 backdrop-blur-sm"
+                    animate={{ rotateY: isExpanded ? 0 : -10 }}
+                  >
+                    {[
+                      { id: "qr", label: "QR", icon: QrCode },
+                      { id: "barcode", label: "CODE", icon: Barcode },
+                    ].map(({ id, label, icon: Icon }) => (
+                      <motion.button
+                        key={id}
+                        onClick={() => setMode(id as "qr" | "barcode")}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`px-3 py-2 rounded-lg transition-all duration-300 text-xs font-bold flex items-center gap-1 ${
+                          mode === id
+                            ? "bg-gradient-to-r from-[#B79A5B] to-[#c8a76b] text-black shadow-lg"
+                            : "text-[#B79A5B]/70 hover:text-[#B79A5B]"
+                        }`}
                       >
-                        {copied ? (
-                          <>
-                            <Check size={14} className="group-hover:scale-110 transition-transform" />
-                            <span className="hidden sm:inline">Copié</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={14} className="group-hover:scale-110 transition-transform" />
-                            <span className="hidden sm:inline">Copier</span>
-                          </>
-                        )}
-                      </button>
-                      <button
-                        onClick={downloadCode}
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#B79A5B] hover:bg-[#B79A5B]/90 border border-[#B79A5B]/50 text-black transition-all text-xs font-bold group"
+                        <Icon size={14} />
+                        {label}
+                      </motion.button>
+                    ))}
+                  </motion.div>
+                </div>
+
+                {/* Products Grid */}
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold text-[#B79A5B]/60 uppercase tracking-wider">Produits</p>
+                  <div className="grid gap-2 max-h-40 overflow-y-auto">
+                    {products.map((product) => (
+                      <motion.button
+                        key={product.id}
+                        onClick={() => {
+                          setSelectedItem(product);
+                          setIsRandom(false);
+                          setCustomValue("");
+                        }}
+                        whileHover={{ scale: 1.02, x: 4 }}
+                        className={`p-3 rounded-lg text-sm transition-all text-left ${
+                          selectedItem?.id === product.id
+                            ? "bg-gradient-to-r from-[#B79A5B]/30 to-[#f0c9e1]/10 border border-[#B79A5B] text-[#f0c9e1]"
+                            : "bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1]/70 hover:border-[#B79A5B]/50"
+                        }`}
                       >
-                        <Download size={14} className="group-hover:scale-110 transition-transform" />
-                        <span className="hidden sm:inline">PNG</span>
-                      </button>
-                    </div>
+                        {product.label}
+                      </motion.button>
+                    ))}
                   </div>
                 </div>
-              </motion.div>
-            )}
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={handleGenerate}
-                className="px-4 py-2 rounded-lg bg-[#B79A5B] text-black font-bold hover:bg-[#B79A5B]/90 transition-all"
-              >
-                Générer
-              </button>
-              <button
-                onClick={generateRandomCode}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#B79A5B]/50 to-[#f0c9e1]/20 border border-[#B79A5B]/50 text-[#B79A5B] font-bold hover:from-[#B79A5B]/70 hover:to-[#f0c9e1]/30 transition-all flex items-center justify-center gap-2"
-              >
-                <Shuffle size={16} /> Aléatoire
-              </button>
-            </div>
-          </motion.div>
-        )}
+                {/* Custom Input */}
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-[#B79A5B]/60 uppercase tracking-wider">Personnalisé</p>
+                  <textarea
+                    value={customValue}
+                    onChange={(e) => {
+                      setCustomValue(e.target.value);
+                      setIsRandom(false);
+                    }}
+                    placeholder="Entrez une URL, du texte, ou un code..."
+                    className="w-full rounded-xl bg-[#080508]/50 border border-[#B79A5B]/20 p-3 text-sm text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:border-[#B79A5B]/60 focus:outline-none focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all"
+                    rows={3}
+                  />
+                </div>
 
-        {/* Main Floating Button with Liquid Metal Shader */}
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
+                {/* Action Buttons */}
+                <motion.div
+                  className="grid grid-cols-2 gap-3 pt-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <motion.button
+                    onClick={handleGenerate}
+                    disabled={isGenerating}
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-[#B79A5B] to-[#c8a76b] text-black font-bold hover:from-[#B79A5B]/90 hover:to-[#c8a76b]/90 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isGenerating ? (
+                      <>
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity }} className="w-4 h-4">
+                          <QrCode size={16} />
+                        </motion.div>
+                        <span>...</span>
+                      </>
+                    ) : (
+                      <>
+                        <QrCode size={16} />
+                        <span>Générer</span>
+                      </>
+                    )}
+                  </motion.button>
+
+                  <motion.button
+                    onClick={generateRandomCode}
+                    whileHover={{ scale: 1.05, y: -2, rotate: 5 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-3 rounded-xl bg-gradient-to-r from-[#B79A5B]/50 to-[#f0c9e1]/20 border border-[#B79A5B]/50 text-[#B79A5B] font-bold hover:from-[#B79A5B]/70 hover:to-[#f0c9e1]/30 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Shuffle size={16} />
+                    <span>Aléatoire</span>
+                  </motion.button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Main Floating Button - Transformer Style */}
+        <motion.button
+          onClick={() => {
+            setIsExpanded(!isExpanded);
+            if (isExpanded) setShowPanel(false);
+          }}
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
           className="relative group"
           onMouseEnter={() => {
             if (shaderMount.current?.setSpeed) {
-              shaderMount.current.setSpeed(1.2);
+              shaderMount.current.setSpeed(1.5);
             }
           }}
           onMouseLeave={() => {
@@ -425,48 +530,74 @@ export function QRBarcodeGenerator() {
             }
           }}
         >
-          {/* Button Container - 48x48 (half of 96x96) */}
-          <div className="w-12 h-12 rounded-full overflow-hidden shadow-xl border border-[#B79A5B]/40">
+          {/* Transformer-like rotating rings */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0 w-16 h-16 rounded-full border border-[#B79A5B]/30"
+          />
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-2 w-12 h-12 rounded-full border border-[#B79A5B]/20"
+          />
+
+          {/* Main button container */}
+          <div className="w-14 h-14 rounded-full overflow-hidden shadow-2xl border border-[#B79A5B]/40 relative">
             {/* Shader Background */}
-            <div
-              ref={shaderRef}
-              className="qr-shader-container absolute inset-0 w-full h-full rounded-full"
-            />
+            <div ref={shaderRef} className="qr-shader-container absolute inset-0 w-full h-full rounded-full" />
 
             {/* Icon */}
-            <div className="absolute inset-0 flex items-center justify-center text-white z-10 pointer-events-none">
+            <motion.div
+              className="absolute inset-0 flex items-center justify-center text-white z-10 pointer-events-none"
+              animate={{ rotateZ: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.6, type: "spring" }}
+            >
               <motion.div
-                animate={{
-                  rotate: isExpanded ? 180 : 0,
-                }}
-                transition={{ duration: 0.5 }}
+                animate={isExpanded ? { y: -2 } : { y: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <QrCode size={24} className="drop-shadow-lg text-[#B79A5B]" />
+                <QrCode size={28} className="drop-shadow-lg text-[#B79A5B]" />
               </motion.div>
-            </div>
+            </motion.div>
 
-            {/* Pulsing Ring */}
+            {/* Pulsing Aura */}
             <motion.div
               animate={{
-                boxShadow: [
-                  "0 0 0 0 rgba(183,154,91,0.6)",
-                  "0 0 0 12px rgba(183,154,91,0)",
-                ],
+                boxShadow: isExpanded
+                  ? [
+                      "0 0 0 0 rgba(183,154,91,0.8)",
+                      "0 0 0 16px rgba(183,154,91,0)",
+                    ]
+                  : [
+                      "0 0 0 0 rgba(183,154,91,0.6)",
+                      "0 0 0 12px rgba(183,154,91,0)",
+                    ],
               }}
-              transition={{ duration: 2.5, repeat: Infinity }}
+              transition={{ duration: isExpanded ? 1.2 : 2.5, repeat: Infinity }}
               className="absolute inset-0 rounded-full"
             />
 
             {/* Animated Border */}
             <motion.div
               animate={{
-                opacity: [0.3, 0.8, 0.3],
+                opacity: isExpanded ? [0.5, 1, 0.5] : [0.3, 0.8, 0.3],
               }}
-              transition={{ duration: 3, repeat: Infinity }}
+              transition={{ duration: isExpanded ? 2 : 3, repeat: Infinity }}
               className="absolute inset-0 rounded-full border-2 border-[#B79A5B]/50"
             />
           </div>
-        </button>
+
+          {/* Glow indicator */}
+          <motion.div
+            animate={{
+              opacity: [0.5, 1, 0.5],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="absolute -inset-3 rounded-full bg-gradient-to-r from-[#B79A5B]/20 to-[#f0c9e1]/10 blur-xl pointer-events-none"
+          />
+        </motion.button>
       </motion.div>
     </div>
   );

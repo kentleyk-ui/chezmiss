@@ -5,11 +5,12 @@ import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
 import { SocialLinksElite } from "@/components/SocialLinksElite";
+import { ChezmissAide } from "@/components/ChezmissAide";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X } from "lucide-react";
+import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Info } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -18,6 +19,7 @@ const titleScript = Alex_Brush({
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showMileleTooltip, setShowMileleTooltip] = useState(false);
   const { t, isClient } = useLanguage();
   
   const navItems = [
@@ -101,10 +103,6 @@ export default function Home() {
           </button>
           <div className="flex items-center gap-2 sm:gap-3">
             <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Recherche"><ScanSearch size={16} /></button>
-            <button type="button" className="relative w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Panier">
-              <ShoppingCart size={16} />
-              <span className="absolute -top-0.5 -right-0.5 text-[9px] rounded-full bg-[#B79A5B] text-black w-4 h-4 grid place-items-center font-bold">0</span>
-            </button>
             <div className="hidden lg:flex items-center gap-2">
               <Link href="/signin">
                 <LiquidMetalButton label="Se connecter" />
@@ -112,9 +110,6 @@ export default function Home() {
               <Link href="/signup">
                 <LiquidMetalButton label="Créer un compte" />
               </Link>
-            </div>
-            <div className="hidden sm:block">
-              {isClient && <LanguageSwitcher />}
             </div>
           </div>
         </div>
@@ -211,164 +206,116 @@ export default function Home() {
               </h1>
             </div>
 
-            {/* BLOC 3 — Photo fondue dans le fond */}
+            {/* BLOC 3 — Photo avec mémorial adapté */}
             <div className="relative w-full sm:w-3/4 mx-auto lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end order-3">
-              <div
-                className="relative"
-                style={{
-                  paddingBottom: "125%",
-                  WebkitMaskImage: [
-                    "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
-                    "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                  ].join(", "),
-                  maskImage: [
-                    "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
-                    "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                  ].join(", "),
-                  WebkitMaskComposite: "destination-in",
-                  maskComposite: "intersect",
-                }}
-              >
-                <Image
-                  src="/Révélez.png"
-                  alt="Révélez votre Élégance"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 300px"
-                  className="object-contain opacity-[0.68]"
-                  style={{ objectPosition: "28% center" }}
-                  priority
-                />
-                {/* voile tonal pour harmoniser avec le fond */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/20 via-transparent to-[#080508]/35 pointer-events-none" />
-                {/* Titre hommage */}
-                <div className="absolute inset-x-0 bottom-[12%] flex justify-center pointer-events-none">
-                  <p className="text-center text-[11px] sm:text-[12px] tracking-[0.18em] text-[#B79A5B] italic drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] drop-shadow-[0_0_12px_rgba(183,154,91,0.4)]">
-                    in the loving memory of Xenia
-                  </p>
+              <div className="relative flex flex-col">
+                {/* Photo */}
+                <div
+                  className="relative"
+                  style={{
+                    paddingBottom: "125%",
+                    WebkitMaskImage: [
+                      "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
+                      "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                    ].join(", "),
+                    maskImage: [
+                      "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
+                      "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                    ].join(", "),
+                    WebkitMaskComposite: "destination-in",
+                    maskComposite: "intersect",
+                  }}
+                >
+                  <Image
+                    src="/Révélez.png"
+                    alt="Révélez votre Élégance"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 300px"
+                    className="object-contain opacity-[0.68]"
+                    style={{ objectPosition: "28% center" }}
+                    priority
+                  />
+                  {/* voile tonal pour harmoniser avec le fond */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/20 via-transparent to-[#080508]/35 pointer-events-none" />
+                </div>
+
+                {/* Mémorial/Tribute section — fond noir en dessous de la photo */}
+                <div className="w-full bg-black/80 backdrop-blur-sm border-t border-[#B79A5B]/20">
+                  <div className="px-5 sm:px-6 py-8 sm:py-10 flex flex-col gap-4">
+                    {/* Texte du mémorial */}
+                    <div className="text-center">
+                      <p className="text-[13px] sm:text-[14px] tracking-[0.15em] text-[#B79A5B] italic font-light drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
+                        A tribute to elegance
+                      </p>
+                      <p className="text-[16px] sm:text-[18px] tracking-[0.12em] text-[#f0c9e1] font-semibold mt-2 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
+                        KSENIA
+                      </p>
+                      <p className="text-[12px] sm:text-[13px] tracking-[0.16em] text-[#B79A5B]/80 mt-3 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
+                        1987 — 2025
+                      </p>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="w-10 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent mx-auto" />
+
+                    {/* Inspiration text */}
+                    <p className="text-[11px] sm:text-[12px] leading-relaxed text-[#f0c9e1]/75 text-center italic">
+                      "La beauté est une célébration de l'âme."
+                    </p>
+
+                    {/* Lien Milele avec bulle interactive */}
+                    <div className="relative group">
+                      <a
+                        href="https://www.milele4ever.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-[12px] tracking-[0.15em] text-[#B79A5B] hover:text-[#f0c9e1] transition-colors rounded-lg border border-[#B79A5B]/30 hover:border-[#B79A5B]/60 bg-[#B79A5B]/5 hover:bg-[#B79A5B]/10"
+                        onMouseEnter={() => setShowMileleTooltip(true)}
+                        onMouseLeave={() => setShowMileleTooltip(false)}
+                        onClick={() => setShowMileleTooltip(!showMileleTooltip)}
+                      >
+                        <Info size={14} />
+                        <span>Célébrer via Milele</span>
+                      </a>
+
+                      {/* Bulle d'information transparente */}
+                      {showMileleTooltip && (
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 pointer-events-none">
+                          <div
+                            className="relative bg-[#080508]/70 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-[#B79A5B]/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+                            style={{
+                              minWidth: "280px",
+                              maxWidth: "320px",
+                              WebkitBackdropFilter: "blur(10px)",
+                            }}
+                          >
+                            {/* Contenu de la bulle */}
+                            <div className="space-y-3">
+                              <p className="text-[12px] sm:text-[13px] leading-[1.5] text-[#f0c9e1]">
+                                <span className="text-[#B79A5B] font-semibold">Partagez les souvenirs</span> sur <a href="https://www.milele4ever.com" className="text-[#B79A5B] hover:text-[#f0c9e1] underline font-medium" target="_blank" rel="noopener noreferrer">www.milele4ever.com</a>
+                              </p>
+                              <p className="text-[11px] sm:text-[12px] leading-[1.5] text-[#f0c9e1]/75">
+                                <span className="text-[#B79A5B] font-semibold">Milele</span> vous permet de célébrer une vie, partager des photos et des histoires, et créer un espace d'amour éternel.
+                              </p>
+                            </div>
+                            {/* Pointe de la bulle */}
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-[#080508]/70" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-
 
         </div>
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#f0c9e1]/22 text-[9px] tracking-[0.2em]">
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#B79A5B]/40 animate-pulse" />
         </div>
       </section>
-
-{/* Section À PROPOS */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-b from-[#080508] via-[#0a050a] to-[#080508]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center mb-16">
-            {/* Texte */}
-            <div className="space-y-6 order-2 lg:order-1">
-              <div>
-                <span className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 uppercase">Notre histoire</span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-[#f0c9e1] mt-3 leading-tight">
-                  À <span className="text-[#B79A5B]">PROPOS</span> de <span className="text-[#B79A5B]">CHEZ MISS</span>
-                </h2>
-              </div>
-              <p className="text-sm sm:text-base text-[#f0c9e1]/80 leading-relaxed">
-                CHEZ MISS est une marque de beauté premium née de la passion pour l'excellence et l'innovation. Chaque produit est conçu avec précision pour sublimer votre beauté naturelle.
-              </p>
-              <p className="text-sm sm:text-base text-[#f0c9e1]/70 leading-relaxed">
-                Fondée au cœur de Québec, notre mission est de fournir des produits exceptionnels aux professionnelles en salon et aux clientes à domicile. Nous croyons que la beauté est un art.
-              </p>
-              <a href="/a-propos" className="inline-block">
-                <LiquidMetalButton label="EN SAVOIR PLUS" viewMode="text" onClick={() => {}} />
-              </a>
-            </div>
-
-            {/* Image */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/20 order-1 lg:order-2" style={{ aspectRatio: "4/3" }}>
-              <div className="absolute inset-0 bg-gradient-to-br from-[#B79A5B]/10 to-[#8B5CF6]/10" />
-              <Image
-                src="/Révélez.png"
-                alt="À Propos"
-                fill
-                className="object-cover opacity-70 hover:opacity-90 transition-opacity duration-300"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#080508] via-transparent to-transparent" />
-            </div>
-          </div>
-
-          {/* Valeurs */}
-          <div className="mt-20 pt-16 border-t border-[#B79A5B]/20">
-            <h3 className="text-2xl sm:text-3xl font-light text-center text-[#f0c9e1] mb-12">
-              Nos <span className="text-[#B79A5B]">Valeurs</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { icon: Diamond, title: "QUALITÉ", desc: "Produits sélectionnés avec exigence" },
-                { icon: Wand2, title: "EXPERTISE", desc: "Une marque pensée par des experts" },
-                { icon: Rocket, title: "RAPIDITÉ", desc: "Livraison rapide et sécurisée" },
-                { icon: Fingerprint, title: "CONFIANCE", desc: "14 jours satisfait ou remboursé" }
-              ].map((value, i) => {
-                const Icon = value.icon;
-                return (
-                  <div key={i} className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group">
-                    <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform" />
-                    <h4 className="text-[#B79A5B] font-semibold mb-2 text-sm tracking-wider">{value.title}</h4>
-                    <p className="text-[#f0c9e1]/70 text-xs leading-relaxed">{value.desc}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Produits en Avant */}
-      <section className="relative py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <span className="text-[10px] tracking-[0.3em] text-[#B79A5B]/70 uppercase">collection</span>
-            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mt-3">
-              Nos <span className="text-[#B79A5B]">Indispensables</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-            {[
-              { name: "WHIPPED CREAM CLEANSER", price: "29,90 $", tag: "BESTSELLER", image: "/whipped-cream-cleanser.png" },
-              { name: "LASH SETTING SPRAY", price: "25,90 $", tag: "NOUVEAU", image: "/lash-setting-spray.png" },
-              { name: "LASH PRIMER", price: "23,90 $", tag: null, image: "/lash-primer.png" },
-              { name: "PREMIUM BONDER", price: "23,90 $", tag: "PRO", image: "/premium-bonder.png" },
-              { name: "CREAM REMOVER", price: "21,90 $", tag: null, image: null }
-            ].map((product, i) => (
-              <div key={i} className="group rounded-lg border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/30 overflow-hidden transition-all duration-300">
-                <div className="aspect-square bg-gradient-to-br from-[#140c12] to-black relative overflow-hidden">
-                  {product.image && (
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-contain p-4 opacity-80 group-hover:opacity-100 transition-opacity"
-                    />
-                  )}
-                  {product.tag && (
-                    <span className="absolute top-2 left-2 text-[8px] bg-[#B79A5B] text-black px-2 py-1 rounded-full font-semibold">{product.tag}</span>
-                  )}
-                </div>
-                <div className="p-3">
-                  <h4 className="text-[9px] text-[#f0c9e1]/80 font-semibold tracking-wider truncate">{product.name}</h4>
-                  <p className="text-[11px] text-[#B79A5B] mt-2 font-semibold">{product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <a href="/boutique">
-              <LiquidMetalButton label="VOIR TOUTE LA COLLECTION" viewMode="text" onClick={() => {}} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Infolettre */}
-      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#8B5CF6]/10 via-transparent to-[#B79A5B]/10 border-y border-[#B79A5B]/20">
+      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#B79A5B]/5 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
             Restez <span className="text-[#B79A5B]">Connectée</span>
@@ -383,9 +330,7 @@ export default function Home() {
               placeholder="votre@email.com"
               className="flex-1 px-4 py-3 bg-[#1a1320] border border-[#B79A5B]/30 rounded-lg text-[#f0c9e1] text-sm focus:border-[#B79A5B] outline-none transition-colors"
             />
-            <button className="px-6 py-3 bg-[#B79A5B] text-black font-semibold rounded-lg hover:bg-[#B79A5B]/90 transition-colors whitespace-nowrap">
-              S'ABONNER
-            </button>
+            <LiquidMetalButton label="S'ABONNER" />
           </div>
 
           <p className="text-xs text-[#f0c9e1]/50 mt-4">
@@ -456,6 +401,7 @@ export default function Home() {
 
       {isClient && <DesktopShortcutInit />}
       {isClient && <LanguageSwitcher />}
+      {isClient && <ChezmissAide />}
     </main>
   );
 }

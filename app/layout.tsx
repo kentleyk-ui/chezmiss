@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { RootLayoutClient } from "./root-layout-client";
 import "./globals.css";
 
 type RootLayoutProps = {
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/logo-heart-192.png" />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <RootLayoutClient>{children}</RootLayoutClient>
+      </body>
     </html>
   );
 }

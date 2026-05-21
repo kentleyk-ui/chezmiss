@@ -3,129 +3,212 @@
 import Link from "next/link";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import Image from "next/image";
+import { ChezmissAide } from "@/components/ChezmissAide";
+import { X } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function SignUp() {
   return (
-    <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden bg-black">
-      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/70 backdrop-blur-2xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/">
-            <Image
-              src="/logo-chezmiss.png"
-              alt="CHEZ MISS"
-              width={200}
-              height={50}
-              className="h-12 w-auto"
-            />
-          </Link>
-          <Link href="/">
-            <LiquidMetalButton label="Accueil" />
-          </Link>
-        </div>
-      </header>
+    <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 backdrop-blur-sm bg-black/40 pointer-events-none"
+      />
 
-      <div className="max-w-md mx-auto px-6 py-16 sm:py-24">
-        <div className="rounded-2xl border border-[#B79A5B]/30 bg-[#0d0810]/50 p-8 backdrop-blur-xl">
-          <h1 className="text-3xl font-bold text-[#B79A5B] mb-2">Créer un compte</h1>
-          <p className="text-[#f0c9e1]/60 mb-8">Rejoignez la communauté CHEZ MISS</p>
+      {/* Main Glass Card */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="relative z-10 pointer-events-auto w-full max-w-md"
+      >
+        {/* Glass Container */}
+        <div className="relative rounded-3xl overflow-hidden max-h-[90vh] overflow-y-auto">
+          {/* Glassmorphism Background */}
+          <div
+            className="absolute inset-0 rounded-3xl"
+            style={{
+              background: `linear-gradient(135deg, rgba(13, 8, 16, 0.5) 0%, rgba(26, 10, 18, 0.3) 100%)`,
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(183, 154, 91, 0.15)",
+            }}
+          />
 
-          <form className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="firstname" className="block text-sm text-[#f0c9e1]/70 mb-2">
-                  Prénom
-                </label>
-                <input
-                  id="firstname"
-                  type="text"
-                  placeholder="Marie"
-                  className="w-full px-4 py-3 rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/50 transition"
-                />
-              </div>
-              <div>
-                <label htmlFor="lastname" className="block text-sm text-[#f0c9e1]/70 mb-2">
-                  Nom
-                </label>
-                <input
-                  id="lastname"
-                  type="text"
-                  placeholder="Dupont"
-                  className="w-full px-4 py-3 rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/50 transition"
-                />
-              </div>
-            </div>
+          {/* Glow effect */}
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-[#B79A5B]/10 via-transparent to-transparent pointer-events-none" />
 
-            <div>
-              <label htmlFor="email" className="block text-sm text-[#f0c9e1]/70 mb-2">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="votre@email.com"
-                className="w-full px-4 py-3 rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/50 transition"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm text-[#f0c9e1]/70 mb-2">
-                Mot de passe
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full px-4 py-3 rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/50 transition"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm text-[#f0c9e1]/70 mb-2">
-                Confirmer le mot de passe
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                className="w-full px-4 py-3 rounded-lg bg-[#080508]/50 border border-[#B79A5B]/20 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/50 transition"
-              />
-            </div>
-
-            <div className="flex items-start gap-2">
-              <input
-                id="terms"
-                type="checkbox"
-                className="w-4 h-4 mt-1 cursor-pointer accent-[#B79A5B]"
-              />
-              <label htmlFor="terms" className="text-xs text-[#f0c9e1]/60">
-                J'accepte les conditions d'utilisation et la politique de confidentialité
-              </label>
-            </div>
-
-            <div className="pt-4">
-              <button
-                type="submit"
-                className="w-full flex justify-center"
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Inscription en développement");
-                }}
+          {/* Content */}
+          <div className="relative p-8 pt-12">
+            {/* Close Button */}
+            <Link href="/">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className="absolute top-4 right-4 p-2 rounded-full hover:bg-[#B79A5B]/10 transition-colors z-20"
               >
-                <LiquidMetalButton label="Créer un compte" onClick={() => {}} />
-              </button>
-            </div>
-          </form>
+                <X size={20} className="text-[#f0c9e1]/60" />
+              </motion.button>
+            </Link>
 
-          <div className="mt-6 pt-6 border-t border-[#B79A5B]/20">
-            <p className="text-sm text-[#f0c9e1]/60 text-center">
-              Vous avez déjà un compte ?{" "}
-              <Link href="/signin" className="text-[#B79A5B] hover:text-[#B79A5B]/80 transition">
-                Se connecter
-              </Link>
-            </p>
+            {/* Logo - Centered, subtle */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 0.15, scale: 1 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+              className="absolute top-2 left-1/2 transform -translate-x-1/2 w-16 h-16 pointer-events-none"
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src="/logo-heart-192.png"
+                  alt="CHEZ MISS"
+                  fill
+                  className="object-contain opacity-20"
+                />
+              </div>
+            </motion.div>
+
+            {/* Text Content */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="text-center mb-8"
+            >
+              <h1 className="text-2xl font-bold text-[#B79A5B] mb-2">
+                Créer un Compte
+              </h1>
+              <p className="text-[#f0c9e1]/70 text-sm">
+                Rejoignez la communauté CHEZ MISS
+              </p>
+            </motion.div>
+
+            {/* Form */}
+            <motion.form
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+              className="space-y-3"
+            >
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label htmlFor="firstname" className="block text-xs text-[#B79A5B]/70 mb-1.5 font-semibold tracking-wider">
+                    PRÉNOM
+                  </label>
+                  <input
+                    id="firstname"
+                    type="text"
+                    placeholder="Marie"
+                    className="w-full px-3 py-2.5 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/30 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/60 focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all text-sm"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastname" className="block text-xs text-[#B79A5B]/70 mb-1.5 font-semibold tracking-wider">
+                    NOM
+                  </label>
+                  <input
+                    id="lastname"
+                    type="text"
+                    placeholder="Dupont"
+                    className="w-full px-3 py-2.5 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/30 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/60 focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-xs text-[#B79A5B]/70 mb-1.5 font-semibold tracking-wider">
+                  EMAIL
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="votre@email.com"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/30 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/60 focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-xs text-[#B79A5B]/70 mb-1.5 font-semibold tracking-wider">
+                  MOT DE PASSE
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/30 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/60 focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all text-sm"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-xs text-[#B79A5B]/70 mb-1.5 font-semibold tracking-wider">
+                  CONFIRMER
+                </label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-lg bg-[#080508]/60 border border-[#B79A5B]/30 text-[#f0c9e1] placeholder-[#f0c9e1]/30 focus:outline-none focus:border-[#B79A5B]/60 focus:ring-1 focus:ring-[#B79A5B]/30 backdrop-blur-sm transition-all text-sm"
+                />
+              </div>
+
+              <div className="flex items-start gap-2 py-1">
+                <input
+                  id="terms"
+                  type="checkbox"
+                  className="w-4 h-4 mt-1 cursor-pointer accent-[#B79A5B] flex-shrink-0"
+                />
+                <label htmlFor="terms" className="text-xs text-[#f0c9e1]/60 cursor-pointer">
+                  J'accepte les conditions d'utilisation et la politique de confidentialité
+                </label>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.4 }}
+                className="space-y-3 pt-2"
+              >
+                <button
+                  type="submit"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    alert("Inscription en développement");
+                  }}
+                  className="w-full flex justify-center"
+                >
+                  <LiquidMetalButton label="Créer un Compte" />
+                </button>
+                <Link href="/" className="w-full flex justify-center">
+                  <LiquidMetalButton label="Retour" viewMode="text" onClick={() => {}} />
+                </Link>
+              </motion.div>
+            </motion.form>
+
+            {/* Divider */}
+            <div className="mt-5 pt-5 border-t border-[#B79A5B]/20" />
+
+            {/* Sign In Link */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+              className="text-center mt-5"
+            >
+              <p className="text-xs text-[#f0c9e1]/60">
+                Vous avez déjà un compte ?{" "}
+                <Link href="/signin" className="text-[#B79A5B] hover:text-[#B79A5B]/80 font-semibold transition">
+                  Se connecter
+                </Link>
+              </p>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
+
+      <ChezmissAide />
     </main>
   );
 }

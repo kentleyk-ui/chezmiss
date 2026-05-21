@@ -49,7 +49,7 @@ export function SocialLinksElite() {
       icon: SocialIcons.instagram,
       href: "https://instagram.com/chezmiss",
       label: "Instagram",
-      color: "from-pink-500 via-red-500 to-yellow-500",
+      color: "from-pink-500 via-red-500 to-orange-400",
     },
     {
       icon: SocialIcons.facebook,

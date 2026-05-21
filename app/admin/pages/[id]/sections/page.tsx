@@ -1,17 +1,22 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Section } from "@/types"
 import Renderer from "@/app/components/builder/Renderer"
 import PropertiesPanel from "@/app/components/builder/PropertiesPanel"
 
 export default function SectionsPage({ params }: any) {
-  const [sections, setSections] = useState([])
-  const [selected, setSelected] = useState(null)
+  const [sections, setSections] = useState<Section[]>([])
+  const [selected, setSelected] = useState<Section | null>(null)
 
   async function loadSections() {
     const res = await fetch(`/api/sections?page_id=${params.id}`)
     const data = await res.json()
     setSections(data)
+  }
+
+  const handleUpdate = (section: Section) => {
+    setSelected(section)
   }
 
   useEffect(() => {

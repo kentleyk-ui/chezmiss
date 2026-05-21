@@ -207,7 +207,7 @@ export default function SetupTwoFA() {
                 </button>
               </div>
 
-              <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-700/30 text-amber-400 text-sm">
+              <div className="p-4 rounded-lg bg-[#B79A5B]/20 border border-[#B79A5B]/30 text-[#B79A5B] text-sm">
                 ⚠️ Conservez les codes de secours dans un endroit sûr. Vous en
                 aurez besoin si vous perdez votre téléphone.
               </div>
