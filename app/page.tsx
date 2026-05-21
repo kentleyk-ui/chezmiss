@@ -6,11 +6,13 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
 import { SocialLinksElite } from "@/components/SocialLinksElite";
 import { ChezmissAide } from "@/components/ChezmissAide";
+import { useLazyLoad } from "@/lib/performance";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
 import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Info } from "lucide-react";
+import { useRef } from "react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -20,7 +22,14 @@ const titleScript = Alex_Brush({
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMileleTooltip, setShowMileleTooltip] = useState(false);
+  const [isNewsletterLoaded, setIsNewsletterLoaded] = useState(false);
+  const [isContactLoaded, setIsContactLoaded] = useState(false);
   const { t, isClient } = useLanguage();
+  const newsletterRef = useRef(null);
+  const contactRef = useRef(null);
+
+  useLazyLoad(newsletterRef, () => setIsNewsletterLoaded(true));
+  useLazyLoad(contactRef, () => setIsContactLoaded(true));
   
   const navItems = [
     { label: "ACCUEIL", href: "#accueil" },
@@ -385,51 +394,55 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#B79A5B]/5 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/20">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
-            Restez <span className="text-[#B79A5B]">Connectée</span>
-          </h2>
-          <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-8">
-            Inscrivez-vous à notre infolettre pour recevoir les dernières tendances beauté et offres exclusives.
-          </p>
+      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#B79A5B]/5 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/20" ref={newsletterRef}>
+        {isNewsletterLoaded && (
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
+              Restez <span className="text-[#B79A5B]">Connectée</span>
+            </h2>
+            <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-8">
+              Inscrivez-vous à notre infolettre pour recevoir les dernières tendances beauté et offres exclusives.
+            </p>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              placeholder="votre@email.com"
-              className="flex-1 px-4 py-3 bg-[#1a1320] border border-[#B79A5B]/30 rounded-lg text-[#f0c9e1] text-sm focus:border-[#B79A5B] outline-none transition-colors"
-            />
-            <LiquidMetalButton label="S'ABONNER" />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="votre@email.com"
+                className="flex-1 px-4 py-3 bg-[#1a1320] border border-[#B79A5B]/30 rounded-lg text-[#f0c9e1] text-sm focus:border-[#B79A5B] outline-none transition-colors"
+              />
+              <LiquidMetalButton label="S'ABONNER" />
+            </div>
+
+            <p className="text-xs text-[#f0c9e1]/50 mt-4">
+              Nous respectons votre vie privée. Désabonnez-vous à tout moment.
+            </p>
           </div>
-
-          <p className="text-xs text-[#f0c9e1]/50 mt-4">
-            Nous respectons votre vie privée. Désabonnez-vous à tout moment.
-          </p>
-        </div>
+        )}
       </section>
 
       {/* Section Contact */}
-      <section className="relative py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
-            Nous <span className="text-[#B79A5B]">Contacter</span>
-          </h2>
+      <section className="relative py-16 sm:py-24" ref={contactRef}>
+        {isContactLoaded && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
+              Nous <span className="text-[#B79A5B]">Contacter</span>
+            </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: "📧", title: "Email", value: "info@chezmiss.ca" },
-              { icon: "📱", title: "Téléphone", value: "+1 (418) 555-MISS" },
-              { icon: "📍", title: "Adresse", value: "Québec, Canada" }
-            ].map((contact, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl mb-4">{contact.icon}</div>
-                <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
-                <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { icon: "📧", title: "Email", value: "info@chezmiss.ca" },
+                { icon: "📱", title: "Téléphone", value: "+1 (418) 555-MISS" },
+                { icon: "📍", title: "Adresse", value: "Québec, Canada" }
+              ].map((contact, i) => (
+                <div key={i} className="text-center">
+                  <div className="text-4xl mb-4">{contact.icon}</div>
+                  <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
+                  <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* Social Links Section */}
