@@ -188,58 +188,36 @@ export default function Home() {
             </div>
 
             {/* BLOC 3 — Photo fondue dans le fond */}
-            <div className="relative rounded-2xl overflow-hidden w-full sm:w-3/4 mx-auto lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end order-3"
-              style={{ boxShadow: "0 0 55px 28px #080508, 0 0 90px 45px #040204" }}>
-              <div className="relative" style={{ paddingBottom: "125%" }}>
+            <div className="relative w-full sm:w-3/4 mx-auto lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end order-3">
+              <div
+                className="relative"
+                style={{
+                  paddingBottom: "125%",
+                  WebkitMaskImage: [
+                    "linear-gradient(to right,  transparent 0%, black 22%, black 78%, transparent 100%)",
+                    "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                  ].join(", "),
+                  maskImage: [
+                    "linear-gradient(to right,  transparent 0%, black 22%, black 78%, transparent 100%)",
+                    "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                  ].join(", "),
+                  WebkitMaskComposite: "destination-in",
+                  maskComposite: "intersect",
+                }}
+              >
                 <Image
                   src="/Révélez.png"
                   alt="Révélez votre Élégance"
                   fill
                   sizes="(max-width: 1024px) 100vw, 300px"
-                  className="object-contain object-center opacity-[0.72]"
+                  className="object-contain object-center opacity-[0.82]"
                   priority
                 />
-                {/* voile global pour encrer la photo dans le fond */}
-                <div className="absolute inset-0 bg-[#080508]/36" />
-                {/* Fades progressifs sur les contours pour ancrer dans le fond */}
-                {/* Haut */}
-                <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#080508]/95 via-[#080508]/60 to-transparent" />
-                {/* Bas */}
-                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#080508]/95 via-[#080508]/60 to-transparent" />
-                {/* Gauche */}
-                <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#080508]/95 via-[#080508]/60 to-transparent" />
-                {/* Droite */}
-                <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#080508]/95 via-[#080508]/60 to-transparent" />
-                {/* Coin haut-gauche */}
-                <div className="absolute top-0 left-0 w-32 h-32 bg-radial-gradient pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at top left, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
-                  }}
-                />
-                {/* Coin haut-droite */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-radial-gradient pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at top right, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
-                  }}
-                />
-                {/* Coin bas-gauche */}
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-radial-gradient pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at bottom left, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
-                  }}
-                />
-                {/* Coin bas-droite */}
-                <div className="absolute bottom-0 right-0 w-32 h-32 bg-radial-gradient pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse at bottom right, rgba(8,5,8,0) 0%, rgba(8,5,8,0.8) 100%)"
-                  }}
-                />
-                {/* fondu elegant theme gold/pink + ombrage global */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/30 via-transparent to-[#080508]/50" />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,5,8,0.5)_100%)]" />
+                {/* voile tonal pour harmoniser avec le fond */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/20 via-transparent to-[#080508]/35 pointer-events-none" />
                 {/* Titre hommage */}
-                <div className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none">
-                  <p className="text-center text-[11px] sm:text-[12px] tracking-[0.15em] text-[#f0c9e1]/80 italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                <div className="absolute inset-x-0 bottom-[12%] flex justify-center pointer-events-none">
+                  <p className="text-center text-[11px] sm:text-[12px] tracking-[0.18em] text-[#B79A5B] italic drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] drop-shadow-[0_0_12px_rgba(183,154,91,0.4)]">
                     in the loving memory of Xenia
                   </p>
                 </div>
