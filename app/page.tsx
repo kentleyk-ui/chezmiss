@@ -315,6 +315,29 @@ export default function Home() {
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#B79A5B]/40 animate-pulse" />
         </div>
       </section>
+
+      {/* NOS VALEURS SECTION */}
+      <section className="relative py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl sm:text-3xl font-light text-center text-[#f0c9e1] mb-12">
+            Nos <span className="text-[#B79A5B]">Valeurs</span>
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {values.map((value, i) => {
+              const Icon = value.icon;
+              return (
+                <div key={i} className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group relative overflow-hidden">
+                  <div className="absolute top-4 right-4 text-[#B79A5B]/20 text-2xl font-light">{value.number}</div>
+                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform" />
+                  <h4 className="text-[#B79A5B] font-semibold mb-2 text-sm tracking-wider">{value.title}</h4>
+                  <p className="text-[#f0c9e1]/70 text-xs leading-relaxed">{value.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#B79A5B]/5 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/20">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
