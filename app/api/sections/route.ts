@@ -6,6 +6,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const page_id = searchParams.get("page_id")
 
+  if (!page_id) return NextResponse.json([])
+
   const { data, error } = await supabase
     .from("sections")
     .select("*")
