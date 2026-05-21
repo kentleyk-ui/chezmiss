@@ -4,11 +4,11 @@ import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
-import { QRCodeAdvanced } from "@/components/QRCodeAdvanced";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
+import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X } from "lucide-react";
+import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Instagram, Facebook, Music, Linkedin, Youtube } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -401,18 +401,95 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10 mt-16 sm:mt-20">
+      {/* Social Links Section */}
+      <section className="border-t border-[#B79A5B]/[0.08] py-12 sm:py-16 bg-gradient-to-b from-[#080508] to-[#0d0810]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="pt-4 sm:pt-6 flex flex-col items-center gap-2 sm:flex-row sm:justify-between sm:gap-0 text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.08em]">
-            <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
-            <span className="tracking-[0.12em]">QUÉBEC · CANADA</span>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[#f0c9e1] mb-2">
+              Nous <span className="text-[#B79A5B]">Suivre</span>
+            </h2>
+            <p className="text-[#f0c9e1]/60 text-sm">Retrouvez CHEZ MISS sur les réseaux sociaux</p>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex justify-center gap-4 sm:gap-6 flex-wrap">
+            <a
+              href="https://instagram.com/chezmiss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
+              aria-label="Instagram"
+            >
+              <Instagram size={24} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            <a
+              href="https://facebook.com/chezmiss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
+              aria-label="Facebook"
+            >
+              <Facebook size={24} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            <a
+              href="https://tiktok.com/chezmiss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
+              aria-label="TikTok"
+            >
+              <Music size={24} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            <a
+              href="https://linkedin.com/company/chezmiss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={24} className="group-hover:scale-110 transition-transform" />
+            </a>
+
+            <a
+              href="https://youtube.com/chezmiss"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
+              aria-label="YouTube"
+            >
+              <Youtube size={24} className="group-hover:scale-110 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-6 pb-6 border-b border-[#B79A5B]/[0.08]">
+            {/* Staff Link */}
+            <Link
+              href="/staff"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#B79A5B]/10 border border-[#B79A5B]/30 rounded-lg text-[#B79A5B] hover:bg-[#B79A5B]/20 transition-all text-sm font-medium"
+            >
+              <span>⚙️</span> Staff Access
+            </Link>
+
+            <div className="text-center text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.08em]">
+              <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
+            </div>
+
+            <div className="text-right text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.12em]">
+              <span>QUÉBEC · CANADA</span>
+            </div>
           </div>
         </div>
       </footer>
 
       {isClient && <DesktopShortcutInit />}
       {isClient && <LanguageSwitcher />}
-      {isClient && <QRCodeAdvanced />}
     </main>
   );
 }
