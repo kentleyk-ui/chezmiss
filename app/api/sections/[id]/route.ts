@@ -13,6 +13,7 @@ export async function PUT(req: Request, { params }: any) {
     .select()
     .single()
 
-  if (error) return NextResponse.json({ error }, { status: 500 })return NextResponse.json(data)
+  if (error) return NextResponse.json({ error }, { status: 500 })
+  return NextResponse.json(data)
 }
 
