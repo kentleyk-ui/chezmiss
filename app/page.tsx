@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
+import { QRCodeModal } from "@/components/QRCodeModal";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import { Alex_Brush } from "next/font/google";
@@ -411,6 +412,7 @@ export default function Home() {
 
       {isClient && <DesktopShortcutInit />}
       {isClient && <LanguageSwitcher />}
+      {isClient && <QRCodeModal />}
     </main>
   );
 }
