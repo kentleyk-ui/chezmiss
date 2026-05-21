@@ -270,6 +270,10 @@ export function QRBarcodeGenerator() {
 
   return (
     <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none">
+      {/* Hidden canvases for QR/Barcode generation */}
+      <canvas ref={qrCanvasRef} style={{ display: "none" }} />
+      <canvas ref={barcodeCanvasRef} style={{ display: "none" }} />
+
       <motion.div className="pointer-events-auto">
         <AnimatePresence>
           {/* Sliding Panel - Emerges from button */}
