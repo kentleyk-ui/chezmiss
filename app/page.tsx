@@ -204,6 +204,12 @@ export default function Home() {
                 <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-[#080508]/76 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#080508]/92 to-transparent" />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_34%,rgba(8,5,8,0.58)_100%)]" />
+                {/* Titre hommage */}
+                <div className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none">
+                  <p className="text-center text-[11px] sm:text-[12px] tracking-[0.15em] text-[#f0c9e1]/80 italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                    in the loving memory of Xenia
+                  </p>
+                </div>
               </div>
             </div>
           </div>
