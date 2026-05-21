@@ -194,11 +194,11 @@ export default function Home() {
                 style={{
                   paddingBottom: "125%",
                   WebkitMaskImage: [
-                    "linear-gradient(to right,  transparent 0%, black 22%, black 78%, transparent 100%)",
+                    "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
                     "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                   ].join(", "),
                   maskImage: [
-                    "linear-gradient(to right,  transparent 0%, black 22%, black 78%, transparent 100%)",
+                    "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
                     "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                   ].join(", "),
                   WebkitMaskComposite: "destination-in",
@@ -210,7 +210,8 @@ export default function Home() {
                   alt="Révélez votre Élégance"
                   fill
                   sizes="(max-width: 1024px) 100vw, 300px"
-                  className="object-contain object-center opacity-[0.82]"
+                  className="object-contain opacity-[0.82]"
+                  style={{ objectPosition: "28% center" }}
                   priority
                 />
                 {/* voile tonal pour harmoniser avec le fond */}
