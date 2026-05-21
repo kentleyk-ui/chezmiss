@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
-import { LiquidMetalSocialIcon } from "@/components/LiquidMetalSocialIcon";
+import { SocialLinksElite } from "@/components/SocialLinksElite";
 import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
@@ -428,33 +428,7 @@ export default function Home() {
           </div>
 
           {/* Social Links */}
-          <div className="flex justify-center gap-4 sm:gap-6 flex-wrap">
-            <LiquidMetalSocialIcon
-              icon="instagram"
-              href="https://instagram.com/chezmiss"
-              label="Instagram"
-            />
-            <LiquidMetalSocialIcon
-              icon="facebook"
-              href="https://facebook.com/chezmiss"
-              label="Facebook"
-            />
-            <LiquidMetalSocialIcon
-              icon="tiktok"
-              href="https://tiktok.com/chezmiss"
-              label="TikTok"
-            />
-            <LiquidMetalSocialIcon
-              icon="linkedin"
-              href="https://linkedin.com/company/chezmiss"
-              label="LinkedIn"
-            />
-            <LiquidMetalSocialIcon
-              icon="youtube"
-              href="https://youtube.com/chezmiss"
-              label="YouTube"
-            />
-          </div>
+          <SocialLinksElite />
         </div>
       </section>
 
