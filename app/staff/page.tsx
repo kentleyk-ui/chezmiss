@@ -1,6 +1,6 @@
 "use client";
 
-import { QRCodeAdvanced } from "@/components/QRCodeAdvanced";
+import { QRBarcodeFuturistic } from "@/components/QRBarcodeFuturistic";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import Link from "next/link";
 import { ArrowLeft, Lock } from "lucide-react";
@@ -16,7 +16,7 @@ export default function StaffPage() {
             <span className="text-sm font-semibold">Retour</span>
           </Link>
           <h1 className="text-lg sm:text-xl font-semibold text-[#B79A5B]">
-            Staff — QR Code Generator
+            Staff — QR Code & Barcode Generator
           </h1>
           <div className="w-12" />
         </div>
@@ -172,8 +172,8 @@ export default function StaffPage() {
         </div>
       </div>
 
-      {/* QR Code Generator Component */}
-      <QRCodeAdvanced />
+      {/* QR Code & Barcode Generator Component */}
+      <QRBarcodeFuturistic />
     </main>
   );
 }
