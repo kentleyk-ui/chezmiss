@@ -7,8 +7,8 @@ import DragDropWrapper from "@/app/components/builder/DragDropWrapper"
 import SortableItem from "@/app/components/builder/SortableItem"
 
 export default function SectionsPage({ params }: any) {
-  const [sections, setSections] = useState([])
-  const [selected, setSelected] = useState(null)
+  const [sections, setSections] = useState<any[]>([])
+  const [selected, setSelected] = useState<any>(null)
 
   async function loadSections() {
     const res = await fetch(`/api/sections?page_id=${params.id}`)
@@ -34,7 +34,7 @@ export default function SectionsPage({ params }: any) {
       <div className="w-3/4 p-10 space-y-4">
 
         <DragDropWrapper items={sections} onReorder={saveOrder}>
-          {sections.map((s: any) => (
+          {Array.isArray(sections) && sections.map((s: any) => (
             <SortableItem key={s.id} id={s.id}>
               <div onClick={() => setSelected(s)}>
                 <Renderer sections={[s]} />
