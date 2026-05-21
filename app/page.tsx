@@ -8,7 +8,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Instagram, Facebook, Music, Linkedin, Play } from "lucide-react";
+import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Heart, Share2, Music, Briefcase, Play } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -420,7 +420,7 @@ export default function Home() {
               className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
               aria-label="Instagram"
             >
-              <Instagram size={24} className="group-hover:scale-110 transition-transform" />
+              <Heart size={24} className="group-hover:scale-110 transition-transform" />
             </a>
 
             <a
@@ -430,7 +430,7 @@ export default function Home() {
               className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#B79A5B]/10 border border-[#B79A5B]/30 flex items-center justify-center text-[#B79A5B] hover:bg-[#B79A5B]/20 hover:border-[#B79A5B]/50 transition-all duration-200 group"
               aria-label="Facebook"
             >
-              <Facebook size={24} className="group-hover:scale-110 transition-transform" />
+              <Share2 size={24} className="group-hover:scale-110 transition-transform" />
             </a>
 
             <a
