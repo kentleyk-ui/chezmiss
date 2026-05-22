@@ -1,12 +1,18 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { QRCodeCanvas } from "qrcode.react"
 import * as htmlToImage from "html-to-image"
 import jsPDF from "jspdf"
 
 type SignatureType = "chezmiss" | "kentley" | "none"
 type ModeType = "standard" | "team" | "a4" | "hologram" | "mobile"
+type ToastTone = "success" | "error" | "info"
+
+type ToastState = {
+  message: string
+  tone: ToastTone
+} | null
 
 type CardData = {
   name: string
@@ -20,6 +26,14 @@ type CardData = {
   logo?: string
 }
 
+type SavedProfile = {
+  name: string
+  card: CardData
+}
+
+const CARD_STORAGE_KEY = "chezmiss_platinum_card"
+const PROFILES_STORAGE_KEY = "chezmiss_platinum_card_profiles"
+
 const defaultCard: CardData = {
   name: "Kentley Mwila",
   title: "Founder · Milele Inc.",
@@ -31,27 +45,75 @@ const defaultCard: CardData = {
   signature: "chezmiss",
 }
 
+function validateCardData(card: CardData): string[] {
+  const issues: string[] = []
+
+  if (!card.name.trim()) issues.push("Le nom est requis")
+  if (!card.title.trim()) issues.push("Le titre est requis")
+  if (!card.company.trim()) issues.push("L'entreprise est requise")
+
+  if (card.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(card.email.trim())) {
+    issues.push("L'email n'est pas valide")
+  }
+
+  if (card.website.trim()) {
+    try {
+      new URL(card.website.trim())
+    } catch {
+      issues.push("Le site web doit être une URL valide")
+    }
+  }
+
+  if (!card.phone.trim()) issues.push("Le numéro de téléphone est requis")
+
+  return issues
+}
+
+function normalizeProfileName(value: string): string {
+  return value.trim().replace(/\s+/g, " ").slice(0, 40)
+}
+
 export default function PlatinumBusinessCardGenerator() {
   const [mode, setMode] = useState<ModeType>("standard")
   const [isMonochrome, setIsMonochrome] = useState(false)
   const [card, setCard] = useState<CardData>(defaultCard)
   const [team, setTeam] = useState<CardData[]>([defaultCard])
+  const [profileName, setProfileName] = useState("Carte principale")
+  const [savedProfiles, setSavedProfiles] = useState<SavedProfile[]>([])
+  const [selectedProfileName, setSelectedProfileName] = useState("")
+  const [toast, setToast] = useState<ToastState>(null)
   const previewRef = useRef<HTMLDivElement | null>(null)
   const sheetRef = useRef<HTMLDivElement | null>(null)
   const logoInputRef = useRef<HTMLInputElement | null>(null)
+  const teamLogoInputRefs = useRef<Array<HTMLInputElement | null>>([])
+  const toastTimerRef = useRef<number | null>(null)
 
   function updateCard<K extends keyof CardData>(field: K, value: CardData[K]) {
-    setCard({ ...card, [field]: value })
+    setCard((prev) => ({ ...prev, [field]: value }))
   }
 
   function addTeamCard() {
-    setTeam([...team, { ...defaultCard, name: "", email: "", phone: "", website: "" }])
+    setTeam((prev) => [
+      ...prev,
+      {
+        ...defaultCard,
+        name: "",
+        title: "",
+        company: defaultCard.company,
+        email: "",
+        phone: "",
+        website: "",
+        showQR: true,
+      },
+    ])
   }
 
   function updateTeamCard<K extends keyof CardData>(index: number, field: K, value: CardData[K]) {
-    const updated = [...team]
-    updated[index] = { ...updated[index], [field]: value }
-    setTeam(updated)
+    setTeam((prev) => {
+      const updated = [...prev]
+      updated[index] = { ...updated[index], [field]: value }
+      return updated
+    })
   }
 
   function onLogoUpload(file: File | undefined) {
@@ -65,80 +127,199 @@ export default function PlatinumBusinessCardGenerator() {
     reader.readAsDataURL(file)
   }
 
+  function onTeamLogoUpload(index: number, file: File | undefined) {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        updateTeamCard(index, "logo", reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  function notify(message: string, tone: ToastTone = "info") {
+    setToast({ message, tone })
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current)
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToast(null)
+    }, 3200)
+  }
+
+  function persistProfiles(nextProfiles: SavedProfile[]) {
+    setSavedProfiles(nextProfiles)
+    window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(nextProfiles))
+  }
+
+  function saveProfile() {
+    const issues = validateCardData(card)
+    if (issues.length > 0) {
+      notify(issues[0], "error")
+      return
+    }
+
+    const name = normalizeProfileName(profileName) || `Carte ${card.name}`
+    const nextProfile: SavedProfile = { name, card }
+    const nextProfiles = [...savedProfiles.filter((profile) => profile.name !== name), nextProfile].sort((a, b) =>
+      a.name.localeCompare(b.name, "fr")
+    )
+
+    persistProfiles(nextProfiles)
+    setSelectedProfileName(name)
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(card))
+    notify(`Profil \"${name}\" sauvegardé.`, "success")
+  }
+
+  function loadSelectedProfile() {
+    const profile = savedProfiles.find((item) => item.name === selectedProfileName)
+    if (!profile) {
+      notify("Sélectionne un profil à charger.", "error")
+      return
+    }
+
+    setCard(profile.card)
+    setProfileName(profile.name)
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(profile.card))
+    notify(`Profil \"${profile.name}\" chargé.`, "success")
+  }
+
+  function deleteSelectedProfile() {
+    if (!selectedProfileName) {
+      notify("Sélectionne un profil à supprimer.", "error")
+      return
+    }
+
+    const nextProfiles = savedProfiles.filter((profile) => profile.name !== selectedProfileName)
+    persistProfiles(nextProfiles)
+    setSelectedProfileName(nextProfiles[0]?.name ?? "")
+    notify(`Profil \"${selectedProfileName}\" supprimé.`, "success")
+  }
+
+  function validateBeforeExport() {
+    const issues = validateCardData(card)
+    if (issues.length > 0) {
+      notify(`Export bloqué: ${issues[0]}`, "error")
+      return false
+    }
+    return true
+  }
+
+  async function capturePreview(node: HTMLElement, pixelRatio = 3) {
+    return htmlToImage.toPng(node, {
+      pixelRatio,
+      cacheBust: true,
+      backgroundColor: isMonochrome ? "#000000" : "#050309",
+    })
+  }
+
   function saveCardLocally() {
     if (typeof window === "undefined") return
-    window.localStorage.setItem("chezmiss_platinum_card", JSON.stringify(card))
-    window.alert("Carte sauvegardee localement.")
+    const profile = { name: normalizeProfileName(profileName) || `Carte ${card.name}`, card }
+    persistProfiles([
+      ...savedProfiles.filter((item) => item.name !== profile.name),
+      profile,
+    ].sort((a, b) => a.name.localeCompare(b.name, "fr")))
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(card))
+    setSelectedProfileName(profile.name)
+    notify("Carte sauvegardée localement.", "success")
   }
 
   function loadSavedCard() {
     if (typeof window === "undefined") return
-    const raw = window.localStorage.getItem("chezmiss_platinum_card")
+    const raw = window.localStorage.getItem(CARD_STORAGE_KEY)
     if (!raw) {
-      window.alert("Aucune sauvegarde trouvee.")
+      notify("Aucune sauvegarde trouvée.", "error")
       return
     }
 
     try {
       const parsed = JSON.parse(raw) as Partial<CardData>
       setCard((prev) => ({ ...prev, ...parsed }))
-      window.alert("Carte chargee.")
+      notify("Carte chargée.", "success")
     } catch {
-      window.alert("Sauvegarde invalide.")
+      notify("Sauvegarde invalide.", "error")
     }
   }
 
   async function downloadPNG() {
-    if (!previewRef.current) return
-    const url = await htmlToImage.toPng(previewRef.current)
+    if (!previewRef.current || !validateBeforeExport()) return
+    const url = await capturePreview(previewRef.current, 4)
     const link = document.createElement("a")
     link.href = url
     link.download = "CHEZMISS-PLATINUM-card.png"
     link.click()
+    notify("PNG haute définition généré.", "success")
   }
 
   async function downloadA4PDF() {
-    if (!sheetRef.current) return
-    const url = await htmlToImage.toPng(sheetRef.current)
+    if (!sheetRef.current || !validateBeforeExport()) return
+    const url = await htmlToImage.toPng(sheetRef.current, {
+      pixelRatio: 3,
+      cacheBust: true,
+      backgroundColor: "#ffffff",
+    })
     const pdf = new jsPDF("portrait", "mm", "a4")
-    pdf.addImage(url, "PNG", 0, 0, 210, 297)
+    pdf.addImage(url, "PNG", 8, 8, 194, 274)
     pdf.save("CHEZMISS-PLATINUM-A4.pdf")
+    notify("PDF A4 prêt à l'impression.", "success")
   }
 
   async function printCard() {
-    if (!previewRef.current) return
+    if (!previewRef.current || !validateBeforeExport()) return
 
-    const url = await htmlToImage.toPng(previewRef.current)
+    const url = await capturePreview(previewRef.current, 4)
     const printWindow = window.open("", "_blank", "width=900,height=600")
     if (!printWindow) return
 
     printWindow.document.write(`
       <html>
-        <head><title>Impression carte CHEZMISS</title></head>
-        <body style="margin:0;display:flex;align-items:center;justify-content:center;background:#111;">
-          <img src="${url}" alt="Carte" style="max-width:96%;height:auto;" />
+        <head>
+          <title>Impression carte CHEZMISS</title>
+          <style>
+            @page { margin: 12mm; }
+            body { margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #111; }
+            img { max-width: 100%; height: auto; display: block; }
+          </style>
+        </head>
+        <body>
+          <img src="${url}" alt="Carte" />
         </body>
       </html>
     `)
     printWindow.document.close()
-    printWindow.focus()
-    printWindow.print()
+    const triggerPrint = () => {
+      printWindow.focus()
+      printWindow.print()
+    }
+    if (printWindow.document.readyState === "complete") {
+      triggerPrint()
+    } else {
+      printWindow.onload = triggerPrint
+    }
+    notify("Fenêtre d'impression ouverte.", "success")
   }
 
   async function sendCard() {
-    if (!previewRef.current) return
+    if (!previewRef.current || !validateBeforeExport()) return
 
-    const pngDataUrl = await htmlToImage.toPng(previewRef.current)
+    const pngDataUrl = await capturePreview(previewRef.current, 4)
     const response = await fetch(pngDataUrl)
     const blob = await response.blob()
     const file = new File([blob], "CHEZMISS-PLATINUM-card.png", { type: "image/png" })
 
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
-      await navigator.share({
-        title: "Carte CHEZMISS",
-        text: `${card.name} - ${card.title}`,
-        files: [file],
-      })
+      try {
+        await navigator.share({
+          title: "Carte CHEZMISS",
+          text: `${card.name} - ${card.title}`,
+          files: [file],
+        })
+        notify("Carte envoyée via le partage natif.", "success")
+      } catch {
+        notify("Partage annulé.", "info")
+      }
       return
     }
 
@@ -147,6 +328,63 @@ export default function PlatinumBusinessCardGenerator() {
       `Nom: ${card.name}\nTitre: ${card.title}\nEntreprise: ${card.company}\nEmail: ${card.email}\nTelephone: ${card.phone}\nSite web: ${card.website}\n\nImage de carte a joindre: CHEZMISS-PLATINUM-card.png`
     )
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self")
+    notify("Ouverture du client mail.", "success")
+  }
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    try {
+      const rawProfiles = window.localStorage.getItem(PROFILES_STORAGE_KEY)
+      if (rawProfiles) {
+        const parsed = JSON.parse(rawProfiles) as SavedProfile[]
+        if (Array.isArray(parsed)) {
+          const normalizedProfiles = parsed
+            .filter((item) => item && typeof item.name === "string" && item.card)
+            .map((item) => ({
+              name: normalizeProfileName(item.name) || `Carte ${item.card?.name ?? "sans nom"}`,
+              card: { ...defaultCard, ...item.card },
+            }))
+          setSavedProfiles(normalizedProfiles)
+          setSelectedProfileName(normalizedProfiles[0]?.name ?? "")
+        }
+      } else {
+        const legacy = window.localStorage.getItem(CARD_STORAGE_KEY)
+        if (legacy) {
+          const parsed = JSON.parse(legacy) as Partial<CardData>
+          const migratedCard = { ...defaultCard, ...parsed }
+          setCard(migratedCard)
+          const legacyProfile = { name: "Dernière carte", card: migratedCard }
+          setSavedProfiles([legacyProfile])
+          setSelectedProfileName(legacyProfile.name)
+        }
+      }
+    } catch {
+      notify("Impossible de lire les sauvegardes locales.", "error")
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current)
+      }
+    }
+  }, [])
+
+  const validationIssues = validateCardData(card)
+
+  function fieldBorder(field: keyof CardData) {
+    const hasIssue = validationIssues.some((issue) => {
+      if (field === "name") return issue.includes("nom")
+      if (field === "title") return issue.includes("titre")
+      if (field === "company") return issue.includes("entreprise")
+      if (field === "phone") return issue.includes("téléphone") || issue.includes("numéro")
+      if (field === "email") return issue.includes("email")
+      if (field === "website") return issue.includes("site web")
+      return false
+    })
+    return hasIssue ? "border-red-400/70" : "border-[#D4AF37]/50"
   }
 
   function renderSignature(sig: SignatureType) {
@@ -158,6 +396,20 @@ export default function PlatinumBusinessCardGenerator() {
 
   return (
     <div className="min-h-screen bg-black text-white p-6 md:p-10 flex flex-col gap-8">
+      {toast && (
+        <div
+          className={`fixed right-4 top-4 z-50 rounded-full border px-4 py-2 text-xs font-medium shadow-2xl backdrop-blur-xl ${
+            toast.tone === "success"
+              ? "border-emerald-400/40 bg-emerald-500/15 text-emerald-100"
+              : toast.tone === "error"
+                ? "border-red-400/40 bg-red-500/15 text-red-100"
+                : "border-white/20 bg-black/60 text-white"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
       {/* BACKGROUND FUTURISTE */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute -top-40 left-10 w-72 h-72 bg-[#D4AF37]/20 blur-3xl rounded-full" />
@@ -241,6 +493,79 @@ export default function PlatinumBusinessCardGenerator() {
         </div>
       </div>
 
+      {mode === "standard" && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 rounded-2xl border border-[#D4AF37]/20 bg-white/5 p-4 text-xs">
+          <div className="space-y-2 md:col-span-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="opacity-70">Nom du profil :</span>
+              <input
+                value={profileName}
+                onChange={(e) => setProfileName(e.target.value)}
+                className="min-w-[220px] bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm"
+                placeholder="Ex: Carte Kentley"
+              />
+              <button
+                type="button"
+                onClick={saveProfile}
+                className="rounded-lg bg-[#D4AF37] px-3 py-2 text-black font-semibold"
+              >
+                Sauvegarder profil
+              </button>
+              <button
+                type="button"
+                onClick={saveCardLocally}
+                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+              >
+                Sauvegarde rapide
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="opacity-70">Profils enregistrés :</span>
+              <select
+                value={selectedProfileName}
+                onChange={(e) => setSelectedProfileName(e.target.value)}
+                className="min-w-[220px] bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm"
+              >
+                <option value="">Choisir un profil</option>
+                {savedProfiles.map((profile) => (
+                  <option key={profile.name} value={profile.name}>
+                    {profile.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={loadSelectedProfile}
+                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+              >
+                Charger
+              </button>
+              <button
+                type="button"
+                onClick={deleteSelectedProfile}
+                className="rounded-lg border border-red-400/50 px-3 py-2 text-red-200"
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#D4AF37]/20 bg-black/40 p-3">
+            <div className="text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]">Contrôle qualité</div>
+            {validationIssues.length === 0 ? (
+              <p className="mt-2 text-emerald-200">Carte prête pour l’export et l’impression.</p>
+            ) : (
+              <ul className="mt-2 space-y-1 text-red-200">
+                {validationIssues.slice(0, 3).map((issue) => (
+                  <li key={issue}>• {issue}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* CONTENU SELON LE MODE */}
       {mode === "standard" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
@@ -257,7 +582,7 @@ export default function PlatinumBusinessCardGenerator() {
               <div key={f.key} className="flex flex-col gap-1">
                 <label className="opacity-70">{f.label}</label>
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm"
+                  className={`bg-black border rounded-lg px-3 py-2 text-sm ${fieldBorder(f.key as keyof CardData)}`}
                   value={card[f.key as keyof CardData] as string}
                   onChange={(e) => updateCard(f.key as keyof CardData, e.target.value)}
                 />
@@ -273,14 +598,13 @@ export default function PlatinumBusinessCardGenerator() {
               <span className="text-xs opacity-80">Afficher le QR code</span>
             </label>
 
-            <button
-              onClick={downloadPNG}
-              className="mt-4 px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm"
-            >
-              Télécharger PNG
-            </button>
-
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button
+                onClick={downloadPNG}
+                className="px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm font-semibold"
+              >
+                Télécharger PNG HD
+              </button>
               <button
                 onClick={printCard}
                 className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
@@ -350,6 +674,12 @@ export default function PlatinumBusinessCardGenerator() {
                 />
                 <input
                   className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  placeholder="Entreprise"
+                  value={member.company}
+                  onChange={(e) => updateTeamCard(i, "company", e.target.value)}
+                />
+                <input
+                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
                   placeholder="Téléphone"
                   value={member.phone}
                   onChange={(e) => updateTeamCard(i, "phone", e.target.value)}
@@ -360,6 +690,45 @@ export default function PlatinumBusinessCardGenerator() {
                   value={member.email}
                   onChange={(e) => updateTeamCard(i, "email", e.target.value)}
                 />
+                <input
+                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  placeholder="Site web"
+                  value={member.website}
+                  onChange={(e) => updateTeamCard(i, "website", e.target.value)}
+                />
+                <div className="flex items-center gap-3 flex-wrap">
+                  <label className="inline-flex items-center gap-2 text-xs opacity-80">
+                    <input
+                      type="checkbox"
+                      checked={member.showQR}
+                      onChange={(e) => updateTeamCard(i, "showQR", e.target.checked)}
+                    />
+                    QR code
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => teamLogoInputRefs.current[i]?.click()}
+                    className="rounded-lg border border-[#D4AF37]/50 px-3 py-2 text-xs"
+                  >
+                    Logo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateTeamCard(i, "logo", undefined)}
+                    className="rounded-lg border border-[#D4AF37]/30 px-3 py-2 text-xs"
+                  >
+                    Retirer
+                  </button>
+                  <input
+                    ref={(el) => {
+                      teamLogoInputRefs.current[i] = el
+                    }}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => onTeamLogoUpload(i, e.target.files?.[0])}
+                  />
+                </div>
                 <PlatinumCard data={member} signature={renderSignature(card.signature)} />
               </div>
             ))}
@@ -463,7 +832,7 @@ function PlatinumCard({
     <div
       className={`relative w-[340px] h-[210px] rounded-xl overflow-hidden border p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,0,0,0.9)] ${
         monochrome
-          ? "border-white/40 bg-gradient-to-br from-black via-[#1a1a1a] to-black"
+          ? "border-white/40 bg-gradient-to-br from-black via-[#181818] to-black"
           : "border-[#D4AF37]/50 bg-gradient-to-br from-black via-[#120b18] to-black"
       }`}
     >
@@ -484,8 +853,8 @@ function PlatinumCard({
             monochrome
               ? "bg-[conic-gradient(from_180deg,_rgba(255,255,255,0.15),_transparent,_rgba(120,120,120,0.2),_transparent,_rgba(255,255,255,0.15))]"
               : "bg-[conic-gradient(from_180deg,_rgba(212,175,55,0.25),_transparent,_rgba(168,85,247,0.25),_transparent,_rgba(212,175,55,0.25))]"
-          }`
-        />
+          }`}
+        ></div>
       )}
 
       <div className="relative flex justify-between gap-3">
@@ -502,7 +871,7 @@ function PlatinumCard({
             <img
               src={data.logo}
               alt="Logo"
-              className="w-[44px] h-[44px] object-contain"
+              className={`w-[44px] h-[44px] object-contain ${monochrome ? "grayscale contrast-125 brightness-125" : ""}`}
             />
           </div>
         )}
