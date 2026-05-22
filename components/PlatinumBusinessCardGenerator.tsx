@@ -464,6 +464,22 @@ export default function PlatinumBusinessCardGenerator() {
   }, [])
 
   const validationIssues = validateCardData(card)
+  const chromeShell =
+    "rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+  const chromeField =
+    "bg-black/55 border border-[#D4AF37]/45 rounded-xl px-3 py-2 text-sm text-white outline-none transition duration-200 placeholder:text-white/30 focus:border-[#D4AF37] focus:bg-black/70 focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)]"
+  const chromeSelect =
+    "bg-black/65 border border-[#D4AF37]/50 rounded-xl px-3 py-2 text-sm text-white outline-none transition duration-200 focus:border-[#D4AF37] focus:shadow-[0_0_0_4px_rgba(212,175,55,0.12)]"
+  const chromeButton =
+    "rounded-xl px-3.5 py-2 text-sm font-semibold tracking-[0.08em] uppercase transition duration-200 active:scale-[0.98]"
+  const chromeButtonPrimary =
+    `${chromeButton} bg-[linear-gradient(135deg,#d4af37_0%,#f7e3a4_45%,#b58b18_100%)] text-black shadow-[0_14px_28px_rgba(212,175,55,0.22)] hover:shadow-[0_18px_36px_rgba(212,175,55,0.32)]`
+  const chromeButtonSecondary =
+    `${chromeButton} border border-[#D4AF37]/45 bg-white/5 text-[#f7e3a4] hover:bg-white/10 hover:border-[#D4AF37]/70`
+  const chromeButtonDanger =
+    `${chromeButton} border border-red-400/40 bg-red-500/10 text-red-100 hover:bg-red-500/15 hover:border-red-400/60`
+  const chromeBadge =
+    "rounded-full border border-[#D4AF37]/25 bg-white/5 px-3 py-1 text-[9px] uppercase tracking-[0.24em] text-[#f7e3a4]"
 
   function fieldBorder(field: keyof CardData) {
     const hasIssue = validationIssues.some((issue) => {
@@ -486,7 +502,7 @@ export default function PlatinumBusinessCardGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 md:p-10 flex flex-col gap-8">
+    <div className="min-h-screen bg-black text-white p-6 md:p-10 flex flex-col gap-8 overflow-hidden">
       {toast && (
         <div
           className={`fixed right-4 top-4 z-50 rounded-full border px-4 py-2 text-xs font-medium shadow-2xl backdrop-blur-xl ${
@@ -504,13 +520,16 @@ export default function PlatinumBusinessCardGenerator() {
       {/* BACKGROUND FUTURISTE */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute -top-40 left-10 w-72 h-72 bg-[#D4AF37]/20 blur-3xl rounded-full" />
+        <div className="absolute top-1/3 right-1/4 w-60 h-60 bg-sky-400/10 blur-3xl rounded-full" />
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/25 blur-3xl rounded-full" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.12),_transparent_60%)]" />
+        <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(90deg,rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:72px_72px]" />
       </div>
 
       {/* HEADER */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-[0.25em] text-[#D4AF37]">
+        <div className={chromeBadge}>Platinum suite</div>
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-[0.25em] text-transparent bg-clip-text bg-[linear-gradient(135deg,#f7e3a4_0%,#d4af37_38%,#ffffff_58%,#b58b18_100%)] drop-shadow-[0_0_24px_rgba(212,175,55,0.18)]">
           CHEZMISS PLATINUM SUITE
         </h1>
         <p className="text-xs md:text-sm opacity-70 uppercase">
@@ -522,13 +541,13 @@ export default function PlatinumBusinessCardGenerator() {
       </div>
 
       {/* BARRE D’OPTIONS */}
-      <div className="flex flex-wrap justify-between items-center gap-4 text-xs">
-        <div className="flex items-center gap-2">
-          <span className="opacity-70">Mode :</span>
+      <div className={`${chromeShell} flex flex-wrap justify-between items-center gap-4 text-xs p-4`}>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="opacity-70 uppercase tracking-[0.2em]">Mode</span>
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value as ModeType)}
-            className="bg-black border border-[#D4AF37]/60 rounded-lg px-2 py-1"
+            className={chromeSelect}
           >
             <option value="standard">Standard</option>
             <option value="team">Équipe</option>
@@ -537,11 +556,11 @@ export default function PlatinumBusinessCardGenerator() {
             <option value="mobile">Mobile</option>
           </select>
 
-          <span className="opacity-70 ml-3">Template :</span>
+          <span className="opacity-70 ml-3 uppercase tracking-[0.2em]">Template</span>
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value as CardTheme)}
-            className="bg-black border border-[#D4AF37]/60 rounded-lg px-2 py-1"
+            className={chromeSelect}
           >
             <option value="executive">Executive</option>
             <option value="minimal">Minimal</option>
@@ -550,18 +569,18 @@ export default function PlatinumBusinessCardGenerator() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          <span className="opacity-70">Signature :</span>
+          <span className="opacity-70 uppercase tracking-[0.2em]">Signature</span>
           <select
             value={card.signature}
             onChange={(e) => updateCard("signature", e.target.value as SignatureType)}
-            className="bg-black border border-[#D4AF37]/60 rounded-lg px-2 py-1"
+            className={chromeSelect}
           >
             <option value="chezmiss">CHEZMISS</option>
             <option value="kentley">Kentley · Milele Inc.</option>
             <option value="none">Aucune</option>
           </select>
 
-          <label className="inline-flex items-center gap-2 rounded-lg border border-[#D4AF37]/60 px-2 py-1 cursor-pointer">
+          <label className="inline-flex items-center gap-2 rounded-xl border border-[#D4AF37]/45 bg-white/5 px-3 py-2 cursor-pointer transition hover:bg-white/10">
             <input
               type="checkbox"
               checked={isMonochrome}
@@ -573,7 +592,7 @@ export default function PlatinumBusinessCardGenerator() {
           <button
             type="button"
             onClick={() => logoInputRef.current?.click()}
-            className="rounded-lg border border-[#D4AF37]/60 px-3 py-1"
+            className={chromeButtonSecondary}
           >
             Inserer logo
           </button>
@@ -588,7 +607,7 @@ export default function PlatinumBusinessCardGenerator() {
           <button
             type="button"
             onClick={() => updateCard("logo", undefined)}
-            className="rounded-lg border border-[#D4AF37]/40 px-3 py-1"
+            className={chromeButtonSecondary}
           >
             Retirer logo
           </button>
@@ -596,38 +615,38 @@ export default function PlatinumBusinessCardGenerator() {
       </div>
 
       {mode === "standard" && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 rounded-2xl border border-[#D4AF37]/20 bg-white/5 p-4 text-xs">
+        <div className={`${chromeShell} grid grid-cols-1 md:grid-cols-3 gap-3 p-4 text-xs`}>
           <div className="space-y-2 md:col-span-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="opacity-70">Nom du profil :</span>
+              <span className="opacity-70 uppercase tracking-[0.2em]">Nom du profil</span>
               <input
                 value={profileName}
                 onChange={(e) => setProfileName(e.target.value)}
-                className="min-w-[220px] bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm"
+                className={`min-w-[220px] ${chromeField}`}
                 placeholder="Ex: Carte Kentley"
               />
               <button
                 type="button"
                 onClick={saveProfile}
-                className="rounded-lg bg-[#D4AF37] px-3 py-2 text-black font-semibold"
+                className={chromeButtonPrimary}
               >
                 Sauvegarder profil
               </button>
               <button
                 type="button"
                 onClick={saveCardLocally}
-                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+                className={chromeButtonSecondary}
               >
                 Sauvegarde rapide
               </button>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="opacity-70">Profils enregistrés :</span>
+              <span className="opacity-70 uppercase tracking-[0.2em]">Profils enregistrés</span>
               <select
                 value={selectedProfileName}
                 onChange={(e) => setSelectedProfileName(e.target.value)}
-                className="min-w-[220px] bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm"
+                className={`min-w-[220px] ${chromeSelect}`}
               >
                 <option value="">Choisir un profil</option>
                 {savedProfiles.map((profile) => (
@@ -639,36 +658,36 @@ export default function PlatinumBusinessCardGenerator() {
               <button
                 type="button"
                 onClick={loadSelectedProfile}
-                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+                className={chromeButtonSecondary}
               >
                 Charger
               </button>
               <button
                 type="button"
                 onClick={deleteSelectedProfile}
-                className="rounded-lg border border-red-400/50 px-3 py-2 text-red-200"
+                className={chromeButtonDanger}
               >
                 Supprimer
               </button>
               <button
                 type="button"
                 onClick={duplicateSelectedProfile}
-                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+                className={chromeButtonSecondary}
               >
                 Dupliquer
               </button>
               <button
                 type="button"
                 onClick={exportAllProfilesPDF}
-                className="rounded-lg bg-[#D4AF37] px-3 py-2 text-black font-semibold"
+                className={chromeButtonPrimary}
               >
                 Export profils PDF
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#D4AF37]/20 bg-black/40 p-3">
-            <div className="text-[11px] uppercase tracking-[0.25em] text-[#D4AF37]">Contrôle qualité</div>
+          <div className="rounded-xl border border-[#D4AF37]/20 bg-black/40 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+            <div className="text-[11px] uppercase tracking-[0.28em] text-[#D4AF37]">Contrôle qualité</div>
             {validationIssues.length === 0 ? (
               <p className="mt-2 text-emerald-200">Carte prête pour l’export et l’impression.</p>
             ) : (
@@ -686,7 +705,7 @@ export default function PlatinumBusinessCardGenerator() {
       {mode === "standard" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           {/* FORM */}
-          <div className="space-y-4 text-sm">
+          <div className={`${chromeShell} space-y-4 text-sm p-4`}>
             {[
               { key: "name", label: "Nom" },
               { key: "title", label: "Titre" },
@@ -696,9 +715,9 @@ export default function PlatinumBusinessCardGenerator() {
               { key: "website", label: "Site web" },
             ].map((f) => (
               <div key={f.key} className="flex flex-col gap-1">
-                <label className="opacity-70">{f.label}</label>
+                <label className="opacity-70 uppercase tracking-[0.2em] text-[10px]">{f.label}</label>
                 <input
-                  className={`bg-black border rounded-lg px-3 py-2 text-sm ${fieldBorder(f.key as keyof CardData)}`}
+                  className={`${chromeField} ${fieldBorder(f.key as keyof CardData)}`}
                   value={card[f.key as keyof CardData] as string}
                   onChange={(e) => updateCard(f.key as keyof CardData, e.target.value)}
                 />
@@ -717,31 +736,31 @@ export default function PlatinumBusinessCardGenerator() {
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
               <button
                 onClick={downloadPNG}
-                className="px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm font-semibold"
+                className={`${chromeButtonPrimary} sm:col-span-2`}
               >
                 Télécharger PNG HD
               </button>
               <button
                 onClick={printCard}
-                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+                className={chromeButtonSecondary}
               >
                 Imprimer
               </button>
               <button
                 onClick={saveCardLocally}
-                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+                className={chromeButtonSecondary}
               >
                 Sauvegarder
               </button>
               <button
                 onClick={loadSavedCard}
-                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+                className={chromeButtonSecondary}
               >
                 Charger
               </button>
               <button
                 onClick={sendCard}
-                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+                className={chromeButtonSecondary}
               >
                 Envoyer
               </button>
@@ -763,12 +782,12 @@ export default function PlatinumBusinessCardGenerator() {
       )}
 
       {mode === "team" && (
-        <div className="space-y-4">
+        <div className={`${chromeShell} space-y-4 p-4`}>
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold text-[#D4AF37]">Équipe</h2>
+            <h2 className="text-xl font-bold text-[#D4AF37] tracking-[0.18em] uppercase">Équipe</h2>
             <button
               onClick={addTeamCard}
-              className="px-4 py-2 border border-[#D4AF37] rounded-lg text-xs"
+              className={chromeButtonSecondary}
             >
               Ajouter une carte
             </button>
@@ -776,39 +795,39 @@ export default function PlatinumBusinessCardGenerator() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {team.map((member, i) => (
-              <div key={i} className="space-y-3">
+              <div key={i} className="space-y-3 rounded-2xl border border-white/8 bg-black/25 p-3">
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Nom"
                   value={member.name}
                   onChange={(e) => updateTeamCard(i, "name", e.target.value)}
                 />
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Titre"
                   value={member.title}
                   onChange={(e) => updateTeamCard(i, "title", e.target.value)}
                 />
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Entreprise"
                   value={member.company}
                   onChange={(e) => updateTeamCard(i, "company", e.target.value)}
                 />
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Téléphone"
                   value={member.phone}
                   onChange={(e) => updateTeamCard(i, "phone", e.target.value)}
                 />
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Email"
                   value={member.email}
                   onChange={(e) => updateTeamCard(i, "email", e.target.value)}
                 />
                 <input
-                  className="bg-black border border-[#D4AF37]/50 rounded-lg px-3 py-2 text-sm w-full"
+                  className={`w-full ${chromeField}`}
                   placeholder="Site web"
                   value={member.website}
                   onChange={(e) => updateTeamCard(i, "website", e.target.value)}
@@ -825,14 +844,14 @@ export default function PlatinumBusinessCardGenerator() {
                   <button
                     type="button"
                     onClick={() => teamLogoInputRefs.current[i]?.click()}
-                    className="rounded-lg border border-[#D4AF37]/50 px-3 py-2 text-xs"
+                    className={chromeButtonSecondary}
                   >
                     Logo
                   </button>
                   <button
                     type="button"
                     onClick={() => updateTeamCard(i, "logo", undefined)}
-                    className="rounded-lg border border-[#D4AF37]/30 px-3 py-2 text-xs"
+                    className={chromeButtonSecondary}
                   >
                     Retirer
                   </button>
@@ -872,10 +891,10 @@ export default function PlatinumBusinessCardGenerator() {
       </div>
 
       {mode === "a4" && (
-        <div className="space-y-4">
+        <div className={`${chromeShell} space-y-4 p-4`}>
           <button
             onClick={downloadA4PDF}
-            className="px-6 py-2 bg-[#D4AF37] text-black rounded-lg text-sm"
+            className={chromeButtonPrimary}
           >
             Télécharger Planche A4 (PDF)
           </button>
