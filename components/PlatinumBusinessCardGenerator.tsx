@@ -75,6 +75,36 @@ function normalizeProfileName(value: string): string {
   return value.trim().replace(/\s+/g, " ").slice(0, 40)
 }
 
+function sanitizeFileStem(value: string): string {
+  const trimmed = value.trim().toLowerCase()
+  const normalized = trimmed.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+  return normalized || "chezmiss-card"
+}
+
+function escapeVCardValue(value: string): string {
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/\n/g, "\\n")
+    .replace(/,/g, "\\,")
+    .replace(/;/g, "\\;")
+}
+
+function buildVCard(card: CardData): string {
+  const lines = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    `FN:${escapeVCardValue(card.name)}`,
+    `ORG:${escapeVCardValue(card.company)}`,
+    `TITLE:${escapeVCardValue(card.title)}`,
+    `TEL;TYPE=WORK,VOICE:${escapeVCardValue(card.phone)}`,
+    `EMAIL;TYPE=INTERNET:${escapeVCardValue(card.email)}`,
+    `URL:${escapeVCardValue(card.website)}`,
+    "END:VCARD",
+  ]
+
+  return `${lines.join("\r\n")}\r\n`
+}
+
 export default function PlatinumBusinessCardGenerator() {
   const [mode, setMode] = useState<ModeType>("standard")
   const [theme, setTheme] = useState<CardTheme>("luxe")
@@ -411,6 +441,76 @@ export default function PlatinumBusinessCardGenerator() {
     )
     window.open(`mailto:?subject=${subject}&body=${body}`, "_self")
     notify("Ouverture du client mail.", "success")
+  }
+
+  async function addToAppleWallet() {
+    if (!validateBeforeExport()) return
+
+    const payload = {
+      name: card.name.trim(),
+      title: card.title.trim(),
+      company: card.company.trim(),
+      phone: card.phone.trim(),
+      email: card.email.trim(),
+      website: card.website.trim(),
+      theme,
+    }
+
+    let passDownloaded = false
+
+    try {
+      const response = await fetch("/api/wallet/apple-pass", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (response.ok) {
+        const contentType = response.headers.get("content-type") || ""
+        if (contentType.includes("application/vnd.apple.pkpass")) {
+          const blob = await response.blob()
+          const link = document.createElement("a")
+          link.href = URL.createObjectURL(blob)
+          link.download = `${sanitizeFileStem(card.name)}.pkpass`
+          link.click()
+          URL.revokeObjectURL(link.href)
+          passDownloaded = true
+          notify("Pass Apple Wallet telecharge.", "success")
+        }
+      }
+    } catch {
+      // Fallback handled below.
+    }
+
+    if (passDownloaded) return
+
+    const vcard = buildVCard(card)
+    const fileName = `${sanitizeFileStem(card.name)}.vcf`
+    const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
+    const file = new File([blob], fileName, { type: "text/vcard;charset=utf-8" })
+
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: `Contact ${card.name}`,
+          text: "Carte de contact CHEZMISS",
+          files: [file],
+        })
+        notify("Contact partage au format vCard.", "info")
+        return
+      } catch {
+        // Continue with direct download.
+      }
+    }
+
+    const link = document.createElement("a")
+    link.href = URL.createObjectURL(blob)
+    link.download = fileName
+    link.click()
+    URL.revokeObjectURL(link.href)
+    notify("Service Apple Wallet non configure. Fichier vCard telecharge en alternative.", "info")
   }
 
   useEffect(() => {
@@ -823,6 +923,12 @@ export default function PlatinumBusinessCardGenerator() {
                 className={chromeButtonSecondary}
               >
                 Envoyer
+              </button>
+              <button
+                onClick={addToAppleWallet}
+                className={chromeButtonPrimary}
+              >
+                Ajouter a Apple Wallet
               </button>
             </div>
           </div>
