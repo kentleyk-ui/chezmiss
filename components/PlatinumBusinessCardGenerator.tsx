@@ -945,56 +945,119 @@ function PlatinumCard({
   theme?: CardTheme
 }) {
   const qrValue = `${data.name} · ${data.title} · ${data.company} · ${data.phone} · ${data.email} · ${data.website}`
+  const themeMeta = {
+    executive: {
+      label: "Executive",
+      descriptor: "Boardroom precision",
+      footer: "Precision / Authority / Clarity",
+    },
+    minimal: {
+      label: "Minimal",
+      descriptor: "Quiet luxury",
+      footer: "Calm / Space / Restraint",
+    },
+    luxe: {
+      label: "Luxe",
+      descriptor: "Jewelled contrast",
+      footer: "Ritual / Glow / Statement",
+    },
+  }[theme]
+  const themeLabel = themeMeta.label
 
   const themeStyles = {
     executive: {
-      border: monochrome ? "border-white/35" : "border-sky-300/40",
+      border: monochrome ? "border-white/35" : "border-sky-300/35",
       background: monochrome
         ? "bg-gradient-to-br from-black via-[#161616] to-black"
-        : "bg-gradient-to-br from-[#04070d] via-[#0b1220] to-[#05070a]",
+        : "bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(135deg,_#04070d_0%,_#0b1220_52%,_#05070a_100%)]",
       accent: monochrome ? "text-white/85" : "text-sky-200",
-      glowA: monochrome ? "bg-white/8" : "bg-sky-400/20",
-      glowB: monochrome ? "bg-white/8" : "bg-cyan-400/18",
+      glowA: monochrome ? "bg-white/8" : "bg-sky-400/18",
+      glowB: monochrome ? "bg-white/8" : "bg-cyan-400/14",
     },
     minimal: {
-      border: monochrome ? "border-white/50" : "border-zinc-300/35",
+      border: monochrome ? "border-white/50" : "border-zinc-200/70",
       background: monochrome
         ? "bg-gradient-to-br from-black via-[#181818] to-black"
-        : "bg-gradient-to-br from-[#0e0e0e] via-[#161616] to-[#0f0f0f]",
-      accent: monochrome ? "text-white/90" : "text-zinc-100",
-      glowA: monochrome ? "bg-white/5" : "bg-zinc-300/10",
-      glowB: monochrome ? "bg-white/4" : "bg-zinc-100/8",
+        : "bg-[linear-gradient(135deg,_#ffffff_0%,_#fafafa_58%,_#f3f4f6_100%)]",
+      accent: monochrome ? "text-white/90" : "text-zinc-900",
+      glowA: monochrome ? "bg-white/5" : "bg-zinc-300/12",
+      glowB: monochrome ? "bg-white/4" : "bg-zinc-100/10",
     },
     luxe: {
       border: monochrome ? "border-white/40" : "border-[#D4AF37]/50",
       background: monochrome
         ? "bg-gradient-to-br from-black via-[#181818] to-black"
-        : "bg-gradient-to-br from-black via-[#120b18] to-black",
+        : "bg-[radial-gradient(circle_at_top_left,_rgba(212,175,55,0.18),_transparent_24%),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.18),_transparent_22%),linear-gradient(135deg,_#050408_0%,_#120b18_50%,_#07050a_100%)]",
       accent: monochrome ? "text-white/90" : "text-[#D4AF37]",
-      glowA: monochrome ? "bg-white/10" : "bg-[#D4AF37]/25",
-      glowB: monochrome ? "bg-white/10" : "bg-purple-500/25",
+      glowA: monochrome ? "bg-white/10" : "bg-[#D4AF37]/20",
+      glowB: monochrome ? "bg-white/10" : "bg-purple-500/22",
     },
   } satisfies Record<CardTheme, { border: string; background: string; accent: string; glowA: string; glowB: string }>
 
   const currentTheme = themeStyles[theme]
+  const isMinimal = theme === "minimal"
+  const isExecutive = theme === "executive"
+  const isLuxe = theme === "luxe"
+  const logoFrame = monochrome
+    ? "border-white/30 bg-black/55"
+    : isMinimal
+      ? "border-zinc-300/80 bg-white"
+      : isExecutive
+        ? "border-sky-200/30 bg-slate-950/70"
+        : "border-[#D4AF37]/35 bg-black/55"
+  const qrFrame = monochrome
+    ? "border-white/30 bg-black/55"
+    : isMinimal
+      ? "border-zinc-300/80 bg-white"
+      : isExecutive
+        ? "border-sky-200/30 bg-slate-950/70"
+        : "border-[#D4AF37]/35 bg-black/55"
+  const qrForeground = monochrome ? "#FFFFFF" : isMinimal ? "#111111" : isExecutive ? "#BAE6FD" : "#D4AF37"
+  const titleTone = monochrome ? "text-white/75" : isMinimal ? "text-zinc-700" : isExecutive ? "text-slate-200/80" : "text-white/70"
+  const detailsTone = monochrome ? "text-white/80" : isMinimal ? "text-zinc-700" : "text-white/80"
+  const nameTone = monochrome
+    ? "text-white"
+    : isMinimal
+      ? "text-zinc-950 tracking-[0.06em]"
+      : isExecutive
+        ? "text-white tracking-[0.03em]"
+        : "text-white tracking-[0.05em]"
+  const nameStyle = isLuxe && !monochrome ? "font-serif italic" : ""
+  const chipTone = monochrome
+    ? "border-white/20 bg-white/5 text-white/80"
+    : isMinimal
+      ? "border-zinc-300 bg-white text-zinc-700"
+      : isExecutive
+        ? "border-sky-200/20 bg-sky-300/10 text-sky-100"
+        : "border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#f7e3a4]"
 
   if (plain) {
     return (
-      <div className="w-[340px] h-[210px] border border-gray-300 rounded-xl p-4 flex flex-col justify-between">
-        <div>
-          <div className="text-xs uppercase tracking-[0.25em] text-[#D4AF37]">
-            {data.company}
+      <div className="w-[340px] h-[210px] border border-gray-300 rounded-xl p-4 flex flex-col justify-between bg-white text-black shadow-[0_18px_60px_rgba(15,23,42,0.10)]">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.3em] text-[#B79A5B]">{data.company}</div>
+            <div className="mt-2 text-[10px] uppercase tracking-[0.28em] text-zinc-400">{themeMeta.descriptor}</div>
+            <div className="mt-1 text-lg font-semibold text-zinc-950">{data.name}</div>
+            <div className="text-xs text-zinc-600">{data.title}</div>
           </div>
-          <div className="mt-2 text-lg font-semibold">{data.name}</div>
-          <div className="text-xs">{data.title}</div>
+          <div className="text-[9px] uppercase tracking-[0.22em] rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-zinc-600">
+            {themeLabel}
+          </div>
         </div>
-        <div className="text-[10px] space-y-1 mt-2">
+
+        <div className="mt-3 h-px bg-gradient-to-r from-transparent via-zinc-200 to-transparent" />
+
+        <div className="text-[10px] space-y-1 mt-2 text-zinc-700">
           <div>{data.phone}</div>
           <div>{data.email}</div>
           <div>{data.website}</div>
         </div>
         {signature && (
-          <div className="text-[8px] opacity-60 text-right mt-1">{signature}</div>
+          <div className="flex items-end justify-between gap-3 mt-1">
+            <div className="text-[8px] uppercase tracking-[0.22em] text-zinc-400">{themeMeta.footer}</div>
+            <div className="text-[8px] uppercase tracking-[0.2em] opacity-60 text-right">{signature}</div>
+          </div>
         )}
       </div>
     )
@@ -1005,12 +1068,10 @@ function PlatinumCard({
       className={`relative w-[340px] h-[210px] rounded-xl overflow-hidden border p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,0,0,0.9)] ${currentTheme.border} ${currentTheme.background}`}
     >
       {/* Layers futuristes */}
-      <div
-        className={`absolute -top-20 -right-10 w-40 h-40 blur-3xl ${currentTheme.glowA}`}
-      />
-      <div
-        className={`absolute bottom-[-40px] left-[-20px] w-40 h-40 blur-3xl ${currentTheme.glowB}`}
-      />
+      <div className={`absolute -top-20 -right-10 w-40 h-40 blur-3xl ${currentTheme.glowA}`} />
+      <div className={`absolute bottom-[-40px] left-[-20px] w-40 h-40 blur-3xl ${currentTheme.glowB}`} />
+      <div className="absolute inset-0 opacity-[0.14] mix-blend-screen bg-[linear-gradient(115deg,transparent_0%,rgba(255,255,255,0.22)_49%,transparent_52%,transparent_100%)] bg-[length:240%_240%]" />
+      {!isMinimal && !monochrome && <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_55%,rgba(0,0,0,0.25)_100%)]" />}
       {hologram && (
         <div
           className={`absolute inset-0 mix-blend-screen opacity-70 animate-pulse ${
@@ -1022,45 +1083,58 @@ function PlatinumCard({
       )}
 
       <div className="relative flex justify-between gap-3">
-        <div>
-          <div className={`text-[10px] uppercase tracking-[0.25em] ${currentTheme.accent}`}>
+        <div className="min-w-0">
+          <div className={`text-[10px] uppercase tracking-[0.3em] ${currentTheme.accent}`}>
             {data.company}
           </div>
-          <div className="mt-2 text-lg font-semibold">{data.name}</div>
-          <div className="text-xs opacity-70">{data.title}</div>
+          <div className={`mt-2 text-[10px] uppercase tracking-[0.28em] ${isMinimal ? "text-zinc-400" : "text-white/55"}`}>
+            {themeMeta.descriptor}
+          </div>
+          <div className={`mt-1 text-lg font-semibold leading-tight ${nameTone} ${nameStyle}`}>
+            {data.name}
+          </div>
+          <div className={`text-xs leading-snug ${titleTone}`}>{data.title}</div>
         </div>
 
         {data.logo && (
-          <div className={`rounded-lg p-1 border ${monochrome ? "border-white/30 bg-black/50" : "border-[#D4AF37]/40 bg-black/50"}`}>
+          <div className={`rounded-lg p-1 border backdrop-blur-md ${logoFrame}`}>
             <img
               src={data.logo}
               alt="Logo"
-              className={`w-[44px] h-[44px] object-contain ${monochrome ? "grayscale contrast-125 brightness-125" : ""}`}
+              className={`w-[44px] h-[44px] object-contain ${monochrome ? "grayscale contrast-125 brightness-125" : isMinimal ? "mix-blend-multiply" : ""}`}
             />
           </div>
         )}
 
         {data.showQR && (
-          <div className={`bg-black/50 rounded-lg p-1 border ${monochrome ? "border-white/30" : "border-[#D4AF37]/40"}`}>
+          <div className={`rounded-lg p-1 border backdrop-blur-md ${qrFrame}`}>
             <QRCodeCanvas
               value={qrValue}
               size={70}
-              bgColor="transparent"
-              fgColor={monochrome ? "#FFFFFF" : "#D4AF37"}
+              bgColor={isMinimal && !monochrome ? "#FFFFFF" : "transparent"}
+              fgColor={qrForeground}
             />
           </div>
         )}
       </div>
 
-      <div className="relative text-[10px] space-y-1 mt-4">
+      <div className={`relative text-[10px] space-y-1 mt-4 ${detailsTone}`}>
         <div>{data.phone}</div>
         <div>{data.email}</div>
         <div>{data.website}</div>
       </div>
 
       {signature && (
-        <div className="relative text-[9px] opacity-70 text-right mt-2">
-          {signature}
+        <div className="relative flex items-center justify-between gap-3 mt-2 text-[9px]">
+          <div className={`rounded-full border px-2 py-1 ${chipTone}`}>
+            {themeLabel}
+          </div>
+          <div className="flex items-center gap-3 text-right">
+            <div className={`text-[8px] uppercase tracking-[0.22em] ${isMinimal ? "text-zinc-400" : "text-white/45"}`}>
+              {themeMeta.footer}
+            </div>
+            <div>{signature}</div>
+          </div>
         </div>
       )}
     </div>
