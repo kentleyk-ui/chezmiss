@@ -1029,16 +1029,19 @@ function PlatinumCard({
       label: "Executive",
       descriptor: "Boardroom precision",
       footer: "Precision / Authority / Clarity",
+      rail: "Executive dossier",
     },
     minimal: {
       label: "Minimal",
       descriptor: "Quiet luxury",
       footer: "Calm / Space / Restraint",
+      rail: "Minimal dossier",
     },
     luxe: {
       label: "Luxe",
       descriptor: "Jewelled contrast",
       footer: "Ritual / Glow / Statement",
+      rail: "Platinum dossier",
     },
   }[theme]
   const themeLabel = themeMeta.label
@@ -1109,6 +1112,20 @@ function PlatinumCard({
       : isExecutive
         ? "border-sky-200/20 bg-sky-300/10 text-sky-100"
         : "border-[#D4AF37]/25 bg-[#D4AF37]/10 text-[#f7e3a4]"
+  const ruleTone = monochrome
+    ? "from-white/30 via-white/10 to-white/30"
+    : isMinimal
+      ? "from-zinc-300/70 via-zinc-200/20 to-zinc-300/70"
+      : isExecutive
+        ? "from-sky-200/70 via-sky-200/20 to-sky-200/70"
+        : "from-[#D4AF37]/70 via-[#f7e3a4]/20 to-[#D4AF37]/70"
+  const railTone = monochrome
+    ? "text-white/55"
+    : isMinimal
+      ? "text-zinc-500"
+      : isExecutive
+        ? "text-sky-100/65"
+        : "text-[#f7e3a4]/70"
 
   if (plain) {
     return (
@@ -1120,8 +1137,11 @@ function PlatinumCard({
             <div className="mt-1 text-lg font-semibold text-zinc-950">{data.name}</div>
             <div className="text-xs text-zinc-600">{data.title}</div>
           </div>
-          <div className="text-[9px] uppercase tracking-[0.22em] rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-zinc-600">
-            {themeLabel}
+          <div className="space-y-2 text-right">
+            <div className="text-[9px] uppercase tracking-[0.22em] rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 text-zinc-600">
+              {themeLabel}
+            </div>
+            <div className="text-[8px] uppercase tracking-[0.24em] text-zinc-400">{themeMeta.rail}</div>
           </div>
         </div>
 
@@ -1175,29 +1195,37 @@ function PlatinumCard({
           <div className={`text-xs leading-snug ${titleTone}`}>{data.title}</div>
         </div>
 
-        {data.logo && (
-          <div className={`rounded-lg p-1 border backdrop-blur-md ${logoFrame}`}>
-            <img
-              src={data.logo}
-              alt="Logo"
-              className={`w-[44px] h-[44px] object-contain ${monochrome ? "grayscale contrast-125 brightness-125" : isMinimal ? "mix-blend-multiply" : ""}`}
-            />
-          </div>
-        )}
+        <div className="flex items-start gap-2">
+          {data.logo && (
+            <div className={`rounded-lg p-1 border backdrop-blur-md ${logoFrame}`}>
+              <img
+                src={data.logo}
+                alt="Logo"
+                className={`w-[44px] h-[44px] object-contain ${monochrome ? "grayscale contrast-125 brightness-125" : isMinimal ? "mix-blend-multiply" : ""}`}
+              />
+            </div>
+          )}
 
-        {data.showQR && (
-          <div className={`rounded-lg p-1 border backdrop-blur-md ${qrFrame}`}>
-            <QRCodeCanvas
-              value={qrValue}
-              size={70}
-              bgColor={isMinimal && !monochrome ? "#FFFFFF" : "transparent"}
-              fgColor={qrForeground}
-            />
-          </div>
-        )}
+          {data.showQR && (
+            <div className={`rounded-lg p-1 border backdrop-blur-md ${qrFrame}`}>
+              <QRCodeCanvas
+                value={qrValue}
+                size={70}
+                bgColor={isMinimal && !monochrome ? "#FFFFFF" : "transparent"}
+                fgColor={qrForeground}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className={`relative text-[10px] space-y-1 mt-4 ${detailsTone}`}>
+      <div className={`relative mt-4 h-px bg-gradient-to-r ${ruleTone}`} />
+
+      <div className={`relative text-[10px] space-y-1 mt-3 ${detailsTone}`}>
+        <div className="flex items-center justify-between gap-3">
+          <span className="uppercase tracking-[0.24em] text-[9px] opacity-60">Contact</span>
+          <span className={`text-[8px] uppercase tracking-[0.24em] ${railTone}`}>{themeMeta.rail}</span>
+        </div>
         <div>{data.phone}</div>
         <div>{data.email}</div>
         <div>{data.website}</div>
