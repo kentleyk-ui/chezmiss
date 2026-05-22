@@ -10,10 +10,13 @@ Cette fonctionnalite ajoute un bouton "Ajouter a Apple Wallet" dans la page staf
 - Si la route ne peut pas fournir un `.pkpass`, le front fait un fallback en `.vcf` (contact).
 - Tous les modes sont pris en charge: `standard`, `team`, `a4`, `hologram`, `mobile`.
 - Les options visuelles/metier sont transmettes: `signature`, `showQR`, `monochrome`, `logo`, `profileName`.
+- Option Apple Watch prise en charge: `watchOptimized`.
 - Cote UI, l'ajout Wallet est disponible pour:
 	- Carte courante
 	- Profil selectionne
 	- Cartes equipe (individuel + lot)
+	- Batch profils avec rapport detaille (`pkpass`, `vcard`, `invalid`, `error`)
+- Diagnostic readiness disponible via `GET /api/wallet/status`.
 
 ## Variables d'environnement requises
 
@@ -41,10 +44,22 @@ Cette fonctionnalite ajoute un bouton "Ajouter a Apple Wallet" dans la page staf
 - `mode`
 - `signature`
 - `monochrome`
+- `watchOptimized`
 - `showQR`
 - `hasLogo`
 - `profileName`
 - `source`
+
+## Endpoint de diagnostic
+
+- Route: `GET /api/wallet/status`
+- Reponse:
+	- `ready`: bool
+	- `checks.passServiceUrl`: bool
+	- `checks.passTypeIdentifier`: bool
+	- `checks.teamIdentifier`: bool
+	- `checks.passTokenConfigured`: bool
+	- `generatedAt`: string ISO
 
 ## Notes importantes
 

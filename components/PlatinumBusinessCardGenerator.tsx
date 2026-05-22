@@ -15,6 +15,23 @@ type ToastState = {
   tone: ToastTone
 } | null
 
+type WalletStatus = {
+  ready: boolean
+  checks: {
+    passServiceUrl: boolean
+    passTypeIdentifier: boolean
+    teamIdentifier: boolean
+    passTokenConfigured: boolean
+  }
+  generatedAt: string
+}
+
+type WalletBatchResult = {
+  name: string
+  channel: "pkpass" | "vcard" | "invalid" | "error"
+  message: string
+}
+
 type CardData = {
   name: string
   title: string
@@ -33,6 +50,7 @@ type SavedProfile = {
   theme: CardTheme
   mode: ModeType
   isMonochrome: boolean
+  watchOptimized: boolean
   team: CardData[]
 }
 
@@ -121,12 +139,18 @@ export default function PlatinumBusinessCardGenerator() {
   const [mode, setMode] = useState<ModeType>("standard")
   const [theme, setTheme] = useState<CardTheme>("luxe")
   const [isMonochrome, setIsMonochrome] = useState(false)
+  const [watchOptimized, setWatchOptimized] = useState(true)
   const [card, setCard] = useState<CardData>(defaultCard)
   const [team, setTeam] = useState<CardData[]>([defaultCard])
   const [profileName, setProfileName] = useState("Carte principale")
   const [savedProfiles, setSavedProfiles] = useState<SavedProfile[]>([])
   const [selectedProfileName, setSelectedProfileName] = useState("")
   const [toast, setToast] = useState<ToastState>(null)
+  const [walletStatus, setWalletStatus] = useState<WalletStatus | null>(null)
+  const [walletStatusLoading, setWalletStatusLoading] = useState(false)
+  const [walletStatusError, setWalletStatusError] = useState<string | null>(null)
+  const [walletBatchRunning, setWalletBatchRunning] = useState(false)
+  const [walletBatchReport, setWalletBatchReport] = useState<WalletBatchResult[]>([])
   const previewRef = useRef<HTMLDivElement | null>(null)
   const sheetRef = useRef<HTMLDivElement | null>(null)
   const logoInputRef = useRef<HTMLInputElement | null>(null)
@@ -217,6 +241,7 @@ export default function PlatinumBusinessCardGenerator() {
       theme,
       mode,
       isMonochrome,
+      watchOptimized,
       team: cloneTeamData(team),
     }
     const nextProfiles = [...savedProfiles.filter((profile) => profile.name !== name), nextProfile].sort((a, b) =>
@@ -227,7 +252,7 @@ export default function PlatinumBusinessCardGenerator() {
     setSelectedProfileName(name)
     window.localStorage.setItem(
       CARD_STORAGE_KEY,
-      JSON.stringify({ card, theme, mode, isMonochrome, team })
+      JSON.stringify({ card, theme, mode, isMonochrome, watchOptimized, team })
     )
     notify(`Profil \"${name}\" sauvegardé.`, "success")
   }
@@ -243,6 +268,7 @@ export default function PlatinumBusinessCardGenerator() {
     setTheme(profile.theme)
     setMode(profile.mode ?? "standard")
     setIsMonochrome(Boolean(profile.isMonochrome))
+    setWatchOptimized(profile.watchOptimized !== false)
     setTeam(cloneTeamData(profile.team))
     setProfileName(profile.name)
     window.localStorage.setItem(
@@ -252,6 +278,7 @@ export default function PlatinumBusinessCardGenerator() {
         theme: profile.theme,
         mode: profile.mode ?? "standard",
         isMonochrome: Boolean(profile.isMonochrome),
+        watchOptimized: profile.watchOptimized !== false,
         team: cloneTeamData(profile.team),
       })
     )
@@ -291,6 +318,7 @@ export default function PlatinumBusinessCardGenerator() {
       theme: profile.theme,
       mode: profile.mode ?? "standard",
       isMonochrome: Boolean(profile.isMonochrome),
+      watchOptimized: profile.watchOptimized !== false,
       team: cloneTeamData(profile.team),
     }
 
@@ -338,8 +366,8 @@ export default function PlatinumBusinessCardGenerator() {
     notify("Export batch PDF des profils terminé.", "success")
   }
 
-  function validateBeforeExport() {
-    const issues = validateCardData(card)
+  function validateBeforeExport(targetCard: CardData = card) {
+    const issues = validateCardData(targetCard)
     if (issues.length > 0) {
       notify(`Export bloqué: ${issues[0]}`, "error")
       return false
@@ -363,6 +391,7 @@ export default function PlatinumBusinessCardGenerator() {
       theme,
       mode,
       isMonochrome,
+      watchOptimized,
       team: cloneTeamData(team),
     }
     persistProfiles([
@@ -371,7 +400,7 @@ export default function PlatinumBusinessCardGenerator() {
     ].sort((a, b) => a.name.localeCompare(b.name, "fr")))
     window.localStorage.setItem(
       CARD_STORAGE_KEY,
-      JSON.stringify({ card, theme, mode, isMonochrome, team })
+      JSON.stringify({ card, theme, mode, isMonochrome, watchOptimized, team })
     )
     setSelectedProfileName(profile.name)
     notify("Carte sauvegardée localement.", "success")
@@ -401,6 +430,9 @@ export default function PlatinumBusinessCardGenerator() {
         }
         if ("isMonochrome" in parsed) {
           setIsMonochrome(Boolean(parsed.isMonochrome))
+        }
+        if ("watchOptimized" in parsed) {
+          setWatchOptimized(parsed.watchOptimized !== false)
         }
         if ("team" in parsed && Array.isArray(parsed.team)) {
           setTeam(cloneTeamData(parsed.team as CardData[]))
@@ -508,15 +540,25 @@ export default function PlatinumBusinessCardGenerator() {
       sourceTheme?: CardTheme
       sourceMode?: ModeType
       sourceMonochrome?: boolean
+      sourceWatchOptimized?: boolean
       sourceProfileName?: string
       silent?: boolean
+      preferDirectDownload?: boolean
     }
-  ) {
-    if (!validateBeforeExport()) return
+  ): Promise<WalletBatchResult> {
+    if (!validateBeforeExport(sourceCard)) {
+      return {
+        name: options?.sourceProfileName || sourceCard.name || "Carte",
+        channel: "invalid",
+        message: "Carte invalide: champs obligatoires manquants ou incorrects.",
+      }
+    }
 
     const walletTheme = options?.sourceTheme ?? theme
     const walletMode = options?.sourceMode ?? mode
     const walletMonochrome = options?.sourceMonochrome ?? isMonochrome
+    const walletWatchOptimized = options?.sourceWatchOptimized ?? watchOptimized
+    const targetName = options?.sourceProfileName || sourceCard.name || "Carte"
 
     const payload = {
       name: sourceCard.name.trim(),
@@ -530,11 +572,13 @@ export default function PlatinumBusinessCardGenerator() {
       signature: sourceCard.signature,
       showQR: sourceCard.showQR,
       monochrome: walletMonochrome,
+      watchOptimized: walletWatchOptimized,
       logo: sourceCard.logo,
       profileName: options?.sourceProfileName,
     }
 
     let passDownloaded = false
+    let apiErrorMessage = ""
 
     try {
       const response = await fetch("/api/wallet/apple-pass", {
@@ -558,25 +602,37 @@ export default function PlatinumBusinessCardGenerator() {
           if (!options?.silent) {
             notify("Pass Apple Wallet telecharge.", "success")
           }
+          return {
+            name: targetName,
+            channel: "pkpass",
+            message: "Pass Apple Wallet telecharge.",
+          }
         }
       } else {
         const errorBody = (await response.json().catch(() => null)) as { message?: string } | null
+        apiErrorMessage = errorBody?.message ?? "Service Wallet indisponible"
         if (errorBody?.message && !options?.silent) {
           notify(errorBody.message, "info")
         }
       }
     } catch {
-      // Fallback handled below.
+      apiErrorMessage = "Echec de connexion au service Wallet"
     }
 
-    if (passDownloaded) return
+    if (passDownloaded) {
+      return {
+        name: targetName,
+        channel: "pkpass",
+        message: "Pass Apple Wallet telecharge.",
+      }
+    }
 
     const vcard = buildVCard(sourceCard)
     const fileName = `${sanitizeFileStem(sourceCard.name)}.vcf`
     const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
     const file = new File([blob], fileName, { type: "text/vcard;charset=utf-8" })
 
-    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+    if (!options?.preferDirectDownload && navigator.share && navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({
           title: `Contact ${sourceCard.name}`,
@@ -586,19 +642,40 @@ export default function PlatinumBusinessCardGenerator() {
         if (!options?.silent) {
           notify("Contact partage au format vCard.", "info")
         }
-        return
+        return {
+          name: targetName,
+          channel: "vcard",
+          message: apiErrorMessage
+            ? `Fallback vCard via partage: ${apiErrorMessage}`
+            : "Contact partage au format vCard.",
+        }
       } catch {
         // Continue with direct download.
       }
     }
 
-    const link = document.createElement("a")
-    link.href = URL.createObjectURL(blob)
-    link.download = fileName
-    link.click()
-    URL.revokeObjectURL(link.href)
-    if (!options?.silent) {
-      notify("Service Apple Wallet non configure. Fichier vCard telecharge en alternative.", "info")
+    try {
+      const link = document.createElement("a")
+      link.href = URL.createObjectURL(blob)
+      link.download = fileName
+      link.click()
+      URL.revokeObjectURL(link.href)
+      if (!options?.silent) {
+        notify("Service Apple Wallet non configure. Fichier vCard telecharge en alternative.", "info")
+      }
+      return {
+        name: targetName,
+        channel: "vcard",
+        message: apiErrorMessage
+          ? `Fallback vCard telecharge: ${apiErrorMessage}`
+          : "Fallback vCard telecharge.",
+      }
+    } catch {
+      return {
+        name: targetName,
+        channel: "error",
+        message: apiErrorMessage || "Impossible de telecharger la vCard.",
+      }
     }
   }
 
@@ -634,8 +711,10 @@ export default function PlatinumBusinessCardGenerator() {
         sourceTheme: theme,
         sourceMode: "team",
         sourceMonochrome: isMonochrome,
+        sourceWatchOptimized: watchOptimized,
         sourceProfileName: `Equipe ${idx + 1}`,
         silent: true,
+        preferDirectDownload: true,
       })
       processed += 1
     }
@@ -647,6 +726,76 @@ export default function PlatinumBusinessCardGenerator() {
 
     notify(`${processed} carte(s) equipe envoyee(s) vers Wallet/vCard.`, "success")
   }
+
+  async function fetchWalletStatus() {
+    setWalletStatusLoading(true)
+    setWalletStatusError(null)
+    try {
+      const response = await fetch("/api/wallet/status", { cache: "no-store" })
+      if (!response.ok) {
+        setWalletStatus(null)
+        setWalletStatusError("Impossible de verifier la configuration Wallet.")
+        return
+      }
+      const payload = (await response.json()) as WalletStatus
+      setWalletStatus(payload)
+    } catch {
+      setWalletStatus(null)
+      setWalletStatusError("Service de diagnostic Wallet indisponible.")
+    } finally {
+      setWalletStatusLoading(false)
+    }
+  }
+
+  async function addAllProfilesToAppleWalletBatch() {
+    if (savedProfiles.length === 0) {
+      notify("Aucun profil sauvegarde pour Wallet batch.", "error")
+      return
+    }
+
+    setWalletBatchRunning(true)
+    const results: WalletBatchResult[] = []
+
+    for (const profile of savedProfiles) {
+      const issues = validateCardData(profile.card)
+      if (issues.length > 0) {
+        results.push({
+          name: profile.name,
+          channel: "invalid",
+          message: `Profil invalide: ${issues[0]}`,
+        })
+        continue
+      }
+
+      const result = await addToAppleWallet(profile.card, {
+        sourceTheme: profile.theme,
+        sourceMode: profile.mode,
+        sourceMonochrome: profile.isMonochrome,
+        sourceWatchOptimized: profile.watchOptimized,
+        sourceProfileName: profile.name,
+        silent: true,
+        preferDirectDownload: true,
+      })
+      results.push(result)
+    }
+
+    setWalletBatchReport(results)
+    setWalletBatchRunning(false)
+
+    const pkpassCount = results.filter((item) => item.channel === "pkpass").length
+    const vcardCount = results.filter((item) => item.channel === "vcard").length
+    const invalidCount = results.filter((item) => item.channel === "invalid").length
+    const errorCount = results.filter((item) => item.channel === "error").length
+
+    notify(
+      `Batch Wallet: ${pkpassCount} pkpass, ${vcardCount} vCard, ${invalidCount} invalides, ${errorCount} erreurs.`,
+      errorCount > 0 ? "error" : "success"
+    )
+  }
+
+  useEffect(() => {
+    fetchWalletStatus()
+  }, [])
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -668,6 +817,7 @@ export default function PlatinumBusinessCardGenerator() {
                   ? ((item as Partial<SavedProfile>).mode as ModeType)
                   : "standard",
               isMonochrome: Boolean((item as Partial<SavedProfile>).isMonochrome),
+              watchOptimized: (item as Partial<SavedProfile>).watchOptimized !== false,
               team: cloneTeamData((item as Partial<SavedProfile>).team as CardData[]),
             }))
           setSavedProfiles(normalizedProfiles)
@@ -693,6 +843,7 @@ export default function PlatinumBusinessCardGenerator() {
             theme: migratedTheme,
             mode: "standard",
             isMonochrome: false,
+            watchOptimized: true,
             team: [migratedCard],
           }
           setSavedProfiles([legacyProfile])
@@ -843,6 +994,36 @@ export default function PlatinumBusinessCardGenerator() {
             <div className="text-[10px] uppercase tracking-[0.22em] text-white/45">Template</div>
             <div className="mt-1 text-sm text-white">{themeLabel}</div>
           </div>
+          <div className={chromeMetric}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-white/45">Wallet readiness</div>
+              <button
+                type="button"
+                onClick={fetchWalletStatus}
+                className="rounded-md border border-[#D4AF37]/35 bg-black/20 px-2 py-1 text-[9px] uppercase tracking-[0.18em] text-[#f7e3a4]"
+              >
+                Refresh
+              </button>
+            </div>
+            <div className="mt-2 text-sm text-white">
+              {walletStatusLoading
+                ? "Verification en cours..."
+                : walletStatus
+                  ? walletStatus.ready
+                    ? "Configuration Wallet prete"
+                    : "Configuration Wallet incomplete"
+                  : "Statut Wallet indisponible"}
+            </div>
+            {walletStatus && (
+              <div className="mt-2 space-y-1 text-[11px] text-white/70">
+                <div>Service URL: {walletStatus.checks.passServiceUrl ? "OK" : "Manquant"}</div>
+                <div>Pass Type ID: {walletStatus.checks.passTypeIdentifier ? "OK" : "Manquant"}</div>
+                <div>Team ID: {walletStatus.checks.teamIdentifier ? "OK" : "Manquant"}</div>
+                <div>Token service: {walletStatus.checks.passTokenConfigured ? "Configure" : "Non configure"}</div>
+              </div>
+            )}
+            {walletStatusError && <div className="mt-2 text-[11px] text-red-200">{walletStatusError}</div>}
+          </div>
           <p className="text-[11px] leading-relaxed text-white/55">
             Designed & Engineered by <span className="text-[#D4AF37]">Kentley · Milele Inc.</span>
           </p>
@@ -896,6 +1077,15 @@ export default function PlatinumBusinessCardGenerator() {
               onChange={(e) => setIsMonochrome(e.target.checked)}
             />
             Noir et blanc
+          </label>
+
+          <label className="inline-flex items-center gap-2 rounded-xl border border-[#D4AF37]/45 bg-white/5 px-3 py-2 cursor-pointer transition hover:bg-white/10">
+            <input
+              type="checkbox"
+              checked={watchOptimized}
+              onChange={(e) => setWatchOptimized(e.target.checked)}
+            />
+            Optimiser Apple Watch
           </label>
 
           <button
@@ -992,6 +1182,14 @@ export default function PlatinumBusinessCardGenerator() {
               >
                 Export profils PDF
               </button>
+              <button
+                type="button"
+                onClick={addAllProfilesToAppleWalletBatch}
+                disabled={walletBatchRunning}
+                className={chromeButtonPrimary}
+              >
+                {walletBatchRunning ? "Batch Wallet..." : "Wallet batch profils"}
+              </button>
             </div>
           </div>
 
@@ -1007,6 +1205,31 @@ export default function PlatinumBusinessCardGenerator() {
               </ul>
             )}
           </div>
+
+          {walletBatchReport.length > 0 && (
+            <div className="md:col-span-3 rounded-xl border border-[#D4AF37]/20 bg-black/40 p-4 space-y-2">
+              <div className="text-[11px] uppercase tracking-[0.28em] text-[#D4AF37]">Rapport Wallet batch</div>
+              <div className="grid gap-2 md:grid-cols-2">
+                {walletBatchReport.map((item, idx) => (
+                  <div
+                    key={`${item.name}-${idx}`}
+                    className={`rounded-lg border px-3 py-2 text-[11px] ${
+                      item.channel === "pkpass"
+                        ? "border-emerald-400/35 bg-emerald-500/10 text-emerald-100"
+                        : item.channel === "vcard"
+                          ? "border-sky-300/35 bg-sky-500/10 text-sky-100"
+                          : item.channel === "invalid"
+                            ? "border-amber-300/35 bg-amber-500/10 text-amber-100"
+                            : "border-red-300/35 bg-red-500/10 text-red-100"
+                    }`}
+                  >
+                    <div className="font-semibold tracking-[0.08em] uppercase">{item.name}</div>
+                    <div className="mt-1 opacity-90">{item.channel.toUpperCase()} · {item.message}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1078,6 +1301,7 @@ export default function PlatinumBusinessCardGenerator() {
                   sourceTheme: theme,
                   sourceMode: mode,
                   sourceMonochrome: isMonochrome,
+                  sourceWatchOptimized: watchOptimized,
                 })}
                 className={chromeButtonPrimary}
               >
@@ -1195,6 +1419,7 @@ export default function PlatinumBusinessCardGenerator() {
                       sourceTheme: theme,
                       sourceMode: "team",
                       sourceMonochrome: isMonochrome,
+                      sourceWatchOptimized: watchOptimized,
                       sourceProfileName: `Equipe ${i + 1}`,
                     })}
                     className={chromeButtonPrimary}
@@ -1278,6 +1503,7 @@ export default function PlatinumBusinessCardGenerator() {
               sourceTheme: theme,
               sourceMode: "hologram",
               sourceMonochrome: isMonochrome,
+              sourceWatchOptimized: watchOptimized,
             })}
             className={chromeButtonPrimary}
           >
@@ -1299,6 +1525,7 @@ export default function PlatinumBusinessCardGenerator() {
               sourceTheme: theme,
               sourceMode: "mobile",
               sourceMonochrome: isMonochrome,
+              sourceWatchOptimized: watchOptimized,
             })}
             className={chromeButtonPrimary}
           >
