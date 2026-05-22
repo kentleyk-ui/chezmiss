@@ -31,6 +31,9 @@ type SavedProfile = {
   name: string
   card: CardData
   theme: CardTheme
+  mode: ModeType
+  isMonochrome: boolean
+  team: CardData[]
 }
 
 const CARD_STORAGE_KEY = "chezmiss_platinum_card"
@@ -73,6 +76,15 @@ function validateCardData(card: CardData): string[] {
 
 function normalizeProfileName(value: string): string {
   return value.trim().replace(/\s+/g, " ").slice(0, 40)
+}
+
+function cloneCardData(source: CardData): CardData {
+  return { ...source }
+}
+
+function cloneTeamData(source: CardData[]): CardData[] {
+  if (!Array.isArray(source) || source.length === 0) return [cloneCardData(defaultCard)]
+  return source.map((member) => ({ ...defaultCard, ...member }))
 }
 
 function sanitizeFileStem(value: string): string {
@@ -199,14 +211,24 @@ export default function PlatinumBusinessCardGenerator() {
     }
 
     const name = normalizeProfileName(profileName) || `Carte ${card.name}`
-    const nextProfile: SavedProfile = { name, card, theme }
+    const nextProfile: SavedProfile = {
+      name,
+      card: cloneCardData(card),
+      theme,
+      mode,
+      isMonochrome,
+      team: cloneTeamData(team),
+    }
     const nextProfiles = [...savedProfiles.filter((profile) => profile.name !== name), nextProfile].sort((a, b) =>
       a.name.localeCompare(b.name, "fr")
     )
 
     persistProfiles(nextProfiles)
     setSelectedProfileName(name)
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card, theme }))
+    window.localStorage.setItem(
+      CARD_STORAGE_KEY,
+      JSON.stringify({ card, theme, mode, isMonochrome, team })
+    )
     notify(`Profil \"${name}\" sauvegardé.`, "success")
   }
 
@@ -219,8 +241,20 @@ export default function PlatinumBusinessCardGenerator() {
 
     setCard(profile.card)
     setTheme(profile.theme)
+    setMode(profile.mode ?? "standard")
+    setIsMonochrome(Boolean(profile.isMonochrome))
+    setTeam(cloneTeamData(profile.team))
     setProfileName(profile.name)
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card: profile.card, theme: profile.theme }))
+    window.localStorage.setItem(
+      CARD_STORAGE_KEY,
+      JSON.stringify({
+        card: profile.card,
+        theme: profile.theme,
+        mode: profile.mode ?? "standard",
+        isMonochrome: Boolean(profile.isMonochrome),
+        team: cloneTeamData(profile.team),
+      })
+    )
     notify(`Profil \"${profile.name}\" chargé.`, "success")
   }
 
@@ -255,6 +289,9 @@ export default function PlatinumBusinessCardGenerator() {
       name: nextName,
       card: { ...profile.card },
       theme: profile.theme,
+      mode: profile.mode ?? "standard",
+      isMonochrome: Boolean(profile.isMonochrome),
+      team: cloneTeamData(profile.team),
     }
 
     const nextProfiles = [...savedProfiles, duplicated].sort((a, b) => a.name.localeCompare(b.name, "fr"))
@@ -320,12 +357,22 @@ export default function PlatinumBusinessCardGenerator() {
 
   function saveCardLocally() {
     if (typeof window === "undefined") return
-    const profile = { name: normalizeProfileName(profileName) || `Carte ${card.name}`, card, theme }
+    const profile: SavedProfile = {
+      name: normalizeProfileName(profileName) || `Carte ${card.name}`,
+      card: cloneCardData(card),
+      theme,
+      mode,
+      isMonochrome,
+      team: cloneTeamData(team),
+    }
     persistProfiles([
       ...savedProfiles.filter((item) => item.name !== profile.name),
       profile,
     ].sort((a, b) => a.name.localeCompare(b.name, "fr")))
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card, theme }))
+    window.localStorage.setItem(
+      CARD_STORAGE_KEY,
+      JSON.stringify({ card, theme, mode, isMonochrome, team })
+    )
     setSelectedProfileName(profile.name)
     notify("Carte sauvegardée localement.", "success")
   }
@@ -345,6 +392,18 @@ export default function PlatinumBusinessCardGenerator() {
         setCard((prev) => ({ ...prev, ...savedCard }))
         if (isCardTheme(parsed.theme)) {
           setTheme(parsed.theme)
+        }
+        if ("mode" in parsed && typeof parsed.mode === "string") {
+          const savedMode = parsed.mode as ModeType
+          if (["standard", "team", "a4", "hologram", "mobile"].includes(savedMode)) {
+            setMode(savedMode)
+          }
+        }
+        if ("isMonochrome" in parsed) {
+          setIsMonochrome(Boolean(parsed.isMonochrome))
+        }
+        if ("team" in parsed && Array.isArray(parsed.team)) {
+          setTeam(cloneTeamData(parsed.team as CardData[]))
         }
       } else {
         setCard((prev) => ({ ...prev, ...(parsed as Partial<CardData>) }))
@@ -443,17 +502,36 @@ export default function PlatinumBusinessCardGenerator() {
     notify("Ouverture du client mail.", "success")
   }
 
-  async function addToAppleWallet() {
+  async function addToAppleWallet(
+    sourceCard: CardData,
+    options?: {
+      sourceTheme?: CardTheme
+      sourceMode?: ModeType
+      sourceMonochrome?: boolean
+      sourceProfileName?: string
+      silent?: boolean
+    }
+  ) {
     if (!validateBeforeExport()) return
 
+    const walletTheme = options?.sourceTheme ?? theme
+    const walletMode = options?.sourceMode ?? mode
+    const walletMonochrome = options?.sourceMonochrome ?? isMonochrome
+
     const payload = {
-      name: card.name.trim(),
-      title: card.title.trim(),
-      company: card.company.trim(),
-      phone: card.phone.trim(),
-      email: card.email.trim(),
-      website: card.website.trim(),
-      theme,
+      name: sourceCard.name.trim(),
+      title: sourceCard.title.trim(),
+      company: sourceCard.company.trim(),
+      phone: sourceCard.phone.trim(),
+      email: sourceCard.email.trim(),
+      website: sourceCard.website.trim(),
+      theme: walletTheme,
+      mode: walletMode,
+      signature: sourceCard.signature,
+      showQR: sourceCard.showQR,
+      monochrome: walletMonochrome,
+      logo: sourceCard.logo,
+      profileName: options?.sourceProfileName,
     }
 
     let passDownloaded = false
@@ -473,15 +551,17 @@ export default function PlatinumBusinessCardGenerator() {
           const blob = await response.blob()
           const link = document.createElement("a")
           link.href = URL.createObjectURL(blob)
-          link.download = `${sanitizeFileStem(card.name)}.pkpass`
+          link.download = `${sanitizeFileStem(sourceCard.name)}.pkpass`
           link.click()
           URL.revokeObjectURL(link.href)
           passDownloaded = true
-          notify("Pass Apple Wallet telecharge.", "success")
+          if (!options?.silent) {
+            notify("Pass Apple Wallet telecharge.", "success")
+          }
         }
       } else {
         const errorBody = (await response.json().catch(() => null)) as { message?: string } | null
-        if (errorBody?.message) {
+        if (errorBody?.message && !options?.silent) {
           notify(errorBody.message, "info")
         }
       }
@@ -491,19 +571,21 @@ export default function PlatinumBusinessCardGenerator() {
 
     if (passDownloaded) return
 
-    const vcard = buildVCard(card)
-    const fileName = `${sanitizeFileStem(card.name)}.vcf`
+    const vcard = buildVCard(sourceCard)
+    const fileName = `${sanitizeFileStem(sourceCard.name)}.vcf`
     const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8" })
     const file = new File([blob], fileName, { type: "text/vcard;charset=utf-8" })
 
     if (navigator.share && navigator.canShare?.({ files: [file] })) {
       try {
         await navigator.share({
-          title: `Contact ${card.name}`,
+          title: `Contact ${sourceCard.name}`,
           text: "Carte de contact CHEZMISS",
           files: [file],
         })
-        notify("Contact partage au format vCard.", "info")
+        if (!options?.silent) {
+          notify("Contact partage au format vCard.", "info")
+        }
         return
       } catch {
         // Continue with direct download.
@@ -515,7 +597,55 @@ export default function PlatinumBusinessCardGenerator() {
     link.download = fileName
     link.click()
     URL.revokeObjectURL(link.href)
-    notify("Service Apple Wallet non configure. Fichier vCard telecharge en alternative.", "info")
+    if (!options?.silent) {
+      notify("Service Apple Wallet non configure. Fichier vCard telecharge en alternative.", "info")
+    }
+  }
+
+  async function addSelectedProfileToAppleWallet() {
+    const profile = savedProfiles.find((item) => item.name === selectedProfileName)
+    if (!profile) {
+      notify("Selectionne un profil a ajouter au Wallet.", "error")
+      return
+    }
+
+    await addToAppleWallet(profile.card, {
+      sourceTheme: profile.theme,
+      sourceMode: profile.mode ?? "standard",
+      sourceMonochrome: Boolean(profile.isMonochrome),
+      sourceProfileName: profile.name,
+    })
+  }
+
+  async function addTeamToAppleWallet() {
+    if (team.length === 0) {
+      notify("Aucune carte equipe a ajouter.", "error")
+      return
+    }
+
+    let processed = 0
+    for (let idx = 0; idx < team.length; idx += 1) {
+      const member = team[idx]
+      const issues = validateCardData(member)
+      if (issues.length > 0) {
+        continue
+      }
+      await addToAppleWallet(member, {
+        sourceTheme: theme,
+        sourceMode: "team",
+        sourceMonochrome: isMonochrome,
+        sourceProfileName: `Equipe ${idx + 1}`,
+        silent: true,
+      })
+      processed += 1
+    }
+
+    if (processed === 0) {
+      notify("Aucune carte equipe valide pour Wallet.", "error")
+      return
+    }
+
+    notify(`${processed} carte(s) equipe envoyee(s) vers Wallet/vCard.`, "success")
   }
 
   useEffect(() => {
@@ -930,10 +1060,20 @@ export default function PlatinumBusinessCardGenerator() {
                 Envoyer
               </button>
               <button
-                onClick={addToAppleWallet}
+                onClick={() => addToAppleWallet(card, {
+                  sourceTheme: theme,
+                  sourceMode: mode,
+                  sourceMonochrome: isMonochrome,
+                })}
                 className={chromeButtonPrimary}
               >
                 Ajouter a Apple Wallet
+              </button>
+              <button
+                onClick={addSelectedProfileToAppleWallet}
+                className={chromeButtonSecondary}
+              >
+                Wallet profil selectionne
               </button>
             </div>
           </div>
@@ -1035,10 +1175,31 @@ export default function PlatinumBusinessCardGenerator() {
                     className="hidden"
                     onChange={(e) => onTeamLogoUpload(i, e.target.files?.[0])}
                   />
+                  <button
+                    type="button"
+                    onClick={() => addToAppleWallet(member, {
+                      sourceTheme: theme,
+                      sourceMode: "team",
+                      sourceMonochrome: isMonochrome,
+                      sourceProfileName: `Equipe ${i + 1}`,
+                    })}
+                    className={chromeButtonPrimary}
+                  >
+                    Apple Wallet
+                  </button>
                 </div>
                 <PlatinumCard data={member} signature={renderSignature(card.signature)} theme={theme} />
               </div>
             ))}
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={addTeamToAppleWallet}
+              className={chromeButtonPrimary}
+            >
+              Ajouter toute l'equipe au Wallet
+            </button>
           </div>
         </div>
       )}
@@ -1090,7 +1251,7 @@ export default function PlatinumBusinessCardGenerator() {
       )}
 
       {mode === "hologram" && (
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-3">
           <PlatinumCard
             data={card}
             signature={renderSignature(card.signature)}
@@ -1098,17 +1259,37 @@ export default function PlatinumBusinessCardGenerator() {
             monochrome={isMonochrome}
             theme={theme}
           />
+          <button
+            onClick={() => addToAppleWallet(card, {
+              sourceTheme: theme,
+              sourceMode: "hologram",
+              sourceMonochrome: isMonochrome,
+            })}
+            className={chromeButtonPrimary}
+          >
+            Ajouter mode Hologram au Wallet
+          </button>
         </div>
       )}
 
       {mode === "mobile" && (
-        <div className="max-w-xs mx-auto">
+        <div className="max-w-xs mx-auto flex flex-col items-center gap-3">
           <PlatinumCard
             data={card}
             signature={renderSignature(card.signature)}
             monochrome={isMonochrome}
             theme={theme}
           />
+          <button
+            onClick={() => addToAppleWallet(card, {
+              sourceTheme: theme,
+              sourceMode: "mobile",
+              sourceMonochrome: isMonochrome,
+            })}
+            className={chromeButtonPrimary}
+          >
+            Ajouter mode Mobile au Wallet
+          </button>
         </div>
       )}
     </div>

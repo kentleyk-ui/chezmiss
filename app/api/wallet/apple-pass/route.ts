@@ -8,6 +8,12 @@ type AppleWalletPassPayload = {
   email?: string
   website?: string
   theme?: "executive" | "minimal" | "luxe"
+  mode?: "standard" | "team" | "a4" | "hologram" | "mobile"
+  signature?: "chezmiss" | "kentley" | "none"
+  showQR?: boolean
+  monochrome?: boolean
+  logo?: string
+  profileName?: string
 }
 
 type ThemePalette = {
@@ -76,6 +82,12 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
   const email = payload.email?.trim() ?? ""
   const website = payload.website?.trim() ?? ""
   const theme = normalizeTheme(payload.theme)
+  const mode = payload.mode ?? "standard"
+  const signature = payload.signature ?? "chezmiss"
+  const showQR = payload.showQR !== false
+  const monochrome = Boolean(payload.monochrome)
+  const hasLogo = Boolean(payload.logo)
+  const profileName = payload.profileName?.trim() || "Carte principale"
   const palette = getThemePalette(theme)
 
   const passTypeIdentifier = process.env.APPLE_WALLET_PASS_TYPE_IDENTIFIER ?? ""
@@ -115,6 +127,36 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
       key: "theme",
       label: "Theme",
       value: theme,
+    },
+    {
+      key: "mode",
+      label: "Mode",
+      value: mode,
+    },
+    {
+      key: "signature",
+      label: "Signature",
+      value: signature,
+    },
+    {
+      key: "visual",
+      label: "Visual",
+      value: monochrome ? "monochrome" : "color",
+    },
+    {
+      key: "qr",
+      label: "QR",
+      value: showQR ? "enabled" : "disabled",
+    },
+    {
+      key: "logo",
+      label: "Logo",
+      value: hasLogo ? "custom" : "none",
+    },
+    {
+      key: "profile",
+      label: "Profile",
+      value: profileName,
     },
   ]
 
@@ -164,6 +206,12 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
       },
       metadata: {
         theme,
+        mode,
+        signature,
+        monochrome,
+        showQR,
+        hasLogo,
+        profileName,
         source: "chezmiss-staff",
       },
       ...(webServiceURL && authenticationToken ? { webServiceURL, authenticationToken } : {}),

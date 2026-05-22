@@ -8,6 +8,12 @@ Cette fonctionnalite ajoute un bouton "Ajouter a Apple Wallet" dans la page staf
 - La route construit un payload PassKit riche (theme, couleurs, champs, QR vCard).
 - La route appelle un service externe de signature PassKit.
 - Si la route ne peut pas fournir un `.pkpass`, le front fait un fallback en `.vcf` (contact).
+- Tous les modes sont pris en charge: `standard`, `team`, `a4`, `hologram`, `mobile`.
+- Les options visuelles/metier sont transmettes: `signature`, `showQR`, `monochrome`, `logo`, `profileName`.
+- Cote UI, l'ajout Wallet est disponible pour:
+	- Carte courante
+	- Profil selectionne
+	- Cartes equipe (individuel + lot)
 
 ## Variables d'environnement requises
 
@@ -28,6 +34,17 @@ Cette fonctionnalite ajoute un bouton "Ajouter a Apple Wallet" dans la page staf
 - Entree: JSON contenant une cle `pass` avec structure PassKit (fournie par la route).
 - Sortie: fichier binaire `.pkpass`
 - Header attendu: `Content-Type: application/vnd.apple.pkpass`
+
+### Champs envoye dans `pass.metadata`
+
+- `theme`
+- `mode`
+- `signature`
+- `monochrome`
+- `showQR`
+- `hasLogo`
+- `profileName`
+- `source`
 
 ## Notes importantes
 
