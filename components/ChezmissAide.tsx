@@ -59,7 +59,7 @@ export function ChezmissAide() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 pointer-events-auto w-96 max-w-[calc(100vw-24px)]">
+    <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 max-w-[calc(100vw-2rem)] z-50 pointer-events-none">
       <AnimatePresence>
         {!isMinimized && (
           <motion.div
@@ -67,7 +67,7 @@ export function ChezmissAide() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="rounded-2xl overflow-hidden shadow-2xl"
+            className="pointer-events-auto rounded-2xl overflow-hidden shadow-2xl max-h-[calc(100dvh-2rem)]"
           >
             {/* Glass Background */}
             <div className="absolute inset-0 rounded-2xl bg-[#080508]/50 backdrop-blur-md"
@@ -176,7 +176,7 @@ export function ChezmissAide() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={() => setIsMinimized(false)}
-          className="w-full"
+          className="pointer-events-auto w-full sm:w-auto"
         >
           <LiquidMetalButton label="Miss Aide" />
         </motion.button>

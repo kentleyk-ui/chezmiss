@@ -10,7 +10,7 @@ Cloudflare already manages:
 - ✅ chezmiss.ca
 - ✅ www.chezmiss.ca
 
-Now we need to point them to Vercel instead of Netlify.
+Now we need to point them to Vercel.
 
 ---
 
@@ -23,11 +23,11 @@ Now we need to point them to Vercel instead of Netlify.
 
 ### Step 2: Update DNS Records for www
 
-**Current Record (Netlify):**
+**Current Record (before Vercel):**
 ```
 Type: CNAME
 Name: www
-Value: some-netlify-url.netlify.app
+Value: (anciennement Netlify, à remplacer par Vercel)
 TTL: Auto
 ```
 
@@ -209,10 +209,9 @@ Or use: https://whatsmydns.net
 
 ## 🔄 Current vs New Configuration
 
-### Current (Netlify)
+### Ancien (Netlify)
 ```
-www.chezmiss.ca  → CNAME → netlify.app
-chezmiss.ca      → A     → Netlify IP
+
 Proxy:           → Proxied (orange)
 ```
 

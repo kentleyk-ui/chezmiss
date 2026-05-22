@@ -23,6 +23,7 @@ export function QRBarcodeGenerator() {
   const [generated, setGenerated] = useState<string | null>(null);
   const [isRandom, setIsRandom] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [withSignature, setWithSignature] = useState(true);
 
   const qrCanvasRef = useRef<HTMLCanvasElement>(null);
   const barcodeCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -191,7 +192,7 @@ export function QRBarcodeGenerator() {
     setCustomValue("");
   };
 
-  const generateQRCode = async (value: string) => {
+  const generateQRCode = async (value: string, addSignature = withSignature) => {
     if (!qrCanvasRef.current) return;
     setIsGenerating(true);
     try {
@@ -204,8 +205,8 @@ export function QRBarcodeGenerator() {
         },
       });
 
-      const watermarkedCanvas = addWatermark(qrCanvasRef.current);
-      setGenerated(watermarkedCanvas.toDataURL("image/png"));
+      const outputCanvas = addSignature ? addWatermark(qrCanvasRef.current) : qrCanvasRef.current;
+      setGenerated(outputCanvas.toDataURL("image/png"));
       setShowPanel(true);
     } catch (err) {
       console.error("QR Code error:", err);
@@ -214,7 +215,7 @@ export function QRBarcodeGenerator() {
     }
   };
 
-  const generateBarcode = async (value: string) => {
+  const generateBarcode = async (value: string, addSignature = withSignature) => {
     if (!barcodeCanvasRef.current) return;
     setIsGenerating(true);
     try {
@@ -230,8 +231,8 @@ export function QRBarcodeGenerator() {
         margin: 10,
       });
 
-      const watermarkedCanvas = addWatermark(barcodeCanvasRef.current);
-      setGenerated(watermarkedCanvas.toDataURL("image/png"));
+      const outputCanvas = addSignature ? addWatermark(barcodeCanvasRef.current) : barcodeCanvasRef.current;
+      setGenerated(outputCanvas.toDataURL("image/png"));
       setShowPanel(true);
     } catch (err) {
       console.error("Barcode error:", err);
@@ -240,13 +241,15 @@ export function QRBarcodeGenerator() {
     }
   };
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (addSignatureOverride?: boolean) => {
     const value = customValue || selectedItem?.value;
+    const addSignature = addSignatureOverride ?? withSignature;
+
     if (value) {
       if (mode === "qr") {
-        await generateQRCode(value);
+        await generateQRCode(value, addSignature);
       } else {
-        await generateBarcode(value);
+        await generateBarcode(value, addSignature);
       }
     }
   };
@@ -318,6 +321,22 @@ export function QRBarcodeGenerator() {
                   </motion.button>
                 </div>
 
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextSignature = !withSignature;
+                      setWithSignature(nextSignature);
+                      if (generated) {
+                        void handleGenerate(nextSignature);
+                      }
+                    }}
+                    className="rounded-full border border-[#B79A5B]/35 bg-[#080508]/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#B79A5B] hover:border-[#B79A5B]/60"
+                  >
+                    {withSignature ? "Signature: ON" : "Signature: OFF"}
+                  </button>
+                </div>
+
                 {/* Code Display */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -333,9 +352,15 @@ export function QRBarcodeGenerator() {
                         alt={mode}
                         className="relative w-64 h-64 rounded-2xl border-2 border-[#B79A5B]/40 shadow-2xl object-contain bg-[#0d0810]/80 p-2"
                       />
-                      <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-[#B79A5B]/60 tracking-widest">
-                        ✓ SIGNÉ CHEZ MISS
-                      </div>
+                      {withSignature ? (
+                        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-[#B79A5B]/60 tracking-widest">
+                          ✓ SIGNE CHEZ MISS
+                        </div>
+                      ) : (
+                        <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-[#f0c9e1]/45 tracking-widest">
+                          SANS SIGNATURE
+                        </div>
+                      )}
                     </div>
                   )}
                 </motion.div>
@@ -478,7 +503,9 @@ export function QRBarcodeGenerator() {
                   transition={{ delay: 0.2 }}
                 >
                   <motion.button
-                    onClick={handleGenerate}
+                    onClick={() => {
+                      void handleGenerate();
+                    }}
                     disabled={isGenerating}
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}

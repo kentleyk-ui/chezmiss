@@ -208,7 +208,7 @@ grep -r "any" app/components/builder/ | wc -l
 ### Phase 3: Deployment
 ```bash
 git push origin main
-# Netlify déploiement automatique
+
 ```
 
 ---

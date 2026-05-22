@@ -1,0 +1,31 @@
+
+> chezmiss-site@1.0.0 build
+> next build
+
+Ôû▓ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local, .env.production
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 3.4min
+  Running TypeScript ...
+Failed to type check.
+
+./components/PlatinumBusinessCardGenerator.tsx:5:30
+Type error: Cannot find module 'html-to-image' or its corresponding type declarations.
+
+  3 | import { useState, useRef } from "react"
+  4 | import { QRCodeCanvas } from "qrcode.react"
+> 5 | import * as htmlToImage from "html-to-image"
+    |                              ^
+  6 | import jsPDF from "jspdf"
+  7 |
+  8 | type SignatureType = "chezmiss" | "kentley" | "none"
+Next.js build worker exited with code: 1 and signal: null
+
+> chezmiss-site@1.0.0 build
+> next build
+
+Ôû▓ Next.js 16.2.6 (Turbopack)
+- Environments: .env.local, .env.production
+
+  Creating an optimized production build ...
