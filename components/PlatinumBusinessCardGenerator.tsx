@@ -17,6 +17,7 @@ type CardData = {
   website: string
   showQR: boolean
   signature: SignatureType
+  logo?: string
 }
 
 const defaultCard: CardData = {
@@ -32,12 +33,14 @@ const defaultCard: CardData = {
 
 export default function PlatinumBusinessCardGenerator() {
   const [mode, setMode] = useState<ModeType>("standard")
+  const [isMonochrome, setIsMonochrome] = useState(false)
   const [card, setCard] = useState<CardData>(defaultCard)
   const [team, setTeam] = useState<CardData[]>([defaultCard])
   const previewRef = useRef<HTMLDivElement | null>(null)
   const sheetRef = useRef<HTMLDivElement | null>(null)
+  const logoInputRef = useRef<HTMLInputElement | null>(null)
 
-  function updateCard(field: keyof CardData, value: any) {
+  function updateCard<K extends keyof CardData>(field: K, value: CardData[K]) {
     setCard({ ...card, [field]: value })
   }
 
@@ -45,10 +48,44 @@ export default function PlatinumBusinessCardGenerator() {
     setTeam([...team, { ...defaultCard, name: "", email: "", phone: "", website: "" }])
   }
 
-  function updateTeamCard(index: number, field: keyof CardData, value: any) {
+  function updateTeamCard<K extends keyof CardData>(index: number, field: K, value: CardData[K]) {
     const updated = [...team]
     updated[index] = { ...updated[index], [field]: value }
     setTeam(updated)
+  }
+
+  function onLogoUpload(file: File | undefined) {
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        updateCard("logo", reader.result)
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
+  function saveCardLocally() {
+    if (typeof window === "undefined") return
+    window.localStorage.setItem("chezmiss_platinum_card", JSON.stringify(card))
+    window.alert("Carte sauvegardee localement.")
+  }
+
+  function loadSavedCard() {
+    if (typeof window === "undefined") return
+    const raw = window.localStorage.getItem("chezmiss_platinum_card")
+    if (!raw) {
+      window.alert("Aucune sauvegarde trouvee.")
+      return
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as Partial<CardData>
+      setCard((prev) => ({ ...prev, ...parsed }))
+      window.alert("Carte chargee.")
+    } catch {
+      window.alert("Sauvegarde invalide.")
+    }
   }
 
   async function downloadPNG() {
@@ -66,6 +103,50 @@ export default function PlatinumBusinessCardGenerator() {
     const pdf = new jsPDF("portrait", "mm", "a4")
     pdf.addImage(url, "PNG", 0, 0, 210, 297)
     pdf.save("CHEZMISS-PLATINUM-A4.pdf")
+  }
+
+  async function printCard() {
+    if (!previewRef.current) return
+
+    const url = await htmlToImage.toPng(previewRef.current)
+    const printWindow = window.open("", "_blank", "width=900,height=600")
+    if (!printWindow) return
+
+    printWindow.document.write(`
+      <html>
+        <head><title>Impression carte CHEZMISS</title></head>
+        <body style="margin:0;display:flex;align-items:center;justify-content:center;background:#111;">
+          <img src="${url}" alt="Carte" style="max-width:96%;height:auto;" />
+        </body>
+      </html>
+    `)
+    printWindow.document.close()
+    printWindow.focus()
+    printWindow.print()
+  }
+
+  async function sendCard() {
+    if (!previewRef.current) return
+
+    const pngDataUrl = await htmlToImage.toPng(previewRef.current)
+    const response = await fetch(pngDataUrl)
+    const blob = await response.blob()
+    const file = new File([blob], "CHEZMISS-PLATINUM-card.png", { type: "image/png" })
+
+    if (navigator.share && navigator.canShare?.({ files: [file] })) {
+      await navigator.share({
+        title: "Carte CHEZMISS",
+        text: `${card.name} - ${card.title}`,
+        files: [file],
+      })
+      return
+    }
+
+    const subject = encodeURIComponent(`Carte professionnelle - ${card.name}`)
+    const body = encodeURIComponent(
+      `Nom: ${card.name}\nTitre: ${card.title}\nEntreprise: ${card.company}\nEmail: ${card.email}\nTelephone: ${card.phone}\nSite web: ${card.website}\n\nImage de carte a joindre: CHEZMISS-PLATINUM-card.png`
+    )
+    window.open(`mailto:?subject=${subject}&body=${body}`, "_self")
   }
 
   function renderSignature(sig: SignatureType) {
@@ -114,7 +195,7 @@ export default function PlatinumBusinessCardGenerator() {
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           <span className="opacity-70">Signature :</span>
           <select
             value={card.signature}
@@ -125,6 +206,38 @@ export default function PlatinumBusinessCardGenerator() {
             <option value="kentley">Kentley · Milele Inc.</option>
             <option value="none">Aucune</option>
           </select>
+
+          <label className="inline-flex items-center gap-2 rounded-lg border border-[#D4AF37]/60 px-2 py-1 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isMonochrome}
+              onChange={(e) => setIsMonochrome(e.target.checked)}
+            />
+            Noir et blanc
+          </label>
+
+          <button
+            type="button"
+            onClick={() => logoInputRef.current?.click()}
+            className="rounded-lg border border-[#D4AF37]/60 px-3 py-1"
+          >
+            Inserer logo
+          </button>
+          <input
+            ref={logoInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => onLogoUpload(e.target.files?.[0])}
+          />
+
+          <button
+            type="button"
+            onClick={() => updateCard("logo", undefined)}
+            className="rounded-lg border border-[#D4AF37]/40 px-3 py-1"
+          >
+            Retirer logo
+          </button>
         </div>
       </div>
 
@@ -166,12 +279,43 @@ export default function PlatinumBusinessCardGenerator() {
             >
               Télécharger PNG
             </button>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button
+                onClick={printCard}
+                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+              >
+                Imprimer
+              </button>
+              <button
+                onClick={saveCardLocally}
+                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+              >
+                Sauvegarder
+              </button>
+              <button
+                onClick={loadSavedCard}
+                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+              >
+                Charger
+              </button>
+              <button
+                onClick={sendCard}
+                className="px-4 py-2 border border-[#D4AF37]/70 rounded-lg text-xs"
+              >
+                Envoyer
+              </button>
+            </div>
           </div>
 
           {/* PREVIEW */}
           <div className="flex justify-center">
             <div ref={previewRef}>
-              <PlatinumCard data={card} signature={renderSignature(card.signature)} />
+              <PlatinumCard
+                data={card}
+                signature={renderSignature(card.signature)}
+                monochrome={isMonochrome}
+              />
             </div>
           </div>
         </div>
@@ -238,7 +382,12 @@ export default function PlatinumBusinessCardGenerator() {
           >
             {team.slice(0, 10).map((member, i) => (
               <div key={i} className="scale-[0.75] origin-top-left">
-                <PlatinumCard data={member} signature={renderSignature(card.signature)} plain />
+                <PlatinumCard
+                  data={member}
+                  signature={renderSignature(card.signature)}
+                  plain
+                  monochrome={isMonochrome}
+                />
               </div>
             ))}
           </div>
@@ -247,13 +396,22 @@ export default function PlatinumBusinessCardGenerator() {
 
       {mode === "hologram" && (
         <div className="flex justify-center">
-          <PlatinumCard data={card} signature={renderSignature(card.signature)} hologram />
+          <PlatinumCard
+            data={card}
+            signature={renderSignature(card.signature)}
+            hologram
+            monochrome={isMonochrome}
+          />
         </div>
       )}
 
       {mode === "mobile" && (
         <div className="max-w-xs mx-auto">
-          <PlatinumCard data={card} signature={renderSignature(card.signature)} />
+          <PlatinumCard
+            data={card}
+            signature={renderSignature(card.signature)}
+            monochrome={isMonochrome}
+          />
         </div>
       )}
     </div>
@@ -269,11 +427,13 @@ function PlatinumCard({
   signature,
   hologram = false,
   plain = false,
+  monochrome = false,
 }: {
   data: CardData
   signature: string | null
   hologram?: boolean
   plain?: boolean
+  monochrome?: boolean
 }) {
   const qrValue = `${data.name} · ${data.title} · ${data.company} · ${data.phone} · ${data.email} · ${data.website}`
 
@@ -300,30 +460,60 @@ function PlatinumCard({
   }
 
   return (
-    <div className="relative w-[340px] h-[210px] rounded-xl overflow-hidden border border-[#D4AF37]/50 shadow-[0_0_40px_rgba(0,0,0,0.9)] bg-gradient-to-br from-black via-[#120b18] to-black p-4 flex flex-col justify-between">
+    <div
+      className={`relative w-[340px] h-[210px] rounded-xl overflow-hidden border p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,0,0,0.9)] ${
+        monochrome
+          ? "border-white/40 bg-gradient-to-br from-black via-[#1a1a1a] to-black"
+          : "border-[#D4AF37]/50 bg-gradient-to-br from-black via-[#120b18] to-black"
+      }`}
+    >
       {/* Layers futuristes */}
-      <div className="absolute -top-20 -right-10 w-40 h-40 bg-[#D4AF37]/25 blur-3xl" />
-      <div className="absolute bottom-[-40px] left-[-20px] w-40 h-40 bg-purple-500/25 blur-3xl" />
+      <div
+        className={`absolute -top-20 -right-10 w-40 h-40 blur-3xl ${
+          monochrome ? "bg-white/10" : "bg-[#D4AF37]/25"
+        }`}
+      />
+      <div
+        className={`absolute bottom-[-40px] left-[-20px] w-40 h-40 blur-3xl ${
+          monochrome ? "bg-white/10" : "bg-purple-500/25"
+        }`}
+      />
       {hologram && (
-        <div className="absolute inset-0 bg-[conic-gradient(from_180deg,_rgba(212,175,55,0.25),_transparent,_rgba(168,85,247,0.25),_transparent,_rgba(212,175,55,0.25))] mix-blend-screen opacity-70 animate-pulse" />
+        <div
+          className={`absolute inset-0 mix-blend-screen opacity-70 animate-pulse ${
+            monochrome
+              ? "bg-[conic-gradient(from_180deg,_rgba(255,255,255,0.15),_transparent,_rgba(120,120,120,0.2),_transparent,_rgba(255,255,255,0.15))]"
+              : "bg-[conic-gradient(from_180deg,_rgba(212,175,55,0.25),_transparent,_rgba(168,85,247,0.25),_transparent,_rgba(212,175,55,0.25))]"
+          }`
+        />
       )}
 
       <div className="relative flex justify-between gap-3">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.25em] text-[#D4AF37]">
+          <div className={`text-[10px] uppercase tracking-[0.25em] ${monochrome ? "text-white/90" : "text-[#D4AF37]"}`}>
             {data.company}
           </div>
           <div className="mt-2 text-lg font-semibold">{data.name}</div>
           <div className="text-xs opacity-70">{data.title}</div>
         </div>
 
+        {data.logo && (
+          <div className={`rounded-lg p-1 border ${monochrome ? "border-white/30 bg-black/50" : "border-[#D4AF37]/40 bg-black/50"}`}>
+            <img
+              src={data.logo}
+              alt="Logo"
+              className="w-[44px] h-[44px] object-contain"
+            />
+          </div>
+        )}
+
         {data.showQR && (
-          <div className="bg-black/50 rounded-lg p-1 border border-[#D4AF37]/40">
+          <div className={`bg-black/50 rounded-lg p-1 border ${monochrome ? "border-white/30" : "border-[#D4AF37]/40"}`}>
             <QRCodeCanvas
               value={qrValue}
               size={70}
               bgColor="transparent"
-              fgColor="#D4AF37"
+              fgColor={monochrome ? "#FFFFFF" : "#D4AF37"}
             />
           </div>
         )}
