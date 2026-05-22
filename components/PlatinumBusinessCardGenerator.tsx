@@ -662,6 +662,13 @@ export default function PlatinumBusinessCardGenerator() {
               name: normalizeProfileName(item.name) || `Carte ${item.card?.name ?? "sans nom"}`,
               card: { ...defaultCard, ...item.card },
               theme: isCardTheme((item as Partial<SavedProfile>).theme) ? (item as SavedProfile).theme : "luxe",
+              mode:
+                (item as Partial<SavedProfile>).mode &&
+                ["standard", "team", "a4", "hologram", "mobile"].includes((item as Partial<SavedProfile>).mode as string)
+                  ? ((item as Partial<SavedProfile>).mode as ModeType)
+                  : "standard",
+              isMonochrome: Boolean((item as Partial<SavedProfile>).isMonochrome),
+              team: cloneTeamData((item as Partial<SavedProfile>).team as CardData[]),
             }))
           setSavedProfiles(normalizedProfiles)
           setSelectedProfileName(normalizedProfiles[0]?.name ?? "")
@@ -680,7 +687,14 @@ export default function PlatinumBusinessCardGenerator() {
               : "luxe"
           setCard(migratedCard)
           setTheme(migratedTheme)
-          const legacyProfile = { name: "Dernière carte", card: migratedCard, theme: migratedTheme }
+          const legacyProfile: SavedProfile = {
+            name: "Dernière carte",
+            card: migratedCard,
+            theme: migratedTheme,
+            mode: "standard",
+            isMonochrome: false,
+            team: [migratedCard],
+          }
           setSavedProfiles([legacyProfile])
           setSelectedProfileName(legacyProfile.name)
         }
