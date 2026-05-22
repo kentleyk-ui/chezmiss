@@ -12,6 +12,7 @@ type AppleWalletPassPayload = {
   signature?: "chezmiss" | "kentley" | "none"
   showQR?: boolean
   monochrome?: boolean
+  watchOptimized?: boolean
   logo?: string
   profileName?: string
 }
@@ -86,6 +87,7 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
   const signature = payload.signature ?? "chezmiss"
   const showQR = payload.showQR !== false
   const monochrome = Boolean(payload.monochrome)
+  const watchOptimized = payload.watchOptimized !== false
   const hasLogo = Boolean(payload.logo)
   const profileName = payload.profileName?.trim() || "Carte principale"
   const palette = getThemePalette(theme)
@@ -168,6 +170,35 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
     })
   }
 
+  const watchSecondaryFields = [
+    {
+      key: "watchTitle",
+      label: "Role",
+      value: title,
+    },
+    {
+      key: "watchPhone",
+      label: "Phone",
+      value: phone,
+    },
+  ]
+
+  const watchAuxiliaryFields = [
+    {
+      key: "watchCompany",
+      label: "Company",
+      value: company,
+    },
+  ]
+
+  if (email) {
+    watchAuxiliaryFields.push({
+      key: "watchEmail",
+      label: "Email",
+      value: email,
+    })
+  }
+
   return {
     pass: {
       formatVersion: 1,
@@ -194,14 +225,16 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
             value: name,
           },
         ],
-        secondaryFields,
-        auxiliaryFields: [
-          {
-            key: "companyAux",
-            label: "Company",
-            value: company,
-          },
-        ],
+        secondaryFields: watchOptimized ? watchSecondaryFields : secondaryFields,
+        auxiliaryFields: watchOptimized
+          ? watchAuxiliaryFields
+          : [
+              {
+                key: "companyAux",
+                label: "Company",
+                value: company,
+              },
+            ],
         backFields,
       },
       metadata: {
@@ -209,6 +242,7 @@ function buildPassServicePayload(payload: AppleWalletPassPayload) {
         mode,
         signature,
         monochrome,
+        watchOptimized,
         showQR,
         hasLogo,
         profileName,
