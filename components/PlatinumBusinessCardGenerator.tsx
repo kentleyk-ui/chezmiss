@@ -464,6 +464,23 @@ export default function PlatinumBusinessCardGenerator() {
   }, [])
 
   const validationIssues = validateCardData(card)
+  const themeLabel = theme === "executive" ? "Executive" : theme === "minimal" ? "Minimal" : "Luxe"
+  const themeCaption =
+    theme === "executive"
+      ? "Boardroom precision"
+      : theme === "minimal"
+        ? "Quiet luxury"
+        : "Jewelled contrast"
+  const modeLabel =
+    mode === "standard"
+      ? "Studio"
+      : mode === "team"
+        ? "Equipe"
+        : mode === "a4"
+          ? "Impression"
+          : mode === "hologram"
+            ? "Hologram"
+            : "Mobile"
   const chromeShell =
     "rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl"
   const chromeField =
@@ -480,6 +497,8 @@ export default function PlatinumBusinessCardGenerator() {
     `${chromeButton} border border-red-400/40 bg-red-500/10 text-red-100 hover:bg-red-500/15 hover:border-red-400/60`
   const chromeBadge =
     "rounded-full border border-[#D4AF37]/25 bg-white/5 px-3 py-1 text-[9px] uppercase tracking-[0.24em] text-[#f7e3a4]"
+  const chromeMetric =
+    "rounded-2xl border border-white/10 bg-black/25 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
 
   function fieldBorder(field: keyof CardData) {
     const hasIssue = validationIssues.some((issue) => {
@@ -527,17 +546,58 @@ export default function PlatinumBusinessCardGenerator() {
       </div>
 
       {/* HEADER */}
-      <div className="text-center space-y-2">
-        <div className={chromeBadge}>Platinum suite</div>
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-[0.25em] text-transparent bg-clip-text bg-[linear-gradient(135deg,#f7e3a4_0%,#d4af37_38%,#ffffff_58%,#b58b18_100%)] drop-shadow-[0_0_24px_rgba(212,175,55,0.18)]">
-          CHEZMISS PLATINUM SUITE
-        </h1>
-        <p className="text-xs md:text-sm opacity-70 uppercase">
-          Business Card Generator · Futuristic Edition
-        </p>
-        <p className="text-[11px] opacity-60">
-          Designed & Engineered by <span className="text-[#D4AF37]">Kentley · Milele Inc.</span>
-        </p>
+      <div className="grid gap-4 lg:grid-cols-[1.35fr_0.9fr] items-stretch">
+        <div className={`${chromeShell} p-5 md:p-6 relative overflow-hidden`}>
+          <div className="absolute inset-0 opacity-[0.12] bg-[radial-gradient(circle_at_top_right,_rgba(212,175,55,0.35),_transparent_36%)]" />
+          <div className="relative space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className={chromeBadge}>Platinum suite</div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[9px] uppercase tracking-[0.24em] text-white/70">
+                {themeLabel} / {modeLabel}
+              </div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[9px] uppercase tracking-[0.24em] text-white/70">
+                {savedProfiles.length} profils
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-5xl font-black tracking-[0.18em] text-transparent bg-clip-text bg-[linear-gradient(135deg,#f7e3a4_0%,#d4af37_34%,#ffffff_58%,#b58b18_100%)] drop-shadow-[0_0_24px_rgba(212,175,55,0.18)] font-serif uppercase">
+                CHEZMISS PLATINUM SUITE
+              </h1>
+              <p className="max-w-2xl text-sm md:text-base text-white/70 leading-relaxed">
+                Business card generator conçu comme un atelier de direction artistique: validation, templates éditoriaux,
+                export batch et finitions premium pour des cartes qui semblent déjà imprimées en papier de luxe.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.22em]">
+              <span className={chromeBadge}>{themeCaption}</span>
+              <span className={chromeBadge}>{validationIssues.length === 0 ? "Prêt à exporter" : `${validationIssues.length} alerte(s)`}</span>
+              <span className={chromeBadge}>{isMonochrome ? "Monochrome" : "Couleur"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={`${chromeShell} p-5 md:p-6 space-y-3`}>
+          <div className="text-[11px] uppercase tracking-[0.28em] text-[#D4AF37]">Atelier status</div>
+          <div className={chromeMetric}>
+            <div className="text-[10px] uppercase tracking-[0.22em] text-white/45">Validation</div>
+            <div className="mt-1 text-sm text-white">
+              {validationIssues.length === 0 ? "Aucune erreur bloquante" : `${validationIssues.length} point(s) à corriger`}
+            </div>
+          </div>
+          <div className={chromeMetric}>
+            <div className="text-[10px] uppercase tracking-[0.22em] text-white/45">Mode actif</div>
+            <div className="mt-1 text-sm text-white">{modeLabel}</div>
+          </div>
+          <div className={chromeMetric}>
+            <div className="text-[10px] uppercase tracking-[0.22em] text-white/45">Template</div>
+            <div className="mt-1 text-sm text-white">{themeLabel}</div>
+          </div>
+          <p className="text-[11px] leading-relaxed text-white/55">
+            Designed & Engineered by <span className="text-[#D4AF37]">Kentley · Milele Inc.</span>
+          </p>
+        </div>
       </div>
 
       {/* BARRE D’OPTIONS */}
