@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QRBarcodeGenerator } from "@/components/QRBarcodeGenerator";
+import PlatinumBusinessCardGenerator from "@/components/PlatinumBusinessCardGenerator";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { ChezmissAide } from "@/components/ChezmissAide";
 import Link from "next/link";
@@ -201,6 +202,22 @@ export default function StaffPage() {
           <p className="mt-4 text-xs text-[#f0c9e1]/70">
             <span className="font-semibold text-[#B79A5B]">Astuce:</span> Les codes QR peuvent être téléchargés et partagés directement. Utilisez-les pour vos besoins marketing!
           </p>
+        </div>
+
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="bg-[#0d0810]/50 border border-[#B79A5B]/20 rounded-xl p-6 sm:p-8">
+            <div className="mx-auto max-w-3xl text-center space-y-3 mb-6">
+              <p className="text-sm uppercase tracking-[0.35em] text-[#B79A5B]/70">Staff Control</p>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-[#B79A5B]">
+                Générateur de Carte Platinum
+              </h2>
+              <p className="text-sm sm:text-base text-[#f0c9e1]/70">
+                Créez, prévisualisez et exportez vos cartes professionnelles directement depuis cette page.
+              </p>
+            </div>
+
+            <PlatinumBusinessCardGenerator />
+          </div>
         </div>
       </div>
 
