@@ -7,6 +7,7 @@ import jsPDF from "jspdf"
 
 type SignatureType = "chezmiss" | "kentley" | "none"
 type ModeType = "standard" | "team" | "a4" | "hologram" | "mobile"
+type CardTheme = "executive" | "minimal" | "luxe"
 type ToastTone = "success" | "error" | "info"
 
 type ToastState = {
@@ -29,6 +30,7 @@ type CardData = {
 type SavedProfile = {
   name: string
   card: CardData
+  theme: CardTheme
 }
 
 const CARD_STORAGE_KEY = "chezmiss_platinum_card"
@@ -75,6 +77,7 @@ function normalizeProfileName(value: string): string {
 
 export default function PlatinumBusinessCardGenerator() {
   const [mode, setMode] = useState<ModeType>("standard")
+  const [theme, setTheme] = useState<CardTheme>("luxe")
   const [isMonochrome, setIsMonochrome] = useState(false)
   const [card, setCard] = useState<CardData>(defaultCard)
   const [team, setTeam] = useState<CardData[]>([defaultCard])
@@ -86,6 +89,7 @@ export default function PlatinumBusinessCardGenerator() {
   const sheetRef = useRef<HTMLDivElement | null>(null)
   const logoInputRef = useRef<HTMLInputElement | null>(null)
   const teamLogoInputRefs = useRef<Array<HTMLInputElement | null>>([])
+  const exportCardRefs = useRef<Array<HTMLDivElement | null>>([])
   const toastTimerRef = useRef<number | null>(null)
 
   function updateCard<K extends keyof CardData>(field: K, value: CardData[K]) {
@@ -153,6 +157,10 @@ export default function PlatinumBusinessCardGenerator() {
     window.localStorage.setItem(PROFILES_STORAGE_KEY, JSON.stringify(nextProfiles))
   }
 
+  function isCardTheme(value: unknown): value is CardTheme {
+    return value === "executive" || value === "minimal" || value === "luxe"
+  }
+
   function saveProfile() {
     const issues = validateCardData(card)
     if (issues.length > 0) {
@@ -161,14 +169,14 @@ export default function PlatinumBusinessCardGenerator() {
     }
 
     const name = normalizeProfileName(profileName) || `Carte ${card.name}`
-    const nextProfile: SavedProfile = { name, card }
+    const nextProfile: SavedProfile = { name, card, theme }
     const nextProfiles = [...savedProfiles.filter((profile) => profile.name !== name), nextProfile].sort((a, b) =>
       a.name.localeCompare(b.name, "fr")
     )
 
     persistProfiles(nextProfiles)
     setSelectedProfileName(name)
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(card))
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card, theme }))
     notify(`Profil \"${name}\" sauvegardé.`, "success")
   }
 
@@ -180,8 +188,9 @@ export default function PlatinumBusinessCardGenerator() {
     }
 
     setCard(profile.card)
+    setTheme(profile.theme)
     setProfileName(profile.name)
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(profile.card))
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card: profile.card, theme: profile.theme }))
     notify(`Profil \"${profile.name}\" chargé.`, "success")
   }
 
@@ -195,6 +204,71 @@ export default function PlatinumBusinessCardGenerator() {
     persistProfiles(nextProfiles)
     setSelectedProfileName(nextProfiles[0]?.name ?? "")
     notify(`Profil \"${selectedProfileName}\" supprimé.`, "success")
+  }
+
+  function duplicateSelectedProfile() {
+    const profile = savedProfiles.find((item) => item.name === selectedProfileName)
+    if (!profile) {
+      notify("Sélectionne un profil à dupliquer.", "error")
+      return
+    }
+
+    const baseName = `${profile.name} copie`
+    let nextName = baseName
+    let index = 2
+    while (savedProfiles.some((item) => item.name === nextName)) {
+      nextName = `${baseName} ${index}`
+      index += 1
+    }
+
+    const duplicated: SavedProfile = {
+      name: nextName,
+      card: { ...profile.card },
+      theme: profile.theme,
+    }
+
+    const nextProfiles = [...savedProfiles, duplicated].sort((a, b) => a.name.localeCompare(b.name, "fr"))
+    persistProfiles(nextProfiles)
+    setSelectedProfileName(nextName)
+    notify(`Profil \"${nextName}\" dupliqué.`, "success")
+  }
+
+  async function exportAllProfilesPDF() {
+    if (savedProfiles.length === 0) {
+      notify("Aucun profil à exporter.", "error")
+      return
+    }
+
+    const pdf = new jsPDF("portrait", "mm", "a4")
+    const generatedAt = new Date().toLocaleString("fr-CA")
+
+    for (let idx = 0; idx < savedProfiles.length; idx += 1) {
+      const profile = savedProfiles[idx]
+      const node = exportCardRefs.current[idx]
+      if (idx > 0) pdf.addPage()
+
+      pdf.setFontSize(16)
+      pdf.text("CHEZMISS - Export Profils Cartes", 14, 18)
+      pdf.setFontSize(12)
+      pdf.text(`Profil: ${profile.name}`, 14, 28)
+      pdf.setFontSize(10)
+      pdf.text(`Theme: ${profile.theme}`, 14, 36)
+      pdf.text(`Generation: ${generatedAt}`, 14, 42)
+
+      if (node) {
+        const image = await htmlToImage.toPng(node, {
+          pixelRatio: 4,
+          cacheBust: true,
+          backgroundColor: isMonochrome ? "#000000" : profile.theme === "minimal" ? "#0f0f0f" : "#050309",
+        })
+        pdf.addImage(image, "PNG", 18, 56, 174, 107)
+      } else {
+        pdf.text("Prévisualisation non disponible pour ce profil.", 14, 56)
+      }
+    }
+
+    pdf.save("CHEZMISS-PLATINUM-profils.pdf")
+    notify("Export batch PDF des profils terminé.", "success")
   }
 
   function validateBeforeExport() {
@@ -216,12 +290,12 @@ export default function PlatinumBusinessCardGenerator() {
 
   function saveCardLocally() {
     if (typeof window === "undefined") return
-    const profile = { name: normalizeProfileName(profileName) || `Carte ${card.name}`, card }
+    const profile = { name: normalizeProfileName(profileName) || `Carte ${card.name}`, card, theme }
     persistProfiles([
       ...savedProfiles.filter((item) => item.name !== profile.name),
       profile,
     ].sort((a, b) => a.name.localeCompare(b.name, "fr")))
-    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify(card))
+    window.localStorage.setItem(CARD_STORAGE_KEY, JSON.stringify({ card, theme }))
     setSelectedProfileName(profile.name)
     notify("Carte sauvegardée localement.", "success")
   }
@@ -235,8 +309,16 @@ export default function PlatinumBusinessCardGenerator() {
     }
 
     try {
-      const parsed = JSON.parse(raw) as Partial<CardData>
-      setCard((prev) => ({ ...prev, ...parsed }))
+      const parsed = JSON.parse(raw) as Partial<CardData> | { card?: Partial<CardData>; theme?: unknown }
+      if (parsed && typeof parsed === "object" && "card" in parsed) {
+        const savedCard = parsed.card ?? {}
+        setCard((prev) => ({ ...prev, ...savedCard }))
+        if (isCardTheme(parsed.theme)) {
+          setTheme(parsed.theme)
+        }
+      } else {
+        setCard((prev) => ({ ...prev, ...(parsed as Partial<CardData>) }))
+      }
       notify("Carte chargée.", "success")
     } catch {
       notify("Sauvegarde invalide.", "error")
@@ -344,6 +426,7 @@ export default function PlatinumBusinessCardGenerator() {
             .map((item) => ({
               name: normalizeProfileName(item.name) || `Carte ${item.card?.name ?? "sans nom"}`,
               card: { ...defaultCard, ...item.card },
+              theme: isCardTheme((item as Partial<SavedProfile>).theme) ? (item as SavedProfile).theme : "luxe",
             }))
           setSavedProfiles(normalizedProfiles)
           setSelectedProfileName(normalizedProfiles[0]?.name ?? "")
@@ -351,10 +434,18 @@ export default function PlatinumBusinessCardGenerator() {
       } else {
         const legacy = window.localStorage.getItem(CARD_STORAGE_KEY)
         if (legacy) {
-          const parsed = JSON.parse(legacy) as Partial<CardData>
-          const migratedCard = { ...defaultCard, ...parsed }
+          const parsed = JSON.parse(legacy) as Partial<CardData> | { card?: Partial<CardData>; theme?: unknown }
+          const migratedCard = {
+            ...defaultCard,
+            ...(parsed && typeof parsed === "object" && "card" in parsed ? (parsed.card ?? {}) : (parsed as Partial<CardData>)),
+          }
+          const migratedTheme =
+            parsed && typeof parsed === "object" && "theme" in parsed && isCardTheme(parsed.theme)
+              ? parsed.theme
+              : "luxe"
           setCard(migratedCard)
-          const legacyProfile = { name: "Dernière carte", card: migratedCard }
+          setTheme(migratedTheme)
+          const legacyProfile = { name: "Dernière carte", card: migratedCard, theme: migratedTheme }
           setSavedProfiles([legacyProfile])
           setSelectedProfileName(legacyProfile.name)
         }
@@ -444,6 +535,17 @@ export default function PlatinumBusinessCardGenerator() {
             <option value="a4">Planche A4</option>
             <option value="hologram">Hologram 3D</option>
             <option value="mobile">Mobile</option>
+          </select>
+
+          <span className="opacity-70 ml-3">Template :</span>
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value as CardTheme)}
+            className="bg-black border border-[#D4AF37]/60 rounded-lg px-2 py-1"
+          >
+            <option value="executive">Executive</option>
+            <option value="minimal">Minimal</option>
+            <option value="luxe">Luxe</option>
           </select>
         </div>
 
@@ -548,6 +650,20 @@ export default function PlatinumBusinessCardGenerator() {
               >
                 Supprimer
               </button>
+              <button
+                type="button"
+                onClick={duplicateSelectedProfile}
+                className="rounded-lg border border-[#D4AF37]/60 px-3 py-2"
+              >
+                Dupliquer
+              </button>
+              <button
+                type="button"
+                onClick={exportAllProfilesPDF}
+                className="rounded-lg bg-[#D4AF37] px-3 py-2 text-black font-semibold"
+              >
+                Export profils PDF
+              </button>
             </div>
           </div>
 
@@ -639,6 +755,7 @@ export default function PlatinumBusinessCardGenerator() {
                 data={card}
                 signature={renderSignature(card.signature)}
                 monochrome={isMonochrome}
+                theme={theme}
               />
             </div>
           </div>
@@ -729,12 +846,30 @@ export default function PlatinumBusinessCardGenerator() {
                     onChange={(e) => onTeamLogoUpload(i, e.target.files?.[0])}
                   />
                 </div>
-                <PlatinumCard data={member} signature={renderSignature(card.signature)} />
+                <PlatinumCard data={member} signature={renderSignature(card.signature)} theme={theme} />
               </div>
             ))}
           </div>
         </div>
       )}
+
+      <div className="fixed -left-[9999px] -top-[9999px] pointer-events-none">
+        {savedProfiles.map((profile, idx) => (
+          <div
+            key={`${profile.name}-${idx}`}
+            ref={(el) => {
+              exportCardRefs.current[idx] = el
+            }}
+          >
+            <PlatinumCard
+              data={profile.card}
+              signature={renderSignature(profile.card.signature)}
+              monochrome={isMonochrome}
+              theme={profile.theme}
+            />
+          </div>
+        ))}
+      </div>
 
       {mode === "a4" && (
         <div className="space-y-4">
@@ -756,6 +891,7 @@ export default function PlatinumBusinessCardGenerator() {
                   signature={renderSignature(card.signature)}
                   plain
                   monochrome={isMonochrome}
+                  theme={theme}
                 />
               </div>
             ))}
@@ -770,6 +906,7 @@ export default function PlatinumBusinessCardGenerator() {
             signature={renderSignature(card.signature)}
             hologram
             monochrome={isMonochrome}
+            theme={theme}
           />
         </div>
       )}
@@ -780,6 +917,7 @@ export default function PlatinumBusinessCardGenerator() {
             data={card}
             signature={renderSignature(card.signature)}
             monochrome={isMonochrome}
+            theme={theme}
           />
         </div>
       )}
@@ -797,14 +935,48 @@ function PlatinumCard({
   hologram = false,
   plain = false,
   monochrome = false,
+  theme = "luxe",
 }: {
   data: CardData
   signature: string | null
   hologram?: boolean
   plain?: boolean
   monochrome?: boolean
+  theme?: CardTheme
 }) {
   const qrValue = `${data.name} · ${data.title} · ${data.company} · ${data.phone} · ${data.email} · ${data.website}`
+
+  const themeStyles = {
+    executive: {
+      border: monochrome ? "border-white/35" : "border-sky-300/40",
+      background: monochrome
+        ? "bg-gradient-to-br from-black via-[#161616] to-black"
+        : "bg-gradient-to-br from-[#04070d] via-[#0b1220] to-[#05070a]",
+      accent: monochrome ? "text-white/85" : "text-sky-200",
+      glowA: monochrome ? "bg-white/8" : "bg-sky-400/20",
+      glowB: monochrome ? "bg-white/8" : "bg-cyan-400/18",
+    },
+    minimal: {
+      border: monochrome ? "border-white/50" : "border-zinc-300/35",
+      background: monochrome
+        ? "bg-gradient-to-br from-black via-[#181818] to-black"
+        : "bg-gradient-to-br from-[#0e0e0e] via-[#161616] to-[#0f0f0f]",
+      accent: monochrome ? "text-white/90" : "text-zinc-100",
+      glowA: monochrome ? "bg-white/5" : "bg-zinc-300/10",
+      glowB: monochrome ? "bg-white/4" : "bg-zinc-100/8",
+    },
+    luxe: {
+      border: monochrome ? "border-white/40" : "border-[#D4AF37]/50",
+      background: monochrome
+        ? "bg-gradient-to-br from-black via-[#181818] to-black"
+        : "bg-gradient-to-br from-black via-[#120b18] to-black",
+      accent: monochrome ? "text-white/90" : "text-[#D4AF37]",
+      glowA: monochrome ? "bg-white/10" : "bg-[#D4AF37]/25",
+      glowB: monochrome ? "bg-white/10" : "bg-purple-500/25",
+    },
+  } satisfies Record<CardTheme, { border: string; background: string; accent: string; glowA: string; glowB: string }>
+
+  const currentTheme = themeStyles[theme]
 
   if (plain) {
     return (
@@ -830,22 +1002,14 @@ function PlatinumCard({
 
   return (
     <div
-      className={`relative w-[340px] h-[210px] rounded-xl overflow-hidden border p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,0,0,0.9)] ${
-        monochrome
-          ? "border-white/40 bg-gradient-to-br from-black via-[#181818] to-black"
-          : "border-[#D4AF37]/50 bg-gradient-to-br from-black via-[#120b18] to-black"
-      }`}
+      className={`relative w-[340px] h-[210px] rounded-xl overflow-hidden border p-4 flex flex-col justify-between shadow-[0_0_40px_rgba(0,0,0,0.9)] ${currentTheme.border} ${currentTheme.background}`}
     >
       {/* Layers futuristes */}
       <div
-        className={`absolute -top-20 -right-10 w-40 h-40 blur-3xl ${
-          monochrome ? "bg-white/10" : "bg-[#D4AF37]/25"
-        }`}
+        className={`absolute -top-20 -right-10 w-40 h-40 blur-3xl ${currentTheme.glowA}`}
       />
       <div
-        className={`absolute bottom-[-40px] left-[-20px] w-40 h-40 blur-3xl ${
-          monochrome ? "bg-white/10" : "bg-purple-500/25"
-        }`}
+        className={`absolute bottom-[-40px] left-[-20px] w-40 h-40 blur-3xl ${currentTheme.glowB}`}
       />
       {hologram && (
         <div
@@ -859,7 +1023,7 @@ function PlatinumCard({
 
       <div className="relative flex justify-between gap-3">
         <div>
-          <div className={`text-[10px] uppercase tracking-[0.25em] ${monochrome ? "text-white/90" : "text-[#D4AF37]"}`}>
+          <div className={`text-[10px] uppercase tracking-[0.25em] ${currentTheme.accent}`}>
             {data.company}
           </div>
           <div className="mt-2 text-lg font-semibold">{data.name}</div>
