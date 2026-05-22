@@ -239,7 +239,7 @@ export default function Home() {
                     alt="Révélez votre Élégance"
                     fill
                     sizes="(max-width: 1024px) 100vw, 300px"
-                    className="object-contain opacity-[0.68]"
+                    className="object-contain opacity-[0.5]"
                     style={{ objectPosition: "28% center" }}
                     priority
                   />
