@@ -10,6 +10,167 @@ type AppleWalletPassPayload = {
   theme?: "executive" | "minimal" | "luxe"
 }
 
+type ThemePalette = {
+  backgroundColor: string
+  foregroundColor: string
+  labelColor: string
+}
+
+function normalizeTheme(theme: AppleWalletPassPayload["theme"]): "executive" | "minimal" | "luxe" {
+  if (theme === "executive" || theme === "minimal" || theme === "luxe") {
+    return theme
+  }
+  return "luxe"
+}
+
+function getThemePalette(theme: "executive" | "minimal" | "luxe"): ThemePalette {
+  if (theme === "executive") {
+    return {
+      backgroundColor: "rgb(10, 18, 30)",
+      foregroundColor: "rgb(234, 244, 255)",
+      labelColor: "rgb(140, 187, 255)",
+    }
+  }
+
+  if (theme === "minimal") {
+    return {
+      backgroundColor: "rgb(245, 245, 245)",
+      foregroundColor: "rgb(20, 20, 20)",
+      labelColor: "rgb(96, 96, 96)",
+    }
+  }
+
+  return {
+    backgroundColor: "rgb(18, 11, 24)",
+    foregroundColor: "rgb(245, 231, 184)",
+    labelColor: "rgb(212, 175, 55)",
+  }
+}
+
+function buildVCardMessage(payload: Required<Pick<AppleWalletPassPayload, "name" | "title" | "company" | "phone">> & Partial<AppleWalletPassPayload>): string {
+  const lines = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    `FN:${payload.name}`,
+    `ORG:${payload.company}`,
+    `TITLE:${payload.title}`,
+    `TEL;TYPE=WORK,VOICE:${payload.phone}`,
+  ]
+
+  if (payload.email?.trim()) {
+    lines.push(`EMAIL;TYPE=INTERNET:${payload.email.trim()}`)
+  }
+  if (payload.website?.trim()) {
+    lines.push(`URL:${payload.website.trim()}`)
+  }
+
+  lines.push("END:VCARD")
+  return `${lines.join("\\n")}\\n`
+}
+
+function buildPassServicePayload(payload: AppleWalletPassPayload) {
+  const name = payload.name!.trim()
+  const title = payload.title!.trim()
+  const company = payload.company!.trim()
+  const phone = payload.phone!.trim()
+  const email = payload.email?.trim() ?? ""
+  const website = payload.website?.trim() ?? ""
+  const theme = normalizeTheme(payload.theme)
+  const palette = getThemePalette(theme)
+
+  const passTypeIdentifier = process.env.APPLE_WALLET_PASS_TYPE_IDENTIFIER ?? ""
+  const teamIdentifier = process.env.APPLE_WALLET_TEAM_IDENTIFIER ?? ""
+  const organizationName = process.env.APPLE_WALLET_ORGANIZATION_NAME ?? "CHEZMISS"
+  const webServiceURL = process.env.APPLE_WALLET_WEB_SERVICE_URL
+  const authenticationToken = process.env.APPLE_WALLET_AUTH_TOKEN
+
+  const secondaryFields = [
+    {
+      key: "title",
+      label: "Title",
+      value: title,
+    },
+    {
+      key: "phone",
+      label: "Phone",
+      value: phone,
+    },
+  ]
+
+  if (email) {
+    secondaryFields.push({
+      key: "email",
+      label: "Email",
+      value: email,
+    })
+  }
+
+  const backFields = [
+    {
+      key: "company",
+      label: "Company",
+      value: company,
+    },
+    {
+      key: "theme",
+      label: "Theme",
+      value: theme,
+    },
+  ]
+
+  if (website) {
+    backFields.push({
+      key: "website",
+      label: "Website",
+      value: website,
+    })
+  }
+
+  return {
+    pass: {
+      formatVersion: 1,
+      passTypeIdentifier,
+      teamIdentifier,
+      organizationName,
+      serialNumber: `chezmiss-${crypto.randomUUID()}`,
+      description: "CHEZMISS digital business card",
+      logoText: company,
+      suppressStripShine: true,
+      backgroundColor: palette.backgroundColor,
+      foregroundColor: palette.foregroundColor,
+      labelColor: palette.labelColor,
+      barcode: {
+        format: "PKBarcodeFormatQR",
+        message: buildVCardMessage({ name, title, company, phone, email, website }),
+        messageEncoding: "iso-8859-1",
+      },
+      generic: {
+        primaryFields: [
+          {
+            key: "name",
+            label: "Name",
+            value: name,
+          },
+        ],
+        secondaryFields,
+        auxiliaryFields: [
+          {
+            key: "companyAux",
+            label: "Company",
+            value: company,
+          },
+        ],
+        backFields,
+      },
+      metadata: {
+        theme,
+        source: "chezmiss-staff",
+      },
+      ...(webServiceURL && authenticationToken ? { webServiceURL, authenticationToken } : {}),
+    },
+  }
+}
+
 function hasRequiredFields(payload: AppleWalletPassPayload): boolean {
   return Boolean(payload.name?.trim() && payload.title?.trim() && payload.company?.trim() && payload.phone?.trim())
 }
@@ -46,14 +207,28 @@ export async function POST(req: Request) {
     )
   }
 
+  const passTypeIdentifier = process.env.APPLE_WALLET_PASS_TYPE_IDENTIFIER
+  const teamIdentifier = process.env.APPLE_WALLET_TEAM_IDENTIFIER
+  if (!passTypeIdentifier || !teamIdentifier) {
+    return NextResponse.json(
+      {
+        error: "apple_wallet_missing_identifiers",
+        message: "APPLE_WALLET_PASS_TYPE_IDENTIFIER and APPLE_WALLET_TEAM_IDENTIFIER are required.",
+      },
+      { status: 501 }
+    )
+  }
+
   try {
+    const passPayload = buildPassServicePayload(payload)
+
     const upstreamResponse = await fetch(passServiceUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         ...(passServiceToken ? { Authorization: `Bearer ${passServiceToken}` } : {}),
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(passPayload),
       cache: "no-store",
     })
 

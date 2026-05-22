@@ -479,6 +479,11 @@ export default function PlatinumBusinessCardGenerator() {
           passDownloaded = true
           notify("Pass Apple Wallet telecharge.", "success")
         }
+      } else {
+        const errorBody = (await response.json().catch(() => null)) as { message?: string } | null
+        if (errorBody?.message) {
+          notify(errorBody.message, "info")
+        }
       }
     } catch {
       // Fallback handled below.
