@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
 import { SocialLinksElite } from "@/components/SocialLinksElite";
 import { ChezmissAide } from "@/components/ChezmissAide";
@@ -215,8 +214,8 @@ export default function Home() {
             </div>
 
             {/* BLOC 3 — Photo avec mémorial adapté */}
-            <div className="relative w-full sm:w-3/4 mx-auto lg:w-[260px] xl:w-[300px] flex-shrink-0 lg:justify-self-end order-3">
-              <div className="relative flex flex-col">
+            <div className="relative w-full sm:w-3/4 mx-auto lg:w-auto flex-shrink-0 lg:justify-self-center order-3">
+              <div className="relative flex flex-col justify-center">
                 {/* Photo */}
                 <div
                   className="relative"
@@ -239,80 +238,12 @@ export default function Home() {
                     alt="Révélez votre Élégance"
                     fill
                     sizes="(max-width: 1024px) 100vw, 300px"
-                    className="object-contain opacity-[0.5]"
+                    className="object-contain opacity-[0.25]"
                     style={{ objectPosition: "28% center" }}
                     priority
                   />
                   {/* voile tonal pour harmoniser avec le fond */}
                   <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/20 via-transparent to-[#080508]/35 pointer-events-none" />
-                </div>
-
-                {/* Mémorial/Tribute section — fond noir en dessous de la photo */}
-                <div className="w-full bg-black/80 backdrop-blur-sm border-t border-[#B79A5B]/20">
-                  <div className="px-5 sm:px-6 py-8 sm:py-10 flex flex-col gap-4">
-                    {/* Texte du mémorial */}
-                    <div className="text-center">
-                      <p className="text-[13px] sm:text-[14px] tracking-[0.15em] text-[#B79A5B] italic font-light drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-                        A tribute to elegance
-                      </p>
-                      <p className="text-[16px] sm:text-[18px] tracking-[0.12em] text-[#f0c9e1] font-semibold mt-2 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-                        KSENIA
-                      </p>
-                      <p className="text-[12px] sm:text-[13px] tracking-[0.16em] text-[#B79A5B]/80 mt-3 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-                        1987 — 2025
-                      </p>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="w-10 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent mx-auto" />
-
-                    {/* Inspiration text */}
-                    <p className="text-[11px] sm:text-[12px] leading-relaxed text-[#f0c9e1]/75 text-center italic">
-                      "La beauté est une célébration de l'âme."
-                    </p>
-
-                    {/* Lien Milele avec bulle interactive */}
-                    <div className="relative group">
-                      <a
-                        href="https://www.milele4ever.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-[12px] tracking-[0.15em] text-[#B79A5B] hover:text-[#f0c9e1] transition-colors rounded-lg border border-[#B79A5B]/30 hover:border-[#B79A5B]/60 bg-[#B79A5B]/5 hover:bg-[#B79A5B]/10"
-                        onMouseEnter={() => setShowMileleTooltip(true)}
-                        onMouseLeave={() => setShowMileleTooltip(false)}
-                        onClick={() => setShowMileleTooltip(!showMileleTooltip)}
-                      >
-                        <Info size={14} />
-                        <span>Célébrer via Milele</span>
-                      </a>
-
-                      {/* Bulle d'information transparente */}
-                      {showMileleTooltip && (
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 z-50 pointer-events-none">
-                          <div
-                            className="relative bg-[#080508]/70 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-[#B79A5B]/30 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
-                            style={{
-                              minWidth: "280px",
-                              maxWidth: "320px",
-                              WebkitBackdropFilter: "blur(10px)",
-                            }}
-                          >
-                            {/* Contenu de la bulle */}
-                            <div className="space-y-3">
-                              <p className="text-[12px] sm:text-[13px] leading-[1.5] text-[#f0c9e1]">
-                                <span className="text-[#B79A5B] font-semibold">Partagez les souvenirs</span> sur <a href="https://www.milele4ever.com" className="text-[#B79A5B] hover:text-[#f0c9e1] underline font-medium" target="_blank" rel="noopener noreferrer">www.milele4ever.com</a>
-                              </p>
-                              <p className="text-[11px] sm:text-[12px] leading-[1.5] text-[#f0c9e1]/75">
-                                <span className="text-[#B79A5B] font-semibold">Milele</span> vous permet de célébrer une vie, partager des photos et des histoires, et créer un espace d'amour éternel.
-                              </p>
-                            </div>
-                            {/* Pointe de la bulle */}
-                            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-[#080508]/70" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -420,14 +351,6 @@ export default function Home() {
       <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-6 pb-6 border-b border-[#B79A5B]/[0.08]">
-            {/* Staff Link */}
-            <Link
-              href="/staff"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#B79A5B]/10 border border-[#B79A5B]/30 rounded-lg text-[#B79A5B] hover:bg-[#B79A5B]/20 transition-all text-sm font-medium"
-            >
-              <span>⚙️</span> Staff Access
-            </Link>
-
             <div className="text-center text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.08em]">
               <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
             </div>
@@ -439,9 +362,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {isClient && <DesktopShortcutInit />}
-      {isClient && <LanguageSwitcher />}
-      {isClient && <ChezmissAide />}
     </main>
   );
 }
