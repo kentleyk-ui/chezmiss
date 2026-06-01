@@ -101,10 +101,10 @@ export function SocialLinksElite() {
             className="group"
           >
             <div
-              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-105 shadow-sm`}
-              style={{ background: social.color.includes("to") ? undefined : social.color }}
+              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-105 shadow-sm border border-white/6`}
+              style={{ background: 'transparent', color: '#B79A5B' }}
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 text-white">
+              <div className="w-8 h-8 sm:w-10 sm:h-10">
                 {social.icon}
               </div>
             </div>
