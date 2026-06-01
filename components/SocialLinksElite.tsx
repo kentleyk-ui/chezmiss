@@ -14,9 +14,7 @@ interface SocialLink {
 const SocialIcons = {
   instagram: (
     <svg viewBox="0 0 24 24" className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <rect width="24" height="24" rx="6" fill="#E1306C" />
-      <path d="M12 7.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6zm0 7.8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#fff" />
-      <circle cx="17.5" cy="6.5" r="1" fill="#fff" />
+      <path fill="currentColor" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
     </svg>
   ),
   facebook: (
@@ -26,10 +24,7 @@ const SocialIcons = {
   ),
   tiktok: (
     <svg viewBox="0 0 24 24" className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <rect width="24" height="24" rx="6" fill="#000" />
-      <path d="M14.5 7.5c-1.2 0-2.2-.9-2.2-2V6H10v7.6a4.6 4.6 0 1 1-2-3.8V8.4a6.6 6.6 0 1 0 4 5.9V8.4c.6.5 1.4.8 2.2.8V7.5z" fill="#fff" />
-      <path d="M16 6.5v5.2a3.2 3.2 0 1 1-3.2-3.2V8.8c.5 0 1-.1 1.5-.2V6.5h.7c.4 0 .8.1 1.2.2z" fill="#25F4EE" opacity="0.95" />
-      <path d="M16 6.5v5.2a3.2 3.2 0 1 1-3.2-3.2V8.8c.5 0 1-.1 1.5-.2V6.5h.7c.4 0 .8.1 1.2.2z" fill="#FE2C55" opacity="0.9" transform="translate(0,-0.2)" />
+      <path fill="currentColor" d="M12.5 3v5.6a3.9 3.9 0 1 0 3.9 3.9V6.4h2.1V3h-6z" />
     </svg>
   ),
   linkedin: (
