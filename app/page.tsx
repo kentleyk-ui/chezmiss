@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { LiquidMetalButton } from "@/ui-lib/components/liquid-metal-button";
 import { DesktopShortcutInit } from "@/components/DesktopShortcutInit";
 import { SocialLinksElite } from "@/components/SocialLinksElite";
@@ -213,35 +214,21 @@ export default function Home() {
             {/* BLOC 3 — Photo avec mémorial adapté */}
             <div className="relative w-full sm:w-3/4 mx-auto lg:w-auto flex-shrink-0 lg:justify-self-center order-3">
               <div className="relative flex flex-col justify-center">
-                {/* Photo */}
-                <div
-                  className="relative"
-                  style={{
-                    paddingBottom: "125%",
-                    WebkitMaskImage: [
-                      "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
-                      "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                    ].join(", "),
-                    maskImage: [
-                      "linear-gradient(to right,  transparent 0%, black 14%, black 82%, transparent 100%)",
-                      "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
-                    ].join(", "),
-                    WebkitMaskComposite: "destination-in",
-                    maskComposite: "intersect",
-                  }}
-                >
-                  <Image
-                    src="/Révélez.png"
-                    alt="Révélez votre Élégance"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 300px"
-                    className="object-contain opacity-[0.25]"
-                    style={{ objectPosition: "28% center" }}
-                    priority
-                  />
-                  {/* voile tonal pour harmoniser avec le fond */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-[#1a0d14]/20 via-transparent to-[#080508]/35 pointer-events-none" />
-                </div>
+                    {/* Photo (remplacée par new.PNG) */}
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9 }} className="relative w-full">
+                      <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] lg:aspect-[16/9] overflow-hidden rounded-xl">
+                        <Image
+                          src="/new.PNG"
+                          alt="Révélez votre Élégance"
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 800px"
+                          className="object-cover object-center"
+                          priority
+                        />
+                        {/* voile tonal pour harmoniser avec le fond */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/30 via-transparent to-[#000000]/50 pointer-events-none" />
+                      </div>
+                    </motion.div>
               </div>
             </div>
           </div>
