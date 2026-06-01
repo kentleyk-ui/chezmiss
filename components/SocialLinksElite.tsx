@@ -13,18 +13,10 @@ interface SocialLink {
 
 const SocialIcons = {
   instagram: (
-    <svg viewBox="0 0 48 48" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="igGrad" x1="0" x2="1">
-          <stop offset="0%" stopColor="#f58529" />
-          <stop offset="50%" stopColor="#dd2a7b" />
-          <stop offset="100%" stopColor="#8134af" />
-        </linearGradient>
-      </defs>
-      <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#igGrad)" />
-      <circle cx="24" cy="24" r="9" fill="#fff" opacity="0.12" />
-      <path d="M24 19.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z" fill="#fff" />
-      <circle cx="33" cy="15" r="2" fill="#fff" />
+    <svg viewBox="0 0 24 24" className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#E1306C" />
+      <path d="M12 7.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6zm0 7.8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#fff" />
+      <circle cx="17.5" cy="6.5" r="1" fill="#fff" />
     </svg>
   ),
   facebook: (
@@ -33,10 +25,11 @@ const SocialIcons = {
     </svg>
   ),
   tiktok: (
-    <svg viewBox="0 0 48 48" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-      <path d="M30 10c-1.1 0-2 .9-2 2v8.6c0 3.3-2.7 6-6 6-1.4 0-2.7-.5-3.7-1.4v4.3c1.4 1.1 3.2 1.8 5 1.8 5 0 9-4 9-9V14h3c0-2.8-2.2-5-5-5z" fill="#010101" />
-      <path d="M30 10v2.7a6 6 0 0 0 2 .3v-3a1 1 0 0 0-1-1h-1z" fill="#25F4EE" />
-      <path d="M24 34c-1.4 0-2.7-.5-3.7-1.4v-4.3c1 .8 2.3 1.4 3.7 1.4 3.3 0 6-2.7 6-6V16.8h3c0 5-4 9-9 9-1.4 0-2.7-.5-3.7-1.4V34z" fill="#FE2C55" />
+    <svg viewBox="0 0 24 24" className="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <rect width="24" height="24" rx="6" fill="#000" />
+      <path d="M14.5 7.5c-1.2 0-2.2-.9-2.2-2V6H10v7.6a4.6 4.6 0 1 1-2-3.8V8.4a6.6 6.6 0 1 0 4 5.9V8.4c.6.5 1.4.8 2.2.8V7.5z" fill="#fff" />
+      <path d="M16 6.5v5.2a3.2 3.2 0 1 1-3.2-3.2V8.8c.5 0 1-.1 1.5-.2V6.5h.7c.4 0 .8.1 1.2.2z" fill="#25F4EE" opacity="0.95" />
+      <path d="M16 6.5v5.2a3.2 3.2 0 1 1-3.2-3.2V8.8c.5 0 1-.1 1.5-.2V6.5h.7c.4 0 .8.1 1.2.2z" fill="#FE2C55" opacity="0.9" transform="translate(0,-0.2)" />
     </svg>
   ),
   linkedin: (
@@ -59,25 +52,25 @@ export function SocialLinksElite() {
       icon: SocialIcons.instagram,
       href: "https://www.instagram.com/chezmiss?igsh=Y293ZDU4bDhkeG56",
       label: "Instagram - CHEZ MISS",
-      color: "from-pink-500 via-red-500 to-orange-400",
+      color: "#E1306C",
     },
     {
       icon: SocialIcons.tiktok,
       href: "https://www.tiktok.com/@chezmiss?_r=1&_t=ZS-96prJTENC4H",
       label: "TikTok - CHEZ MISS",
-      color: "from-black via-gray-800 to-black",
+      color: "#000000",
     },
     {
       icon: SocialIcons.instagram,
       href: "https://www.instagram.com/dolls.mafia.official?igsh=MXZhbmNoY3poZ2NiMA==",
       label: "Instagram - Dolls Mafia",
-      color: "from-pink-500 via-red-500 to-orange-400",
+      color: "#E1306C",
     },
     {
       icon: SocialIcons.tiktok,
       href: "https://www.tiktok.com/@dolls.mafia.official?_r=1&_t=ZS-96prX384gZk",
       label: "TikTok - Dolls Mafia",
-      color: "from-black via-gray-800 to-black",
+      color: "#000000",
     },
   ];
 
@@ -110,96 +103,16 @@ export function SocialLinksElite() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={social.label}
-            className="group relative"
-            onMouseEnter={() => setHoveredId(social.label)}
-            onMouseLeave={() => setHoveredId(null)}
+            className="group"
           >
-            {/* Outer Glow Effect */}
-            <motion.div
-              animate={{
-                opacity: hoveredId === social.label ? 1 : 0.4,
-                scale: hoveredId === social.label ? 1.2 : 1,
-              }}
-              transition={{ duration: 0.3 }}
-              className={`absolute -inset-4 rounded-full blur-xl bg-gradient-to-r ${social.color} opacity-30 group-hover:opacity-50 transition-all duration-300`}
-            />
-
-            {/* Main Icon Container */}
             <div
-              className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300`}
-              style={{
-                background: `linear-gradient(135deg, ${social.color.split(" ")[1]}, ${social.color.split(" ")[3]})`,
-              }}
+              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-105 shadow-sm`}
+              style={{ background: social.color.includes("to") ? undefined : social.color }}
             >
-              {/* Animated Background Grid */}
-              <motion.div
-                animate={
-                  hoveredId === social.label
-                    ? { backgroundPosition: ["0% 0%", "100% 100%"] }
-                    : {}
-                }
-                transition={{
-                  duration: 6,
-                  repeat: hoveredId === social.label ? Infinity : 0,
-                  ease: "linear",
-                }}
-                className="absolute inset-0 opacity-20"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)",
-                  backgroundSize: "200% 200%",
-                }}
-              />
-
-              {/* Glass Morphism Layer */}
-              <div className="absolute inset-0 rounded-full backdrop-blur-sm bg-white/5 border border-white/10" />
-
-              {/* Icon Container */}
-              <motion.div
-                animate={{
-                  rotate: hoveredId === social.label ? 360 : 0,
-                }}
-                transition={{ duration: 0.6 }}
-                className="relative z-10 w-7 h-7 sm:w-8 sm:h-8 text-white drop-shadow-lg"
-              >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 text-white">
                 {social.icon}
-              </motion.div>
-
-              {/* Inner Glow */}
-              <div className="absolute inset-2 rounded-full bg-gradient-to-tr from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-              {/* Animated Border */}
-              <motion.div
-                animate={{
-                  opacity: hoveredId === social.label ? [0.3, 0.8, 0.3] : 0.2,
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 rounded-full border-2 border-white/40"
-              />
-
-              {/* Shimmer Effect on Hover */}
-              {hoveredId === social.label && (
-                <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "100%" }}
-                  transition={{ duration: 0.6, repeat: Infinity }}
-                  className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
-                />
-              )}
+              </div>
             </div>
-
-            {/* Label */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{
-                opacity: hoveredId === social.label ? 1 : 0,
-                y: hoveredId === social.label ? 0 : 10,
-              }}
-              transition={{ duration: 0.2 }}
-              className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-xs font-semibold text-[#B79A5B] pointer-events-none"
-            >
-              {social.label}
-            </motion.div>
           </Link>
         </motion.div>
       ))}
