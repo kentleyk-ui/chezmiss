@@ -21,13 +21,10 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showMileleTooltip, setShowMileleTooltip] = useState(false);
   const [isNewsletterLoaded, setIsNewsletterLoaded] = useState(false);
-  const [isContactLoaded, setIsContactLoaded] = useState(false);
   const { t, isClient } = useLanguage();
   const newsletterRef = useRef<HTMLDivElement>(null);
-  const contactRef = useRef<HTMLDivElement>(null);
 
   useLazyLoad(newsletterRef as React.RefObject<HTMLElement>, () => setIsNewsletterLoaded(true));
-  useLazyLoad(contactRef as React.RefObject<HTMLElement>, () => setIsContactLoaded(true));
   
   const navItems = [
     { label: "ACCUEIL", href: "#accueil" },
@@ -309,28 +306,26 @@ export default function Home() {
       </section>
 
       {/* Section Contact */}
-      <section className="relative py-16 sm:py-24" ref={contactRef}>
-        {isContactLoaded && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
-              Nous <span className="text-[#B79A5B]">Contacter</span>
-            </h2>
+      <section className="relative py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
+            Nous <span className="text-[#B79A5B]">Contacter</span>
+          </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { icon: "📧", title: "Email", value: "chezmiss@hotmail.com" },
-                { icon: "📱", title: "Téléphone", value: "+1 (514) 928-6477" },
-                { icon: "📍", title: "Adresse", value: "275, rue Cousineau, Laval, Québec, H7G 3J9" }
-              ].map((contact, i) => (
-                <div key={i} className="text-center">
-                  <div className="text-4xl mb-4">{contact.icon}</div>
-                  <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
-                  <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { icon: "📧", title: "Email", value: "chezmiss@hotmail.com" },
+              { icon: "📱", title: "Téléphone", value: "+1 (514) 928-6477" },
+              { icon: "📍", title: "Adresse", value: "275, rue Cousineau, Laval, Québec, H7G 3J9" }
+            ].map((contact, i) => (
+              <div key={i} className="text-center">
+                <div className="text-4xl mb-4">{contact.icon}</div>
+                <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
+                <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </section>
 
       {/* Social Links Section */}
