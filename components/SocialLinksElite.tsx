@@ -13,10 +13,18 @@ interface SocialLink {
 
 const SocialIcons = {
   instagram: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-full h-full">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" fill="currentColor" />
-      <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" />
+    <svg viewBox="0 0 48 48" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="igGrad" x1="0" x2="1">
+          <stop offset="0%" stopColor="#f58529" />
+          <stop offset="50%" stopColor="#dd2a7b" />
+          <stop offset="100%" stopColor="#8134af" />
+        </linearGradient>
+      </defs>
+      <rect x="2" y="2" width="44" height="44" rx="10" fill="url(#igGrad)" />
+      <circle cx="24" cy="24" r="9" fill="#fff" opacity="0.12" />
+      <path d="M24 19.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9z" fill="#fff" />
+      <circle cx="33" cy="15" r="2" fill="#fff" />
     </svg>
   ),
   facebook: (
@@ -25,8 +33,10 @@ const SocialIcons = {
     </svg>
   ),
   tiktok: (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.1 1.82 2.89 2.89 0 0 1 2.31-4.64 2.88 2.88 0 0 1 .88.13v-3.49a5.88 5.88 0 0 0-1-.1A5.9 5.9 0 0 0 5 12.6a5.9 5.9 0 0 0 5.6 5.9 5.88 5.88 0 0 0 5.77-4.3 5.86 5.86 0 0 0 1.7-4.05v-2.34a7.86 7.86 0 0 0 3.39 1.61v-3.48a4.18 4.18 0 0 1-.6-.05z" />
+    <svg viewBox="0 0 48 48" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30 10c-1.1 0-2 .9-2 2v8.6c0 3.3-2.7 6-6 6-1.4 0-2.7-.5-3.7-1.4v4.3c1.4 1.1 3.2 1.8 5 1.8 5 0 9-4 9-9V14h3c0-2.8-2.2-5-5-5z" fill="#010101" />
+      <path d="M30 10v2.7a6 6 0 0 0 2 .3v-3a1 1 0 0 0-1-1h-1z" fill="#25F4EE" />
+      <path d="M24 34c-1.4 0-2.7-.5-3.7-1.4v-4.3c1 .8 2.3 1.4 3.7 1.4 3.3 0 6-2.7 6-6V16.8h3c0 5-4 9-9 9-1.4 0-2.7-.5-3.7-1.4V34z" fill="#FE2C55" />
     </svg>
   ),
   linkedin: (
@@ -52,16 +62,16 @@ export function SocialLinksElite() {
       color: "from-pink-500 via-red-500 to-orange-400",
     },
     {
-      icon: SocialIcons.instagram,
-      href: "https://www.instagram.com/dolls.mafia.official?igsh=MXZhbmNoY3poZ2NiMA==",
-      label: "Instagram - Dolls Mafia",
-      color: "from-pink-500 via-red-500 to-orange-400",
-    },
-    {
       icon: SocialIcons.tiktok,
       href: "https://www.tiktok.com/@chezmiss?_r=1&_t=ZS-96prJTENC4H",
       label: "TikTok - CHEZ MISS",
       color: "from-black via-gray-800 to-black",
+    },
+    {
+      icon: SocialIcons.instagram,
+      href: "https://www.instagram.com/dolls.mafia.official?igsh=MXZhbmNoY3poZ2NiMA==",
+      label: "Instagram - Dolls Mafia",
+      color: "from-pink-500 via-red-500 to-orange-400",
     },
     {
       icon: SocialIcons.tiktok,
