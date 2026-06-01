@@ -318,9 +318,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { icon: "📧", title: "Email", value: "info@chezmiss.ca" },
-                { icon: "📱", title: "Téléphone", value: "+1 (418) 555-MISS" },
-                { icon: "📍", title: "Adresse", value: "Québec, Canada" }
+                { icon: "📧", title: "Email", value: "chezmiss@hotmail.com" },
+                { icon: "📱", title: "Téléphone", value: "+1 (514) 928-6477" },
+                { icon: "📍", title: "Adresse", value: "275, rue Cousineau, Laval, Québec, H7G 3J9" }
               ].map((contact, i) => (
                 <div key={i} className="text-center">
                   <div className="text-4xl mb-4">{contact.icon}</div>
