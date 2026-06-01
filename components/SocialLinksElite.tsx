@@ -47,33 +47,27 @@ export function SocialLinksElite() {
   const socialLinks: SocialLink[] = [
     {
       icon: SocialIcons.instagram,
-      href: "https://instagram.com/chezmiss",
-      label: "Instagram",
+      href: "https://www.instagram.com/chezmiss?igsh=Y293ZDU4bDhkeG56",
+      label: "Instagram - CHEZ MISS",
       color: "from-pink-500 via-red-500 to-orange-400",
     },
     {
-      icon: SocialIcons.facebook,
-      href: "https://facebook.com/chezmiss",
-      label: "Facebook",
-      color: "from-blue-600 to-blue-800",
+      icon: SocialIcons.instagram,
+      href: "https://www.instagram.com/dolls.mafia.official?igsh=MXZhbmNoY3poZ2NiMA==",
+      label: "Instagram - Dolls Mafia",
+      color: "from-pink-500 via-red-500 to-orange-400",
     },
     {
       icon: SocialIcons.tiktok,
-      href: "https://tiktok.com/chezmiss",
-      label: "TikTok",
+      href: "https://www.tiktok.com/@chezmiss?_r=1&_t=ZS-96prJTENC4H",
+      label: "TikTok - CHEZ MISS",
       color: "from-black via-gray-800 to-black",
     },
     {
-      icon: SocialIcons.linkedin,
-      href: "https://linkedin.com/company/chezmiss",
-      label: "LinkedIn",
-      color: "from-blue-700 to-blue-900",
-    },
-    {
-      icon: SocialIcons.youtube,
-      href: "https://youtube.com/chezmiss",
-      label: "YouTube",
-      color: "from-red-600 to-red-800",
+      icon: SocialIcons.tiktok,
+      href: "https://www.tiktok.com/@dolls.mafia.official?_r=1&_t=ZS-96prX384gZk",
+      label: "TikTok - Dolls Mafia",
+      color: "from-black via-gray-800 to-black",
     },
   ];
 
