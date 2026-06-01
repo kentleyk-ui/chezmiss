@@ -122,24 +122,32 @@ export default function Home() {
         {/* Mobile menu — full overlay avec grands touch targets */}
         {mobileMenuOpen && (
           <div className="lg:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-2xl border-b border-[#B79A5B]/[0.15] shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
-            <nav className="flex flex-col items-center gap-2 py-8 px-6">
+            <nav className="flex flex-col items-center gap-3 py-8 px-5">
               {navItems.map((item) => (
-                <a 
-                  key={item.label} 
+                <Link
+                  key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full flex justify-center py-1 touch-manipulation"
+                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#10050d]/95 px-5 py-4 text-center text-sm font-semibold tracking-[0.22em] uppercase text-[#f0c9e1] transition hover:bg-[#B79A5B]/10 active:bg-[#B79A5B]/15 touch-manipulation"
                 >
-                  <LiquidMetalButton label={item.label} />
-                </a>
-              ))}
-              <div className="mt-4 w-16 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/30 to-transparent" />
-              <div className="flex flex-col items-center gap-2 mt-4 w-full">
-                <Link href="/signin" className="w-full flex justify-center" onClick={() => setMobileMenuOpen(false)}>
-                  <LiquidMetalButton label="Se connecter" />
+                  {item.label}
                 </Link>
-                <Link href="/signup" className="w-full flex justify-center" onClick={() => setMobileMenuOpen(false)}>
-                  <LiquidMetalButton label="Créer un compte" />
+              ))}
+              <div className="mt-4 w-20 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/30 to-transparent" />
+              <div className="flex flex-col items-center gap-3 mt-4 w-full">
+                <Link
+                  href="/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#B79A5B]/[0.12] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition hover:bg-[#B79A5B]/20 active:bg-[#B79A5B]/25 touch-manipulation"
+                >
+                  Se connecter
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#B79A5B]/[0.08] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition hover:bg-[#B79A5B]/15 active:bg-[#B79A5B]/20 touch-manipulation"
+                >
+                  Créer un compte
                 </Link>
               </div>
               <p className="text-[10px] tracking-[0.25em] text-[#f0c9e1]/25 mt-4">CHEZ MISS</p>
