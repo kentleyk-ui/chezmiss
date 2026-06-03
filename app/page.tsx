@@ -11,7 +11,8 @@ import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Crown, Truck, Lock, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Info } from "lucide-react";
+import { DiamondIcon, CrownIcon, TruckIcon, LockIcon } from "@/components/RealisticIcons";
+import { ScanSearch, Menu, X } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -35,10 +36,10 @@ export default function Home() {
   ];
 
   const values = [
-    { icon: Diamond, title: "QUALITE SUPERIEURE", description: "Des ingrédients haut de gamme pour des résultats exceptionnels et professionnels.", number: "01" },
-    { icon: Crown, title: "EXPERTISE & PASSION", description: "Des produits élaborés par des experts passionnés pour mettre en lumière la splendeur de la beauté.", number: "02" },
-    { icon: Truck, title: "LIVRAISON RAPIDE", description: "Livraison rapide partout au canada, efficace et sécuritaire. (des frais additionnels peuvent s'appliquer dans certains cas)", number: "03" },
-    { icon: Lock, title: "SATISFAIT OU REMBOURSE", description: "Paiement sécurisé, Transaction 100% chiffrés de bout en bout, Modes de paiements sûrs et protégés.", number: "04" },
+    { icon: DiamondIcon, title: "QUALITE SUPERIEURE", description: "Des ingrédients haut de gamme pour des résultats exceptionnels et professionnels.", number: "01" },
+    { icon: CrownIcon, title: "EXPERTISE & PASSION", description: "Des produits élaborés par des experts passionnés pour mettre en lumière la splendeur de la beauté.", number: "02" },
+    { icon: TruckIcon, title: "LIVRAISON RAPIDE", description: "Livraison rapide partout au canada, efficace et sécuritaire. (des frais additionnels peuvent s'appliquer dans certains cas)", number: "03" },
+    { icon: LockIcon, title: "SATISFAIT OU REMBOURSE", description: "Paiement sécurisé, Transaction 100% chiffrés de bout en bout, Modes de paiements sûrs et protégés.", number: "04" },
   ];
 
   const products = [
@@ -480,7 +481,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-br from-[#B79A5B]/0 via-transparent to-[#B79A5B]/0 group-hover:from-[#B79A5B]/5 group-hover:to-[#B79A5B]/5 transition-all duration-500" />
 
                   <div className="absolute top-4 right-4 text-[#B79A5B]/15 text-3xl font-light">{value.number}</div>
-                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-125 group-hover:text-[#d4a574] transition-all duration-400" />
+                  <Icon className="w-12 h-12 text-[#B79A5B] mb-4 group-hover:scale-125 transition-all duration-400" />
                   <h4 className="text-[#B79A5B] font-semibold mb-3 text-sm tracking-[0.15em] uppercase">{value.title}</h4>
                   <p className="text-[#f0c9e1]/75 text-xs leading-relaxed group-hover:text-[#f0c9e1] transition-colors duration-300">{value.description}</p>
 
