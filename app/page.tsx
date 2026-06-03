@@ -240,10 +240,10 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full pt-8 sm:pt-12 pb-8 flex flex-col gap-8 sm:gap-10">
           {/* TITRE COLLECTION */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
-            <p className="text-[11px] sm:text-[12px] uppercase tracking-[0.4em] text-[#B79A5B] mb-3 font-medium">
+            <p className="text-[9px] sm:text-[11px] lg:text-[12px] uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[#B79A5B]/60 mb-2 sm:mb-3 font-medium">
               Présentation des nouveaux produits
             </p>
-            <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-light uppercase tracking-[0.12em] text-[#f8edf3] drop-shadow-[0_2px_20px_rgba(0,0,0,0.32)]">
+            <h2 className="text-[clamp(1.4rem,4vw,2.6rem)] font-light uppercase tracking-[0.08em] sm:tracking-[0.12em] text-[#f8edf3] drop-shadow-[0_2px_20px_rgba(0,0,0,0.32)]">
               Notre toute nouvelle collection
             </h2>
           </motion.div>
@@ -504,7 +504,7 @@ export default function Home() {
             className="max-w-2xl mx-auto px-4 sm:px-6 text-center"
           >
             <h2 className="text-4xl sm:text-5xl font-light text-[#f0c9e1] mb-4 tracking-[0.05em]">
-              Restez <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Connectée</span>
+              Restez <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Connecté</span>
             </h2>
             <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-10 leading-relaxed">
               Inscrivez-vous à notre infolettre pour recevoir les dernières tendances beauté et offres exclusives.
