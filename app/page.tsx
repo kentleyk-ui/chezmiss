@@ -53,12 +53,32 @@ export default function Home() {
     <main className="cm-marble cm-page-enter min-h-screen text-[#f8edf3] overflow-x-hidden">
 
       {/* TOP STRIP */}
-      <div className="relative z-30 border-b border-[#B79A5B]/20 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/10 to-[#1a0a12] text-center text-[11px] sm:text-[13px] tracking-[0.18em] sm:tracking-[0.28em] py-2 sm:py-2.5 text-[#f0c9e1] font-medium">
+      <div className="relative z-30 border-b border-[#B79A5B]/25 bg-gradient-to-r from-[#1a0a12] via-[#f0c9e1]/8 to-[#1a0a12] text-center text-[11px] sm:text-[13px] tracking-[0.22em] sm:tracking-[0.32em] py-3 sm:py-3.5 text-[#f0c9e1]/95 font-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-center overflow-hidden">
-          <span className="inline-flex items-center gap-2 sm:gap-3">
-            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-r from-transparent to-[#B79A5B]/60" />
+          <span className="inline-flex items-center gap-3 sm:gap-4">
+            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/50 to-transparent" />
             <span className="whitespace-nowrap">ACT LIKE A LADY</span>
-            <span className="relative w-5 h-5 sm:w-7 sm:h-7 rounded-full overflow-hidden border border-[#B79A5B]/55 shadow-[0_0_12px_rgba(183,154,91,0.22)] flex-shrink-0">
+
+            {/* Animated Eyes Ball */}
+            <motion.span
+              className="relative w-5 h-5 sm:w-7 sm:h-7 rounded-full overflow-hidden flex-shrink-0 cursor-pointer"
+              style={{
+                border: "1px solid rgba(183,154,91,0.6)",
+                boxShadow: "0 0 16px rgba(183,154,91,0.2), inset 0 0 12px rgba(240,201,225,0.08)"
+              }}
+              animate={{
+                y: [0, -4, 0],
+                rotateZ: [0, 360]
+              }}
+              transition={{
+                y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                rotateZ: { duration: 8, repeat: Infinity, ease: "linear" }
+              }}
+              whileHover={{
+                scale: 1.2,
+                boxShadow: "0 0 24px rgba(183,154,91,0.4), inset 0 0 16px rgba(240,201,225,0.15)"
+              }}
+            >
               <Image
                 src="/eyes.png.jpeg"
                 alt="Eyes accent"
@@ -67,26 +87,44 @@ export default function Home() {
                 className="object-cover object-center"
                 priority
               />
-              <span className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/20 via-transparent to-[#080508]/40" />
-            </span>
+              <span className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/25 via-transparent to-[#080508]/45" />
+              {/* Glow effect */}
+              <motion.span
+                className="absolute inset-0 rounded-full"
+                animate={{
+                  boxShadow: [
+                    "inset 0 0 8px rgba(240,201,225,0.1)",
+                    "inset 0 0 16px rgba(240,201,225,0.2)",
+                    "inset 0 0 8px rgba(240,201,225,0.1)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+            </motion.span>
+
             <span className="whitespace-nowrap">LASH LIKE A BOSS</span>
-            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-l from-transparent to-[#B79A5B]/60" />
+            <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-l from-transparent via-[#B79A5B]/50 to-transparent" />
           </span>
         </div>
       </div>
 
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/[0.10] bg-black/70 backdrop-blur-2xl">
+      <header className="sticky top-0 z-50 border-b border-[#B79A5B]/15 bg-black/80 backdrop-blur-3xl">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 lg:h-18 flex items-center justify-between gap-2 sm:gap-6 relative overflow-visible">
           <div className="flex items-center gap-3 shrink-0 relative -top-0.5 sm:-top-1 pl-0.5">
-            <Image
-              src="/logo-chezmiss.png"
-              alt="CHEZ MISS"
-              width={1528}
-              height={354}
-              priority
-              className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(183,154,91,0.62)]"
-            />
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Image
+                src="/logo-chezmiss.png"
+                alt="CHEZ MISS"
+                width={1528}
+                height={354}
+                priority
+                className="cm-logo-gold h-9 sm:h-12 lg:h-14 w-auto object-contain drop-shadow-[0_0_24px_rgba(183,154,91,0.45)]"
+              />
+            </motion.div>
           </div>
           <nav className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-2">
             {navItems.map((item) => (
@@ -95,19 +133,29 @@ export default function Home() {
               </a>
             ))}
           </nav>
-          
+
           {/* Mobile menu button — 44px touch target */}
-          <button 
+          <motion.button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 active:text-[#B79A5B] active:bg-[#B79A5B]/[0.14] hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] transition-colors mr-auto ml-1 touch-manipulation"
+            className="lg:hidden w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/20 bg-[#B79A5B]/[0.08] text-[#f0c9e1]/60 active:text-[#B79A5B] active:bg-[#B79A5B]/[0.18] hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.12] transition-all duration-300 mr-auto ml-1 touch-manipulation"
             aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={mobileMenuOpen}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          </motion.button>
           <div className="flex items-center gap-2 sm:gap-3">
-            <button type="button" className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/[0.14] bg-[#B79A5B]/[0.05] text-[#f0c9e1]/50 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.10] active:bg-[#B79A5B]/[0.14] transition-colors touch-manipulation" aria-label="Recherche"><ScanSearch size={16} /></button>
+            <motion.button
+              type="button"
+              className="w-11 h-11 grid place-items-center rounded-full border border-[#B79A5B]/20 bg-[#B79A5B]/[0.08] text-[#f0c9e1]/60 hover:text-[#B79A5B] hover:bg-[#B79A5B]/[0.12] active:bg-[#B79A5B]/[0.18] transition-all duration-300 touch-manipulation"
+              aria-label="Recherche"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ScanSearch size={16} />
+            </motion.button>
             <div className="hidden lg:flex items-center gap-2">
               <Link href="/signin">
                 <LiquidMetalButton label="Se connecter" />
@@ -118,17 +166,22 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
+
         {/* Mobile menu — full overlay avec grands touch targets */}
         {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-black/98 backdrop-blur-2xl border-b border-[#B79A5B]/[0.15] shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="lg:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-3xl border-b border-[#B79A5B]/[0.15] shadow-[0_12px_40px_rgba(0,0,0,0.6)]"
+          >
             <nav className="flex flex-col items-center gap-3 py-8 px-5">
               {navItems.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#10050d]/95 px-5 py-4 text-center text-sm font-semibold tracking-[0.22em] uppercase text-[#f0c9e1] transition hover:bg-[#B79A5B]/10 active:bg-[#B79A5B]/15 touch-manipulation"
+                  className="block w-full rounded-3xl border border-[#B79A5B]/25 bg-[#10050d]/95 px-5 py-4 text-center text-sm font-semibold tracking-[0.22em] uppercase text-[#f0c9e1] transition-all duration-300 hover:bg-[#B79A5B]/15 active:bg-[#B79A5B]/20 touch-manipulation"
                 >
                   {item.label}
                 </Link>
@@ -138,21 +191,21 @@ export default function Home() {
                 <Link
                   href="/signin"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#B79A5B]/[0.12] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition hover:bg-[#B79A5B]/20 active:bg-[#B79A5B]/25 touch-manipulation"
+                  className="block w-full rounded-3xl border border-[#B79A5B]/25 bg-[#B79A5B]/[0.15] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition-all duration-300 hover:bg-[#B79A5B]/25 active:bg-[#B79A5B]/30 touch-manipulation"
                 >
                   Se connecter
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full rounded-3xl border border-[#B79A5B]/20 bg-[#B79A5B]/[0.08] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition hover:bg-[#B79A5B]/15 active:bg-[#B79A5B]/20 touch-manipulation"
+                  className="block w-full rounded-3xl border border-[#B79A5B]/25 bg-[#B79A5B]/[0.12] px-5 py-4 text-center text-sm font-semibold text-[#f0c9e1] transition-all duration-300 hover:bg-[#B79A5B]/20 active:bg-[#B79A5B]/25 touch-manipulation"
                 >
                   Créer un compte
                 </Link>
               </div>
-              <p className="text-[10px] tracking-[0.25em] text-[#f0c9e1]/25 mt-4">CHEZ MISS</p>
+              <p className="text-[10px] tracking-[0.28em] text-[#f0c9e1]/30 mt-6 font-light">CHEZ MISS</p>
             </nav>
-          </div>
+          </motion.div>
         )}
       </header>
 
