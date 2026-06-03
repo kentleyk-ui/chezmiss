@@ -35,10 +35,10 @@ export default function Home() {
   ];
 
   const values = [
-    { icon: Diamond, title: "QUALITE SUPERIEURE", description: "Des produits selectionnes avec exigence pour des resultats professionnels.", number: "01" },
-    { icon: Wand2, title: "EXPERTISE & PASSION", description: "Une marque pensee par des experts pour sublimer chaque regard.", number: "02" },
-    { icon: Rocket, title: "LIVRAISON RAPIDE", description: "Expedition rapide et securisee partout en France et en Europe.", number: "03" },
-    { icon: Fingerprint, title: "SATISFAIT OU REMBOURSE", description: "14 jours pour changer d'avis, parce que votre satisfaction est notre priorite.", number: "04" },
+    { icon: Diamond, title: "QUALITE SUPERIEURE", description: "Des ingrédients haut de gamme pour des résultats exceptionnels et professionnels.", number: "01" },
+    { icon: Wand2, title: "EXPERTISE & PASSION", description: "Des produits élaborés par des experts passionnés pour mettre en lumière la splendeur de la beauté.", number: "02" },
+    { icon: Rocket, title: "LIVRAISON RAPIDE", description: "Livraison rapide partout au canada, efficace et sécuritaire. (des frais additionnels peuvent s'appliquer dans certains cas)", number: "03" },
+    { icon: Fingerprint, title: "SATISFAIT OU REMBOURSE", description: "Paiement sécurisé, Transaction 100% chiffrés de bout en bout, Modes de paiements sûrs et protégés.", number: "04" },
   ];
 
   const products = [
@@ -175,179 +175,340 @@ export default function Home() {
             LUXE · BEAUTÉ · CONFIANCE
           </div>
         </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full pt-14 sm:pt-16 pb-8 flex flex-col gap-5 sm:gap-6">
-          {/* RANGÉE 3 BLOCS — sur mobile: titre en premier */}
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-5 sm:gap-6 lg:gap-8 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full pt-8 sm:pt-12 pb-8 flex flex-col gap-8 sm:gap-10">
+          {/* TITRE COLLECTION */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center">
+            <p className="text-[11px] sm:text-[12px] uppercase tracking-[0.4em] text-[#B79A5B] mb-3 font-medium">
+              Présentation des nouveaux produits
+            </p>
+            <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-light uppercase tracking-[0.12em] text-[#f8edf3] drop-shadow-[0_2px_20px_rgba(0,0,0,0.32)]">
+              Notre toute nouvelle collection
+            </h2>
+          </motion.div>
 
-            {/* BLOC 1 — Glace texte */}
-            <div className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/8 lg:max-w-[500px] lg:justify-self-start order-2 lg:order-1"
-              style={{ boxShadow: "0 0 0 1px rgba(183,154,91,0.06), 0 0 50px 24px #080508, 0 0 86px 42px #040204" }}>
-              {/* fond verre */}
-              <div className="absolute inset-0 bg-gradient-to-b from-[#18090f]/75 to-[#0a050a]/85 backdrop-blur-xl" />
-              {/* fond icône à peine visible */}
+          {/* SECTION PRINCIPALE — Photo + Palette + Texte */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-center">
+
+            {/* BLOC GAUCHE — Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="relative order-2 lg:order-1 group lg:col-span-1"
+            >
+              <div className="relative w-full aspect-[3/2] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden rounded-3xl">
+                {/* Bordure dorée fine */}
+                <div className="absolute inset-0 rounded-3xl border border-[#B79A5B]/30 pointer-events-none z-10" />
+
+                {/* Effet de lumière */}
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#B79A5B]/20 via-transparent to-[#f0c9e1]/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />
+
+                <Image
+                  src="/photo.PNG"
+                  alt="Révélez votre Élégance"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  priority
+                />
+
+                {/* Voile tonal avec dégradé */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#B79A5B]/5 via-transparent to-[#080508]/20 pointer-events-none group-hover:via-[#f0c9e1]/5 transition-all duration-700" />
+              </div>
+            </motion.div>
+
+            {/* BLOC CENTRE — Palette texte */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="order-1 lg:order-2 lg:col-span-1 flex flex-col items-center justify-center gap-8"
+            >
+              {/* Palette "Révélez votre Élégance" */}
+              <div className="flex flex-col items-center gap-6">
+                {/* Palette de couleurs */}
+                <div className="flex gap-4">
+                  <motion.div
+                    whileHover={{ scale: 1.15, y: -4 }}
+                    className="w-14 h-14 rounded-full bg-[#B79A5B] shadow-[0_8px_24px_rgba(183,154,91,0.35)] border border-[#B79A5B]/50 cursor-pointer"
+                  />
+                  <motion.div
+                    whileHover={{ scale: 1.15, y: -4 }}
+                    className="w-14 h-14 rounded-full bg-[#f0c9e1] shadow-[0_8px_24px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/40 cursor-pointer"
+                  />
+                  <motion.div
+                    whileHover={{ scale: 1.15, y: -4 }}
+                    className="w-14 h-14 rounded-full bg-[#d4a574] shadow-[0_8px_24px_rgba(212,165,116,0.3)] border border-[#d4a574]/50 cursor-pointer"
+                  />
+                </div>
+
+                {/* Texte script */}
+                <h1 className={`${titleScript.className} font-normal leading-tight tracking-wider text-center`}>
+                  <motion.span
+                    className="block text-[clamp(2.2rem,5vw,3.2rem)] bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                  >
+                    Révélez
+                  </motion.span>
+                  <motion.span
+                    className="block text-[clamp(1.8rem,4.5vw,2.8rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.3)]"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    votre
+                  </motion.span>
+                  <motion.span
+                    className="block text-[clamp(2.2rem,5.5vw,3.4rem)] font-serif bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 }}
+                    style={{ fontFamily: 'Georgia, serif' }}
+                  >
+                    Élégance
+                  </motion.span>
+                </h1>
+              </div>
+            </motion.div>
+
+            {/* BLOC DROIT — Glace texte info */}
+            <motion.div
+              whileHover={{ y: -4 }}
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative rounded-3xl overflow-hidden border border-[#B79A5B]/25 order-3 lg:order-3 lg:col-span-1 backdrop-blur-2xl"
+              style={{ boxShadow: "0 0 0 1px rgba(183,154,91,0.15), inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(183,154,91,0.08)" }}>
+
+              {/* Fond verre avec dégradé subtil */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#18090f]/80 via-[#1a0a12]/85 to-[#0a050a]/90" />
+
+              {/* Reflet haut */}
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/60 to-transparent" />
+
+              {/* Effet lumière */}
+              <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#B79A5B]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+              {/* Logo subtle */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <Image
                   src="/logo-chezmiss-enhanced.png"
                   alt=""
                   width={260}
                   height={260}
-                  className="w-[60%] h-auto object-contain opacity-[0.12] select-none"
+                  className="w-[50%] h-auto object-contain opacity-[0.08] select-none"
                   aria-hidden
                 />
               </div>
-              {/* reflet haut */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/45 to-transparent" />
-              {/* texte justifié */}
-              <div className="relative z-10 px-5 sm:px-7 py-6 sm:py-9 flex flex-col gap-3 sm:gap-4">
-                <p className="text-[13px] sm:text-[13.5px] leading-[1.7] sm:leading-[1.75] text-[#f0c9e1] text-justify">
-                  <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre autant aux exigences des professionnelles en salon, qu'aux clientes à domicile.
+
+              {/* Contenu texte */}
+              <div className="relative z-10 px-6 sm:px-8 py-7 sm:py-10 flex flex-col gap-4 sm:gap-5">
+                <p className="text-[13px] sm:text-[14px] leading-[1.8] sm:leading-[1.85] text-[#f0c9e1] text-justify">
+                  <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre aux exigences des professionnelles et des clientes.
                 </p>
-                <p className="text-[13px] sm:text-[13.5px] leading-[1.7] sm:leading-[1.75] text-[#f0c9e1] italic text-justify">
-                  <span className="text-[#B79A5B]/92">Vous le constaterez.</span> Les résultats parlent d'eux-mêmes.
+                <p className="text-[13px] sm:text-[14px] leading-[1.8] text-[#f0c9e1] italic">
+                  <span className="text-[#d4a574] font-medium">Les résultats parlent d'eux-mêmes.</span>
                 </p>
               </div>
-              {/* fondu bas */}
-              <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#080508] to-transparent" />
-            </div>
 
-            {/* BLOC 2 — Titre script */}
-            <div className="flex items-center justify-center px-2 sm:px-4 lg:px-6 order-1 lg:order-2">
-              <h1 className={`${titleScript.className} font-normal leading-[0.84] tracking-[0.01em] text-center`}>
-                <span className="block text-[clamp(3.2rem,8vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(183,154,91,0.45)]">Révélez</span>
-                <span className="block text-[clamp(2.8rem,7vw,4.6rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.30)]">votre</span>
-                <span className="block text-[clamp(3.2rem,8vw,5.4rem)] text-[#B79A5B]/95 drop-shadow-[0_2px_20px_rgba(183,154,91,0.45)]">Élégance</span>
-              </h1>
-            </div>
-
-            {/* BLOC 3 — Photo avec mémorial adapté */}
-            <div className="relative w-full sm:w-3/4 mx-auto lg:w-auto flex-shrink-0 lg:justify-self-center order-3">
-              <div className="relative flex flex-col justify-center">
-                    {/* Photo (remplacée par new.PNG) */}
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.9 }} className="relative w-full">
-                      <div className="relative w-full aspect-[4/3] sm:aspect-[3/2] lg:aspect-[16/9] overflow-hidden rounded-xl">
-                        <Image
-                          src="/new.PNG"
-                          alt="Révélez votre Élégance"
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 800px"
-                          className="object-cover object-center"
-                          priority
-                        />
-                        {/* voile tonal pour harmoniser avec le fond */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/30 via-transparent to-[#000000]/50 pointer-events-none" />
-                      </div>
-                    </motion.div>
-              </div>
-            </div>
+              {/* Fondu bas */}
+              <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#080508] via-[#080508]/50 to-transparent" />
+            </motion.div>
           </div>
 
         </div>
+
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[#f0c9e1]/22 text-[9px] tracking-[0.2em]">
           <div className="w-px h-12 bg-gradient-to-b from-transparent to-[#B79A5B]/40 animate-pulse" />
         </div>
       </section>
 
+
       {/* NOS VALEURS SECTION */}
-      <section className="relative py-16 sm:py-24">
+      <section className="relative py-20 sm:py-28 bg-gradient-to-b from-[#080508]/50 via-[#0d0810] to-[#080508] border-t border-b border-[#B79A5B]/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-light text-[#f0c9e1]">
-              Nos <span className="text-[#B79A5B]">Valeurs</span>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <p className="text-[11px] sm:text-[12px] uppercase tracking-[0.4em] text-[#B79A5B] mb-4 font-medium">
+              Fondamentaux
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] tracking-[0.08em]">
+              Nos <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Valeurs</span>
             </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {values.map((value, i) => {
               const Icon = value.icon;
               return (
-                <div
+                <motion.div
                   key={i}
-                  className="rounded-xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-[#0d0810]/50 p-6 transition-all duration-300 group relative overflow-hidden hover:bg-[#0d0810]/80 hover:shadow-[0_0_20px_rgba(183,154,91,0.15)]"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(183,154,91,0.2)" }}
+                  className="relative rounded-2xl overflow-hidden border border-[#B79A5B]/20 hover:border-[#B79A5B]/60 bg-gradient-to-br from-[#0d0810] via-[#0d0810]/80 to-[#080508] p-7 transition-all duration-500 group backdrop-blur-sm"
+                  style={{
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.2)"
+                  }}
                 >
-                  <div className="absolute top-4 right-4 text-[#B79A5B]/20 text-2xl font-light">{value.number}</div>
-                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-110 transition-transform duration-300" />
-                  <h4 className="text-[#B79A5B] font-semibold mb-2 text-sm tracking-wider">{value.title}</h4>
-                  <p className="text-[#f0c9e1]/70 text-xs leading-relaxed">{value.description}</p>
-                </div>
+                  {/* Effet lumière hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#B79A5B]/0 via-transparent to-[#B79A5B]/0 group-hover:from-[#B79A5B]/5 group-hover:to-[#B79A5B]/5 transition-all duration-500" />
+
+                  <div className="absolute top-4 right-4 text-[#B79A5B]/15 text-3xl font-light">{value.number}</div>
+                  <Icon className="w-8 h-8 text-[#B79A5B] mb-4 group-hover:scale-125 group-hover:text-[#d4a574] transition-all duration-400" />
+                  <h4 className="text-[#B79A5B] font-semibold mb-3 text-sm tracking-[0.15em] uppercase">{value.title}</h4>
+                  <p className="text-[#f0c9e1]/75 text-xs leading-relaxed group-hover:text-[#f0c9e1] transition-colors duration-300">{value.description}</p>
+
+                  {/* Bordure dorée subtle au bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent group-hover:via-[#B79A5B]/80 transition-all duration-500" />
+                </motion.div>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section className="relative py-16 sm:py-24 bg-gradient-to-r from-[#B79A5B]/5 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/20" ref={newsletterRef}>
+      <section className="relative py-20 sm:py-28 bg-gradient-to-r from-[#B79A5B]/8 via-transparent to-[#f0c9e1]/5 border-y border-[#B79A5B]/25" ref={newsletterRef}>
         {isNewsletterLoaded && (
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
-            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] mb-4">
-              Restez <span className="text-[#B79A5B]">Connectée</span>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="max-w-2xl mx-auto px-4 sm:px-6 text-center"
+          >
+            <h2 className="text-4xl sm:text-5xl font-light text-[#f0c9e1] mb-4 tracking-[0.05em]">
+              Restez <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Connectée</span>
             </h2>
-            <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-8">
+            <p className="text-sm sm:text-base text-[#f0c9e1]/70 mb-10 leading-relaxed">
               Inscrivez-vous à notre infolettre pour recevoir les dernières tendances beauté et offres exclusives.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
+            <div className="flex flex-col sm:flex-row gap-4 mb-6">
+              <motion.input
+                whileFocus={{ scale: 1.02 }}
                 type="email"
                 placeholder="votre@email.com"
-                className="flex-1 px-4 py-3 bg-[#1a1320] border border-[#B79A5B]/30 rounded-lg text-[#f0c9e1] text-sm focus:border-[#B79A5B] outline-none transition-colors"
+                className="flex-1 px-5 py-4 bg-gradient-to-r from-[#1a1320] to-[#1a1320]/95 border border-[#B79A5B]/40 rounded-xl text-[#f0c9e1] text-sm focus:border-[#B79A5B]/80 focus:shadow-[0_0_20px_rgba(183,154,91,0.2)] outline-none transition-all duration-300 font-light"
               />
-              <LiquidMetalButton label="S'ABONNER" />
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <LiquidMetalButton label="S'ABONNER" />
+              </motion.div>
             </div>
 
-            <p className="text-xs text-[#f0c9e1]/50 mt-4">
+            <p className="text-xs text-[#f0c9e1]/50">
               Nous respectons votre vie privée. Désabonnez-vous à tout moment.
             </p>
-          </div>
+          </motion.div>
         )}
       </section>
 
       {/* Section Contact */}
-      <section className="relative py-16 sm:py-24">
+      <section className="relative py-20 sm:py-28 bg-gradient-to-b from-[#080508] via-[#0d0810] to-[#080508] border-t border-[#B79A5B]/15">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl font-light text-center text-[#f0c9e1] mb-12">
-            Nous <span className="text-[#B79A5B]">Contacter</span>
-          </h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <p className="text-[11px] sm:text-[12px] uppercase tracking-[0.4em] text-[#B79A5B] mb-4 font-medium">
+              Nous rejoindre
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-light text-[#f0c9e1] tracking-[0.08em]">
+              Nous <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Contacter</span>
+            </h2>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: "📧", title: "Email", value: "chezmiss@hotmail.com" },
+              { icon: "📧", title: "Email", value: "chezmiss@gmail.com" },
               { icon: "📱", title: "Téléphone", value: "+1 (514) 928-6477" },
-              { icon: "📍", title: "Adresse", value: "275, rue Cousineau, Laval, Québec, H7G 3J9" }
+              { icon: "📍", title: "Adresse", value: "Laval, Québec, Canada" }
             ].map((contact, i) => (
-              <div key={i} className="text-center">
-                <div className="text-4xl mb-4">{contact.icon}</div>
-                <h3 className="text-[#B79A5B] font-semibold mb-2">{contact.title}</h3>
-                <p className="text-[#f0c9e1]/70 text-sm">{contact.value}</p>
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="relative text-center p-8 rounded-2xl border border-[#B79A5B]/20 hover:border-[#B79A5B]/50 bg-gradient-to-br from-[#0d0810] via-[#0d0810]/80 to-[#080508] group overflow-hidden transition-all duration-500 backdrop-blur-sm"
+                style={{
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.2)"
+                }}
+              >
+                {/* Effet lumière */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#B79A5B]/0 to-transparent group-hover:from-[#B79A5B]/8 transition-all duration-500" />
+
+                <motion.div
+                  className="text-5xl mb-4 group-hover:scale-125 transition-transform duration-300"
+                  whileHover={{ rotate: 10 }}
+                >
+                  {contact.icon}
+                </motion.div>
+                <h3 className="text-[#B79A5B] font-semibold mb-3 text-sm tracking-[0.15em] uppercase">{contact.title}</h3>
+                <p className="text-[#f0c9e1]/75 text-sm group-hover:text-[#f0c9e1] transition-colors duration-300 font-light">{contact.value}</p>
+
+                {/* Bordure dorée */}
+                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/40 to-transparent group-hover:via-[#B79A5B]/80 transition-all duration-500" />
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Social Links Section */}
-      <section className="border-t border-[#B79A5B]/[0.08] py-12 sm:py-16 bg-gradient-to-b from-[#080508] to-[#0d0810]">
+      <section className="border-t border-[#B79A5B]/15 py-16 sm:py-20 bg-gradient-to-b from-[#080508] via-[#0a050a] to-[#050304]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[#f0c9e1] mb-2">
-              Nous <span className="text-[#B79A5B]">Suivre</span>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl sm:text-3xl font-light text-[#f0c9e1] mb-2 tracking-[0.06em]">
+              Nous <span className="font-serif text-[#B79A5B]" style={{ fontFamily: 'Georgia, serif' }}>Suivre</span>
             </h2>
             <p className="text-[#f0c9e1]/60 text-sm">Retrouvez CHEZ MISS sur les réseaux sociaux</p>
-          </div>
+          </motion.div>
 
           {/* Social Links */}
           <SocialLinksElite />
         </div>
       </section>
 
-      <footer className="border-t border-[#B79A5B]/[0.08] py-8 sm:py-10">
+      <footer className="border-t border-[#B79A5B]/20 py-10 sm:py-12 bg-gradient-to-b from-[#050304] via-[#080508] to-[#000000]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-4 mb-6 pb-6 border-b border-[#B79A5B]/[0.08]">
-            <div className="text-center text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.08em]">
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-6 pb-8 border-b border-[#B79A5B]/15">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center sm:text-left text-[11px] sm:text-[12px] text-[#f0c9e1]/40 tracking-[0.12em] font-light"
+            >
               <span>&copy; 2026 CHEZ MISS. Tous droits réservés.</span>
-            </div>
+            </motion.div>
 
-            <div className="text-right text-[11px] sm:text-[13px] text-[#f0c9e1]/30 tracking-[0.12em]">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-center sm:text-right text-[11px] sm:text-[12px] text-[#f0c9e1]/40 tracking-[0.15em] font-light"
+            >
               <span>QUÉBEC · CANADA</span>
-            </div>
+            </motion.div>
           </div>
         </div>
       </footer>
