@@ -201,7 +201,7 @@ export default function Home() {
                 {/* Palette "Révélez votre Élégance" */}
                 <div className="flex flex-col items-center gap-6">
                   {/* Palette de couleurs */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-2.5">
                     <motion.div
                       whileHover={{ scale: 1.3, y: -6 }}
                       animate={{
@@ -212,7 +212,7 @@ export default function Home() {
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity }}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B79A5B] to-[#9d7e47] shadow-[0_8px_20px_rgba(183,154,91,0.35)] border border-[#B79A5B]/60 cursor-pointer relative overflow-hidden group"
+                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B79A5B] to-[#9d7e47] shadow-[0_8px_20px_rgba(183,154,91,0.35)] border border-[#B79A5B]/60 cursor-pointer relative overflow-hidden group"
                     >
                       <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
                       <div className="absolute inset-1 rounded-full border border-white/30" />
@@ -228,7 +228,7 @@ export default function Home() {
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f0c9e1] to-[#e8b8d0] shadow-[0_8px_20px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/50 cursor-pointer relative overflow-hidden"
+                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f0c9e1] to-[#e8b8d0] shadow-[0_8px_20px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/50 cursor-pointer relative overflow-hidden"
                     >
                       <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/25 to-transparent" />
                       <div className="absolute inset-1 rounded-full border border-white/40" />
@@ -244,7 +244,7 @@ export default function Home() {
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c89463] shadow-[0_8px_20px_rgba(212,165,116,0.3)] border border-[#d4a574]/60 cursor-pointer relative overflow-hidden"
+                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c89463] shadow-[0_8px_20px_rgba(212,165,116,0.3)] border border-[#d4a574]/60 cursor-pointer relative overflow-hidden"
                     >
                       <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/22 to-transparent" />
                       <div className="absolute inset-1 rounded-full border border-white/35" />
