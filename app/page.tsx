@@ -201,19 +201,54 @@ export default function Home() {
                 {/* Palette "Révélez votre Élégance" */}
                 <div className="flex flex-col items-center gap-6">
                   {/* Palette de couleurs */}
-                  <div className="flex gap-4">
+                  <div className="flex gap-3">
                     <motion.div
-                      whileHover={{ scale: 1.15, y: -4 }}
-                      className="w-14 h-14 rounded-full bg-[#B79A5B] shadow-[0_8px_24px_rgba(183,154,91,0.35)] border border-[#B79A5B]/50 cursor-pointer"
-                    />
+                      whileHover={{ scale: 1.3, y: -6 }}
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(183,154,91,0.4), 0 0 40px rgba(183,154,91,0.2)",
+                          "0 0 30px rgba(183,154,91,0.6), 0 0 60px rgba(183,154,91,0.3)",
+                          "0 0 20px rgba(183,154,91,0.4), 0 0 40px rgba(183,154,91,0.2)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B79A5B] to-[#9d7e47] shadow-[0_8px_20px_rgba(183,154,91,0.35)] border border-[#B79A5B]/60 cursor-pointer relative overflow-hidden group"
+                    >
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
+                      <div className="absolute inset-1 rounded-full border border-white/30" />
+                    </motion.div>
+
                     <motion.div
-                      whileHover={{ scale: 1.15, y: -4 }}
-                      className="w-14 h-14 rounded-full bg-[#f0c9e1] shadow-[0_8px_24px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/40 cursor-pointer"
-                    />
+                      whileHover={{ scale: 1.3, y: -6 }}
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(240,201,225,0.3), 0 0 40px rgba(240,201,225,0.15)",
+                          "0 0 30px rgba(240,201,225,0.5), 0 0 60px rgba(240,201,225,0.25)",
+                          "0 0 20px rgba(240,201,225,0.3), 0 0 40px rgba(240,201,225,0.15)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
+                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#f0c9e1] to-[#e8b8d0] shadow-[0_8px_20px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/50 cursor-pointer relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/25 to-transparent" />
+                      <div className="absolute inset-1 rounded-full border border-white/40" />
+                    </motion.div>
+
                     <motion.div
-                      whileHover={{ scale: 1.15, y: -4 }}
-                      className="w-14 h-14 rounded-full bg-[#d4a574] shadow-[0_8px_24px_rgba(212,165,116,0.3)] border border-[#d4a574]/50 cursor-pointer"
-                    />
+                      whileHover={{ scale: 1.3, y: -6 }}
+                      animate={{
+                        boxShadow: [
+                          "0 0 20px rgba(212,165,116,0.35), 0 0 40px rgba(212,165,116,0.18)",
+                          "0 0 30px rgba(212,165,116,0.55), 0 0 60px rgba(212,165,116,0.3)",
+                          "0 0 20px rgba(212,165,116,0.35), 0 0 40px rgba(212,165,116,0.18)"
+                        ]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                      className="w-10 h-10 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c89463] shadow-[0_8px_20px_rgba(212,165,116,0.3)] border border-[#d4a574]/60 cursor-pointer relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/22 to-transparent" />
+                      <div className="absolute inset-1 rounded-full border border-white/35" />
+                    </motion.div>
                   </div>
 
                   {/* Texte script */}
@@ -292,14 +327,14 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* RANGÉE BASSE — Photo (centrée) */}
+            {/* RANGÉE BASSE — Photo (centrée et agrandie) */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative mx-auto w-full max-w-2xl group"
+              className="relative w-full mx-auto group"
             >
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2/1] overflow-hidden rounded-3xl">
+              <div className="relative w-full aspect-[16/9] sm:aspect-[20/10] lg:aspect-[24/10] overflow-hidden rounded-3xl">
                 {/* Bordure dorée fine */}
                 <div className="absolute inset-0 rounded-3xl border border-[#B79A5B]/30 pointer-events-none z-10" />
 
@@ -310,7 +345,7 @@ export default function Home() {
                   src="/photo.PNG"
                   alt="Révélez votre Élégance"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 900px"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   priority
                 />
