@@ -59,24 +59,23 @@ export default function Home() {
             <span className="hidden xs:block w-8 sm:w-10 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/50 to-transparent" />
             <span className="whitespace-nowrap">ACT LIKE A LADY</span>
 
-            {/* Animated Eyes Ball */}
+            {/* Animated Eyes Ball — Futuristic Luxury */}
             <motion.span
               className="relative w-5 h-5 sm:w-7 sm:h-7 rounded-full overflow-hidden flex-shrink-0 cursor-pointer"
               style={{
-                border: "1px solid rgba(183,154,91,0.6)",
-                boxShadow: "0 0 16px rgba(183,154,91,0.2), inset 0 0 12px rgba(240,201,225,0.08)"
+                border: "1.5px solid rgba(183,154,91,0.7)"
               }}
               animate={{
-                y: [0, -4, 0],
+                y: [0, -5, 0],
                 rotateZ: [0, 360]
               }}
               transition={{
                 y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                rotateZ: { duration: 8, repeat: Infinity, ease: "linear" }
+                rotateZ: { duration: 6, repeat: Infinity, ease: "linear" }
               }}
               whileHover={{
-                scale: 1.2,
-                boxShadow: "0 0 24px rgba(183,154,91,0.4), inset 0 0 16px rgba(240,201,225,0.15)"
+                scale: 1.25,
+                boxShadow: "0 0 40px rgba(183,154,91,0.6), 0 0 80px rgba(240,201,225,0.4), inset 0 0 20px rgba(183,154,91,0.3)"
               }}
             >
               <Image
@@ -87,18 +86,27 @@ export default function Home() {
                 className="object-cover object-center"
                 priority
               />
-              <span className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/25 via-transparent to-[#080508]/45" />
-              {/* Glow effect */}
+              {/* Holographic overlay */}
+              <span className="absolute inset-0 bg-gradient-to-br from-[#B79A5B]/30 via-transparent to-[#d4a574]/20" />
+
+              {/* Animated scan lines */}
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-b from-transparent via-[#B79A5B]/40 to-transparent"
+                animate={{ y: [-100, 100] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              />
+
+              {/* Glow breathing effect — luxury futuristic */}
               <motion.span
                 className="absolute inset-0 rounded-full"
                 animate={{
                   boxShadow: [
-                    "inset 0 0 8px rgba(240,201,225,0.1)",
-                    "inset 0 0 16px rgba(240,201,225,0.2)",
-                    "inset 0 0 8px rgba(240,201,225,0.1)"
+                    "inset 0 0 8px rgba(183,154,91,0.25), 0 0 20px rgba(183,154,91,0.35)",
+                    "inset 0 0 16px rgba(183,154,91,0.5), 0 0 40px rgba(183,154,91,0.7)",
+                    "inset 0 0 8px rgba(183,154,91,0.25), 0 0 20px rgba(183,154,91,0.35)"
                   ]
                 }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 2.5, repeat: Infinity }}
               />
             </motion.span>
 
@@ -253,54 +261,72 @@ export default function Home() {
               >
                 {/* Palette "Révélez votre Élégance" */}
                 <div className="flex flex-col items-center gap-6">
-                  {/* Palette de couleurs */}
-                  <div className="flex gap-2.5">
+                  {/* Palette de couleurs — Luxury Futuristic */}
+                  <div className="flex gap-3 relative">
+                    {/* Holographic background */}
+                    <div className="absolute -inset-4 bg-gradient-to-r from-[#B79A5B]/10 via-[#d4a574]/10 to-[#B79A5B]/10 rounded-full blur-2xl" />
+
                     <motion.div
-                      whileHover={{ scale: 1.3, y: -6 }}
+                      whileHover={{ scale: 1.4, y: -8 }}
                       animate={{
                         boxShadow: [
                           "0 0 20px rgba(183,154,91,0.4), 0 0 40px rgba(183,154,91,0.2)",
-                          "0 0 30px rgba(183,154,91,0.6), 0 0 60px rgba(183,154,91,0.3)",
+                          "0 0 35px rgba(183,154,91,0.7), 0 0 60px rgba(183,154,91,0.4)",
                           "0 0 20px rgba(183,154,91,0.4), 0 0 40px rgba(183,154,91,0.2)"
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity }}
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B79A5B] to-[#9d7e47] shadow-[0_8px_20px_rgba(183,154,91,0.35)] border border-[#B79A5B]/60 cursor-pointer relative overflow-hidden group"
+                      className="relative z-10 w-8 h-8 rounded-full bg-gradient-to-br from-[#B79A5B] to-[#9d7e47] border border-[#B79A5B]/70 cursor-pointer overflow-hidden"
                     >
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
-                      <div className="absolute inset-1 rounded-full border border-white/30" />
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/25 to-transparent" />
+                      <div className="absolute inset-0.5 rounded-full border border-[#B79A5B]/50" />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-b from-[#B79A5B]/30 to-transparent"
+                        animate={{ y: [-20, 20] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      />
                     </motion.div>
 
                     <motion.div
-                      whileHover={{ scale: 1.3, y: -6 }}
+                      whileHover={{ scale: 1.4, y: -8 }}
                       animate={{
                         boxShadow: [
-                          "0 0 20px rgba(240,201,225,0.3), 0 0 40px rgba(240,201,225,0.15)",
-                          "0 0 30px rgba(240,201,225,0.5), 0 0 60px rgba(240,201,225,0.25)",
-                          "0 0 20px rgba(240,201,225,0.3), 0 0 40px rgba(240,201,225,0.15)"
+                          "0 0 20px rgba(240,201,225,0.35), 0 0 40px rgba(240,201,225,0.18)",
+                          "0 0 35px rgba(240,201,225,0.6), 0 0 60px rgba(240,201,225,0.35)",
+                          "0 0 20px rgba(240,201,225,0.35), 0 0 40px rgba(240,201,225,0.18)"
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#f0c9e1] to-[#e8b8d0] shadow-[0_8px_20px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/50 cursor-pointer relative overflow-hidden"
+                      className="relative z-10 w-8 h-8 rounded-full bg-gradient-to-br from-[#f0c9e1] to-[#e8b8d0] border border-[#f0c9e1]/60 cursor-pointer overflow-hidden"
                     >
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/25 to-transparent" />
-                      <div className="absolute inset-1 rounded-full border border-white/40" />
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/30 to-transparent" />
+                      <div className="absolute inset-0.5 rounded-full border border-[#f0c9e1]/50" />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-b from-[#f0c9e1]/30 to-transparent"
+                        animate={{ y: [-20, 20] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.5 }}
+                      />
                     </motion.div>
 
                     <motion.div
-                      whileHover={{ scale: 1.3, y: -6 }}
+                      whileHover={{ scale: 1.4, y: -8 }}
                       animate={{
                         boxShadow: [
-                          "0 0 20px rgba(212,165,116,0.35), 0 0 40px rgba(212,165,116,0.18)",
-                          "0 0 30px rgba(212,165,116,0.55), 0 0 60px rgba(212,165,116,0.3)",
-                          "0 0 20px rgba(212,165,116,0.35), 0 0 40px rgba(212,165,116,0.18)"
+                          "0 0 20px rgba(212,165,116,0.4), 0 0 40px rgba(212,165,116,0.2)",
+                          "0 0 35px rgba(212,165,116,0.65), 0 0 60px rgba(212,165,116,0.35)",
+                          "0 0 20px rgba(212,165,116,0.4), 0 0 40px rgba(212,165,116,0.2)"
                         ]
                       }}
                       transition={{ duration: 3, repeat: Infinity, delay: 1 }}
-                      className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c89463] shadow-[0_8px_20px_rgba(212,165,116,0.3)] border border-[#d4a574]/60 cursor-pointer relative overflow-hidden"
+                      className="relative z-10 w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a574] to-[#c89463] border border-[#d4a574]/70 cursor-pointer overflow-hidden"
                     >
                       <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/22 to-transparent" />
-                      <div className="absolute inset-1 rounded-full border border-white/35" />
+                      <div className="absolute inset-0.5 rounded-full border border-[#d4a574]/50" />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-b from-[#d4a574]/30 to-transparent"
+                        animate={{ y: [-20, 20] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 1 }}
+                      />
                     </motion.div>
                   </div>
 
