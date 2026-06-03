@@ -186,17 +186,120 @@ export default function Home() {
             </h2>
           </motion.div>
 
-          {/* SECTION PRINCIPALE — Photo + Palette + Texte */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-center">
+          {/* SECTION PRINCIPALE — Palette + Info Card (côte à côte) + Photo (dessous) */}
+          <div className="flex flex-col gap-8 sm:gap-10">
+            {/* RANGÉE HAUTE — Palette + Info Card */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-center">
 
-            {/* BLOC GAUCHE — Photo */}
+              {/* BLOC GAUCHE — Palette texte */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="flex flex-col items-center justify-center gap-8"
+              >
+                {/* Palette "Révélez votre Élégance" */}
+                <div className="flex flex-col items-center gap-6">
+                  {/* Palette de couleurs */}
+                  <div className="flex gap-4">
+                    <motion.div
+                      whileHover={{ scale: 1.15, y: -4 }}
+                      className="w-14 h-14 rounded-full bg-[#B79A5B] shadow-[0_8px_24px_rgba(183,154,91,0.35)] border border-[#B79A5B]/50 cursor-pointer"
+                    />
+                    <motion.div
+                      whileHover={{ scale: 1.15, y: -4 }}
+                      className="w-14 h-14 rounded-full bg-[#f0c9e1] shadow-[0_8px_24px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/40 cursor-pointer"
+                    />
+                    <motion.div
+                      whileHover={{ scale: 1.15, y: -4 }}
+                      className="w-14 h-14 rounded-full bg-[#d4a574] shadow-[0_8px_24px_rgba(212,165,116,0.3)] border border-[#d4a574]/50 cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Texte script */}
+                  <h1 className={`${titleScript.className} font-normal leading-tight tracking-wider text-center`}>
+                    <motion.span
+                      className="block text-[clamp(2.2rem,5vw,3.2rem)] bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.2 }}
+                    >
+                      Révélez
+                    </motion.span>
+                    <motion.span
+                      className="block text-[clamp(1.8rem,4.5vw,2.8rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.3)]"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.3 }}
+                    >
+                      votre
+                    </motion.span>
+                    <motion.span
+                      className="block text-[clamp(2.2rem,5.5vw,3.4rem)] font-serif bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                      style={{ fontFamily: 'Georgia, serif' }}
+                    >
+                      Élégance
+                    </motion.span>
+                  </h1>
+                </div>
+              </motion.div>
+
+              {/* BLOC DROIT — Glace texte info */}
+              <motion.div
+                whileHover={{ y: -4 }}
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative rounded-3xl overflow-hidden border border-[#B79A5B]/25 backdrop-blur-2xl"
+                style={{ boxShadow: "0 0 0 1px rgba(183,154,91,0.15), inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(183,154,91,0.08)" }}>
+
+                {/* Fond verre avec dégradé subtil */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#18090f]/80 via-[#1a0a12]/85 to-[#0a050a]/90" />
+
+                {/* Reflet haut */}
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/60 to-transparent" />
+
+                {/* Effet lumière */}
+                <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#B79A5B]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+                {/* Logo subtle */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <Image
+                    src="/logo-chezmiss-enhanced.png"
+                    alt=""
+                    width={260}
+                    height={260}
+                    className="w-[50%] h-auto object-contain opacity-[0.08] select-none"
+                    aria-hidden
+                  />
+                </div>
+
+                {/* Contenu texte */}
+                <div className="relative z-10 px-6 sm:px-8 py-7 sm:py-10 flex flex-col gap-4 sm:gap-5">
+                  <p className="text-[13px] sm:text-[14px] leading-[1.8] sm:leading-[1.85] text-[#f0c9e1] text-justify">
+                    <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre aux exigences des professionnelles et des clientes.
+                  </p>
+                  <p className="text-[13px] sm:text-[14px] leading-[1.8] text-[#f0c9e1] italic">
+                    <span className="text-[#d4a574] font-medium">Les résultats parlent d'eux-mêmes.</span>
+                  </p>
+                </div>
+
+                {/* Fondu bas */}
+                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#080508] via-[#080508]/50 to-transparent" />
+              </motion.div>
+            </div>
+
+            {/* RANGÉE BASSE — Photo (centrée) */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="relative order-2 lg:order-1 group lg:col-span-1"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative mx-auto w-full max-w-2xl group"
             >
-              <div className="relative w-full aspect-[3/2] sm:aspect-[4/3] lg:aspect-[4/5] overflow-hidden rounded-3xl">
+              <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2/1] overflow-hidden rounded-3xl">
                 {/* Bordure dorée fine */}
                 <div className="absolute inset-0 rounded-3xl border border-[#B79A5B]/30 pointer-events-none z-10" />
 
@@ -207,7 +310,7 @@ export default function Home() {
                   src="/photo.PNG"
                   alt="Révélez votre Élégance"
                   fill
-                  sizes="(max-width: 1024px) 100vw, 600px"
+                  sizes="(max-width: 1024px) 100vw, 900px"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   priority
                 />
@@ -215,106 +318,6 @@ export default function Home() {
                 {/* Voile tonal avec dégradé */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#B79A5B]/5 via-transparent to-[#080508]/20 pointer-events-none group-hover:via-[#f0c9e1]/5 transition-all duration-700" />
               </div>
-            </motion.div>
-
-            {/* BLOC CENTRE — Palette texte */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="order-1 lg:order-2 lg:col-span-1 flex flex-col items-center justify-center gap-8"
-            >
-              {/* Palette "Révélez votre Élégance" */}
-              <div className="flex flex-col items-center gap-6">
-                {/* Palette de couleurs */}
-                <div className="flex gap-4">
-                  <motion.div
-                    whileHover={{ scale: 1.15, y: -4 }}
-                    className="w-14 h-14 rounded-full bg-[#B79A5B] shadow-[0_8px_24px_rgba(183,154,91,0.35)] border border-[#B79A5B]/50 cursor-pointer"
-                  />
-                  <motion.div
-                    whileHover={{ scale: 1.15, y: -4 }}
-                    className="w-14 h-14 rounded-full bg-[#f0c9e1] shadow-[0_8px_24px_rgba(240,201,225,0.25)] border border-[#f0c9e1]/40 cursor-pointer"
-                  />
-                  <motion.div
-                    whileHover={{ scale: 1.15, y: -4 }}
-                    className="w-14 h-14 rounded-full bg-[#d4a574] shadow-[0_8px_24px_rgba(212,165,116,0.3)] border border-[#d4a574]/50 cursor-pointer"
-                  />
-                </div>
-
-                {/* Texte script */}
-                <h1 className={`${titleScript.className} font-normal leading-tight tracking-wider text-center`}>
-                  <motion.span
-                    className="block text-[clamp(2.2rem,5vw,3.2rem)] bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                  >
-                    Révélez
-                  </motion.span>
-                  <motion.span
-                    className="block text-[clamp(1.8rem,4.5vw,2.8rem)] text-[#f0c9e1] italic drop-shadow-[0_2px_14px_rgba(240,201,225,0.3)]"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                  >
-                    votre
-                  </motion.span>
-                  <motion.span
-                    className="block text-[clamp(2.2rem,5.5vw,3.4rem)] font-serif bg-gradient-to-r from-[#B79A5B] via-[#d4a574] to-[#B79A5B] bg-clip-text text-transparent drop-shadow-[0_2px_20px_rgba(183,154,91,0.35)]"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.5 }}
-                    style={{ fontFamily: 'Georgia, serif' }}
-                  >
-                    Élégance
-                  </motion.span>
-                </h1>
-              </div>
-            </motion.div>
-
-            {/* BLOC DROIT — Glace texte info */}
-            <motion.div
-              whileHover={{ y: -4 }}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="relative rounded-3xl overflow-hidden border border-[#B79A5B]/25 order-3 lg:order-3 lg:col-span-1 backdrop-blur-2xl"
-              style={{ boxShadow: "0 0 0 1px rgba(183,154,91,0.15), inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.3), 0 0 40px rgba(183,154,91,0.08)" }}>
-
-              {/* Fond verre avec dégradé subtil */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#18090f]/80 via-[#1a0a12]/85 to-[#0a050a]/90" />
-
-              {/* Reflet haut */}
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#B79A5B]/60 to-transparent" />
-
-              {/* Effet lumière */}
-              <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-[#B79A5B]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-              {/* Logo subtle */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <Image
-                  src="/logo-chezmiss-enhanced.png"
-                  alt=""
-                  width={260}
-                  height={260}
-                  className="w-[50%] h-auto object-contain opacity-[0.08] select-none"
-                  aria-hidden
-                />
-              </div>
-
-              {/* Contenu texte */}
-              <div className="relative z-10 px-6 sm:px-8 py-7 sm:py-10 flex flex-col gap-4 sm:gap-5">
-                <p className="text-[13px] sm:text-[14px] leading-[1.8] sm:leading-[1.85] text-[#f0c9e1] text-justify">
-                  <span className="text-[#B79A5B] font-semibold tracking-[0.08em]">CHEZ MISS</span> sublime votre beauté avec ses gammes de produits d'exception. Chacun d'eux est conçu pour répondre aux exigences des professionnelles et des clientes.
-                </p>
-                <p className="text-[13px] sm:text-[14px] leading-[1.8] text-[#f0c9e1] italic">
-                  <span className="text-[#d4a574] font-medium">Les résultats parlent d'eux-mêmes.</span>
-                </p>
-              </div>
-
-              {/* Fondu bas */}
-              <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#080508] via-[#080508]/50 to-transparent" />
             </motion.div>
           </div>
 
