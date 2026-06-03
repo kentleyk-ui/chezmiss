@@ -422,7 +422,7 @@ export default function Home() {
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#B79A5B]/20 via-transparent to-[#f0c9e1]/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />
 
                 <Image
-                  src="/photo.PNG"
+                  src="/photo.png"
                   alt="Révélez votre Élégance"
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
