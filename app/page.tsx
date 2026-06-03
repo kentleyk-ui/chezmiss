@@ -11,7 +11,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import Image from "next/image";
 import Link from "next/link";
 import { Alex_Brush } from "next/font/google";
-import { Diamond, Wand2, Rocket, Fingerprint, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Info } from "lucide-react";
+import { Diamond, Crown, Truck, Lock, ScanSearch, CircleUser, ShoppingCart, Sparkle, Menu, X, Info } from "lucide-react";
 
 const titleScript = Alex_Brush({
   subsets: ["latin"],
@@ -36,9 +36,9 @@ export default function Home() {
 
   const values = [
     { icon: Diamond, title: "QUALITE SUPERIEURE", description: "Des ingrédients haut de gamme pour des résultats exceptionnels et professionnels.", number: "01" },
-    { icon: Wand2, title: "EXPERTISE & PASSION", description: "Des produits élaborés par des experts passionnés pour mettre en lumière la splendeur de la beauté.", number: "02" },
-    { icon: Rocket, title: "LIVRAISON RAPIDE", description: "Livraison rapide partout au canada, efficace et sécuritaire. (des frais additionnels peuvent s'appliquer dans certains cas)", number: "03" },
-    { icon: Fingerprint, title: "SATISFAIT OU REMBOURSE", description: "Paiement sécurisé, Transaction 100% chiffrés de bout en bout, Modes de paiements sûrs et protégés.", number: "04" },
+    { icon: Crown, title: "EXPERTISE & PASSION", description: "Des produits élaborés par des experts passionnés pour mettre en lumière la splendeur de la beauté.", number: "02" },
+    { icon: Truck, title: "LIVRAISON RAPIDE", description: "Livraison rapide partout au canada, efficace et sécuritaire. (des frais additionnels peuvent s'appliquer dans certains cas)", number: "03" },
+    { icon: Lock, title: "SATISFAIT OU REMBOURSE", description: "Paiement sécurisé, Transaction 100% chiffrés de bout en bout, Modes de paiements sûrs et protégés.", number: "04" },
   ];
 
   const products = [
